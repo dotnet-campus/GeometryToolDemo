@@ -6,8 +6,8 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="resources/Canvas.xaml"/>
-                <ResourceDictionary Source="resources/Adornor.xaml"/>
+                <ResourceDictionary Source="Resources/Canvas.xaml"/>
+                <ResourceDictionary Source="Resources/Adornor.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>

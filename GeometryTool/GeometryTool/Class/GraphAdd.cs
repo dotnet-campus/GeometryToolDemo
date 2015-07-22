@@ -41,21 +41,21 @@ namespace GeometryTool
             }
             else
             {
-                vLastLine.X2 = vPoint.X;
-                vLastLine.Y2 = vPoint.Y;
+                //vLastLine.X2 = vPoint.X;
+                //vLastLine.Y2 = vPoint.Y;
                 vIsStartPoint = true;
                 AdornerLayer layer = AdornerLayer.GetAdornerLayer(vRootCanvas);
                 if (border != null)
                 {
-                    Adorner myAdorner=new SimpleCircleAdorner(vLastLine, Math.Min(vLastLine.X2, vLastLine.X1), Math.Min(vLastLine.Y2, vLastLine.Y1), Math.Abs(vLastLine.X2 - vLastLine.X1), Math.Abs(vLastLine.Y2 - vLastLine.Y1), border);
+                   // Adorner myAdorner=new SimpleCircleAdorner(vLastLine, Math.Min(vLastLine.X2, vLastLine.X1), Math.Min(vLastLine.Y2, vLastLine.Y1), Math.Abs(vLastLine.X2 - vLastLine.X1), Math.Abs(vLastLine.Y2 - vLastLine.Y1), border);
                     
                     //layer.Add(new SimpleCircleAdorner(vLastLine, Math.Min(vLastLine.X2, vLastLine.X1), Math.Min(vLastLine.Y2, vLastLine.Y1), Math.Abs(vLastLine.X2 - vLastLine.X1), Math.Abs(vLastLine.Y2 - vLastLine.Y1), border));
                     // layer.Add(new GeometryTool.Adorners.RectAdorner(vLastLine,Math.Min(vLastLine.X2 , vLastLine.X1),Math.Min(vLastLine.Y2 ,vLastLine.Y1) ,Math.Abs(vLastLine.X2 - vLastLine.X1), Math.Abs(vLastLine.Y2 - vLastLine.Y1)));
-                    layer.Add(myAdorner);
+                    //layer.Add(myAdorner);
                    
-                    myAdorner.MouseMove += new MouseEventHandler(Element_MouseMove);
-                    myAdorner.MouseLeftButtonDown += new MouseButtonEventHandler(Element_MouseLeftButtonDown);
-                    myAdorner.MouseLeftButtonUp += new MouseButtonEventHandler(Element_MouseLeftButtonUp);
+                    //myAdorner.MouseMove += new MouseEventHandler(Element_MouseMove);
+                    //myAdorner.MouseLeftButtonDown += new MouseButtonEventHandler(Element_MouseLeftButtonDown);
+                    //myAdorner.MouseLeftButtonUp += new MouseButtonEventHandler(Element_MouseLeftButtonUp);
                 }
             }
         }

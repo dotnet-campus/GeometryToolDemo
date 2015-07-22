@@ -9,7 +9,7 @@ using System.Windows.Media;
 
 namespace GeometryTool
 {
-    public class SimpleCircleAdorner : Adorner
+    public class RectAdorner : Adorner
     {
 
         double x;

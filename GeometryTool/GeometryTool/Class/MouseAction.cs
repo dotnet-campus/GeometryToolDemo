@@ -8,12 +8,12 @@ namespace GeometryTool
 {
     public enum MouseAction
     {
-        Select          = 0,
-        Line            = 1,
-        ContinousLine   = 2,
-        Traingle        = 3,
-        Rectangle       = 4,
-        Ellipse         = 5,
-        Point           = 6
+        Select          ,
+        Line            ,
+        ContinousLine   ,
+        Traingle        ,
+        Rectangle       ,
+        Ellipse         ,
+        Point           
     }
 }

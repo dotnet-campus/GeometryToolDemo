@@ -12,7 +12,7 @@ namespace GeometryTool
 {
     public class myBorder : Border
     {
-        public SimpleCircleAdorner rectAdornor;
+        public RectAdorner rectAdornor;
        
         public myBorder()
         {
