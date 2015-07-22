@@ -21,7 +21,7 @@ namespace GeometryTool
     public partial class MainWindow : Window
     {
         public bool isStartPoint;
-        Line LastLine;
+        Path LinePath;
         GraphAdd graphAdd;
         GraphAppearance graphAppearance;
         public MainWindow()
@@ -31,7 +31,7 @@ namespace GeometryTool
             graphAdd = new GraphAdd();
             graphAppearance = new GraphAppearance();
             isStartPoint = true;
-            LastLine = null;
+            LinePath = null;
         }
 
 
@@ -50,19 +50,21 @@ namespace GeometryTool
             System.Windows.Point p = Mouse.GetPosition(e.Source as FrameworkElement);
             switch (this.RootCanvas.Tag.ToString())
             {
-                case "Line": {
-                    HitTestResult result = VisualTreeHelper.HitTest(RootCanvas, p);
-                    Path path=null;
-                    path=result.VisualHit as Path;
-                    
-                    while (path == null)
+                case "Line":
                     {
-                        result = VisualTreeHelper.HitTest(RootCanvas, p);
-                        path = null;
-                        path = result.VisualHit as Path;
+                        HitTestResult result = VisualTreeHelper.HitTest(RootCanvas, p);
+                        if (result != null)
+                        {
+                            Path path = null;
+                            path = result.VisualHit as Path;
+                            if (path != null)
+                            {   
+                                //graphAdd.AddLine();
+
+                            }
+                        }
+                        break;
                     }
-                    break;
-                }
                 case "Point": { graphAdd.AddPoint(p, graphAppearance, this.RootCanvas); break; }
             }
             

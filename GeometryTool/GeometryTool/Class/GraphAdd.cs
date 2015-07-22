@@ -9,13 +9,13 @@ using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-
+using System.Windows.Data;
 namespace GeometryTool
 {
     public class GraphAdd
     {
         myBorder border;
-        public void AddLine(Point vPoint,GraphAppearance vGraphAppearance,Canvas vRootCanvas,ref LineGeometry vLastLine,ref bool vIsStartPoint)
+        public void AddLine(Point vPoint,GraphAppearance vGraphAppearance,Canvas vRootCanvas,ref Path vPath,Path HitPath,ref bool vIsStartPoint)
         {
 
             if (vIsStartPoint)
@@ -23,15 +23,20 @@ namespace GeometryTool
                 Path p = new Path() 
                 { 
                     Stroke = vGraphAppearance.Stroke,
-                    StrokeThickness = vGraphAppearance.StrokeThickness;
+                    StrokeThickness = vGraphAppearance.StrokeThickness
                 };
-                vLastLine = new LineGeometry() ;
-                vLastLine.StartPoint = vPoint;
+                LineGeometry vLastLine = new LineGeometry();
+                vPath.Data = vLastLine;
+
+                EllipseGeometry e = HitPath.Data as EllipseGeometry;
+                Binding binding = new Binding("Center") { Source = e };
+                BindingOperations.SetBinding(vLastLine,LineGeometry.StartPointProperty,binding);
+                
 
 
                 vIsStartPoint = false;
                 border = new myBorder();
-                border.Child = vLastLine;
+                border.Child = p;
                 vRootCanvas.Children.Add(border);
             }
             else
