@@ -55,6 +55,15 @@
     <Compile Include="Class\RectAdorner.cs" />
     <Compile Include="Class\BorderWithAdornor.cs" />
     <Compile Include="Class\Points.cs" />
+    <Compile Include="StrokeDashArray.xaml.cs">
+      <DependentUpon>StrokeDashArray.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="StrokeThickness.xaml.cs">
+      <DependentUpon>StrokeThickness.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="StylusSettings.xaml.cs">
+      <DependentUpon>StylusSettings.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Window1.xaml.cs">
       <DependentUpon>Window1.xaml</DependentUpon>
     </Compile>
@@ -70,7 +79,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Class\Adorners.cs" />
     <Compile Include="Class\Controlborder.cs" />
     <Compile Include="Class\GraphAdd.cs" />
     <Compile Include="Class\GraphAppearance.cs" />
@@ -82,6 +90,26 @@
     <Page Include="Resources\Adornor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\ExpanderStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\GreyButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="StrokeDashArray.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="StrokeThickness.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="StylusSettings.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Window1.xaml">
       <SubType>Designer</SubType>
@@ -114,6 +142,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

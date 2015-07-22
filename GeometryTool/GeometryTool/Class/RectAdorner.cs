@@ -9,6 +9,11 @@ using System.Windows.Media;
 
 namespace GeometryTool
 {
+    /*----------------------------------------------------------------
+
+          // 文件功能描述：定义一个装饰器
+
+   ----------------------------------------------------------------*/
     public class RectAdorner : Adorner
     {
 
@@ -16,18 +21,17 @@ namespace GeometryTool
         double y;
         double width;
         double height;
-        public myBorder myBorder;
-        bool isMove;
-        public SimpleCircleAdorner(UIElement adornedElement, double x, double y, double width, double height, myBorder vMyBorder)
+        public BorderWithAdornor BorderWithAdornor;
+        public RectAdorner(UIElement adornedElement, double x, double y, double width, double height, BorderWithAdornor vBorderWithAdornor)
             : base(adornedElement)
         {
             this.x = x;
             this.y = y;
             this.width = width;
             this.height = height;
-            this.myBorder = vMyBorder;
+            this.BorderWithAdornor = vBorderWithAdornor;
 
-            myBorder.rectAdornor = this;
+            BorderWithAdornor.rectAdornor = this;
             //this.MouseLeftButtonDown += this.ButtonClicked;
             this.Visibility = Visibility.Hidden;
             

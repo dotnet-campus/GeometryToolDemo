@@ -1,0 +1,53 @@
+﻿<Window
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	x:Class="GeometryTool.StrokeDashArray"
+	x:Name="Window"
+	Title="请选择颜色"
+	Width="500" Height="300" 
+    Icon="Image/icon.png"
+	ResizeMode="NoResize" WindowStartupLocation="CenterScreen" mc:Ignorable="d">
+
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/GreyButton.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid x:Name="LayoutRoot" RenderTransformOrigin="0.536,0.533" >
+
+
+
+
+        <TextBlock x:Name="txtTitle1" Width="268" Height="37" FontFamily="Arial Rounded MT" FontSize="24" Foreground="Black" Text="请选择虚实" TextWrapping="Wrap" HorizontalAlignment="Left" Margin="29,9,0,0" VerticalAlignment="Top"/>
+        <Rectangle Stroke="{x:Null}" Height="29" x:Name="recTopBanner" Margin="0,40,0,0" VerticalAlignment="Top">
+            <Rectangle.Fill>
+                <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0.5">
+                    <GradientStop Color="#FF4C4949" Offset="0.178"/>
+                    <GradientStop Color="#FF3B3737" Offset="0.87"/>
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+
+        <Button HorizontalAlignment="Left" Margin="29,0,0,28" x:Name="btnOk"  Style="{DynamicResource GreyButton}" VerticalAlignment="Bottom" Width="113" Height="36" Content="OK" Click="btnOk_Click"/>
+        <Slider HorizontalAlignment="Left" Margin="130,128,0,0" Width="250" VerticalAlignment="Top" Minimum="1" Maximum="10" x:Name="Slider1" ValueChanged="Slider1_ValueChanged"/>
+        <Slider HorizontalAlignment="Left" Margin="130,158,0,0" Width="250" VerticalAlignment="Top" Minimum="1" Maximum="10" x:Name="Slider2" ValueChanged="Slider2_ValueChanged"/>
+        <Line HorizontalAlignment="Left" Margin="130,98,0,0" x:Name="DashArray" VerticalAlignment="Top" Width="250" Stroke="Black" Fill="Black" Height="5">
+            
+        </Line>
+        <Label  HorizontalAlignment="Left" Margin="398,82,0,0" VerticalAlignment="Top" Content="{Binding ElementName=SelectThick,Path=Value}" RenderTransformOrigin="0.613,1.196"  />
+
+
+
+
+
+
+
+
+    </Grid>
+
+
+</Window>

@@ -1,26 +1,34 @@
 ﻿<Window x:Class="GeometryTool.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="525">
+        Icon="Image/icon.png"
+        Title="二维绘画小工具" Height="350" Width="525">
 
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Canvas.xaml"/>
                 <ResourceDictionary Source="Resources/Adornor.xaml"/>
+                <ResourceDictionary Source="Resources/ExpanderStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
+    <Grid>
+    
+        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center">
+            <Button Content="线条粗细"    ToolTip="Select" Click="ThickNess_Click" />
+            <Button   Content="线条虚实"  ToolTip="Point" Click="DashArray_Click" />
+            <Button  Content="线条颜色"   ToolTip="Line" Click="StrokColor_Click" />
+            <Button  Content="填充颜色"   ToolTip="Line" Click="FillColor_Click" />
+        </StackPanel>
 
-    <Canvas x:Name="RootCanvas" Style="{StaticResource CanvasTrigger}" Height="350" Width="525" MouseDown="RootCanvas_MouseDown">
+        <Canvas x:Name="RootCanvas" Style="{StaticResource CanvasTrigger}" Height="350" Width="525" MouseDown="RootCanvas_MouseDown">
+        </Canvas>
         
-
-
-        <StackPanel HorizontalAlignment="Left" Height="100" Margin="0,105,0,0" VerticalAlignment="Top" Width="100">
+        <StackPanel  VerticalAlignment="Center" Panel.ZIndex="1" HorizontalAlignment="Left">
             <RadioButton x:Name="Select"  Content="选择"  GroupName="MouseAction" ToolTip="Select" Click="Select_Click" />
             <RadioButton x:Name="Point"  Content="点"  GroupName="MouseAction" ToolTip="Point" Click="Select_Click" />
-            <RadioButton x:Name="Line"  Content="直线"  GroupName="MouseAction" ToolTip="Line" Click="Select_Click" />
-    	</StackPanel>
-        
-    </Canvas>
+            <RadioButton x:Name="Line"  Content="连线"  GroupName="MouseAction" ToolTip="Line" Click="Select_Click" />
+        </StackPanel>
+    </Grid>
 </Window>
