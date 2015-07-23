@@ -20,15 +20,17 @@
             <Button   Content="线条虚实"  ToolTip="Point" Click="DashArray_Click" />
             <Button  Content="线条颜色"   ToolTip="Line" Click="StrokColor_Click" />
             <Button  Content="填充颜色"   ToolTip="Line" Click="FillColor_Click" />
+            <Button  Content="保存"   ToolTip="Line" Click="Save_Click" />
         </StackPanel>
 
-        <Canvas x:Name="RootCanvas" Style="{StaticResource CanvasTrigger}" Height="350" Width="525" MouseDown="RootCanvas_MouseDown">
+        <Canvas x:Name="RootCanvas" Style="{StaticResource CanvasTrigger}" Height="350" Width="525" MouseDown="RootCanvas_MouseDown" MouseLeftButtonUp="RootCanvas_MouseLeftButtonUp"  MouseLeftButtonDown="RootCanvas_MouseLeftButtonDown"  MouseMove="RootCanvas_MouseMove">
         </Canvas>
         
         <StackPanel  VerticalAlignment="Center" Panel.ZIndex="1" HorizontalAlignment="Left">
             <RadioButton x:Name="Select"  Content="选择"  GroupName="MouseAction" ToolTip="Select" Click="Select_Click" />
+            <RadioButton x:Name="Line"  Content="三角形"  GroupName="MouseAction" ToolTip="AddTriangle" Click="AddTriangle_Click" />
             <RadioButton x:Name="Point"  Content="点"  GroupName="MouseAction" ToolTip="Point" Click="Select_Click" />
-            <RadioButton x:Name="Line"  Content="连线"  GroupName="MouseAction" ToolTip="Line" Click="Select_Click" />
+            
         </StackPanel>
     </Grid>
 </Window>

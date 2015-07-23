@@ -52,8 +52,10 @@
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
-    <Compile Include="Class\RectAdorner.cs" />
     <Compile Include="Class\BorderWithAdornor.cs" />
+    <Compile Include="Class\MyConvert.cs" />
+    <Compile Include="Class\RectAdorner.cs" />
+    <Compile Include="Class\BorderWithDrag.cs" />
     <Compile Include="Class\Points.cs" />
     <Compile Include="StrokeDashArray.xaml.cs">
       <DependentUpon>StrokeDashArray.xaml</DependentUpon>

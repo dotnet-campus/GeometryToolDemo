@@ -78,7 +78,7 @@ namespace GeometryTool
         {
             StrokeThickness = 1;
             Stroke = Brushes.Black;
-            Fill = Brushes.White;
+            Fill = Brushes.Transparent;
         }
     }
 }

@@ -7,7 +7,7 @@
         <Style.Triggers>
             <MultiTrigger>
                 <MultiTrigger.Conditions>
-                    <Condition Property="Tag" Value="Line"></Condition>
+                    <Condition Property="Tag" Value="AddTriangle"></Condition>
                 </MultiTrigger.Conditions>
                 <MultiTrigger.Setters>
                     <Setter Property="Background" Value="White"></Setter>
