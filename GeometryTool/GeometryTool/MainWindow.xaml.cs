@@ -160,7 +160,7 @@ namespace GeometryTool
         /// 选择线条的粗细
         /// </summary>
         /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="e">1</param>
         private void ThickNess_Click(object sender, RoutedEventArgs e)
         {
             StrokeThickness dlg = new StrokeThickness();
