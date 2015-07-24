@@ -29,9 +29,10 @@
         <StackPanel  VerticalAlignment="Center" Panel.ZIndex="1" HorizontalAlignment="Left">
             <RadioButton x:Name="Select"  Content="选择"  GroupName="MouseAction" ToolTip="Select" Click="Select_Click" />
             <RadioButton x:Name="Point"  Content="点"  GroupName="MouseAction" ToolTip="Point" Click="Select_Click" />
-            <RadioButton x:Name="Line"  Content="三角形"  GroupName="MouseAction" ToolTip="AddTriangle" Click="AddTriangle_Click" />
-            <RadioButton x:Name="Rectangular"  Content="矩形"  GroupName="MouseAction" ToolTip="AddRectangular" Click="AddRectangular_Click" />
-            <RadioButton x:Name="Circle"  Content="圆形"  GroupName="MouseAction" ToolTip="AddCircle" Click="AddCircle_Click" />
+            <RadioButton x:Name="Line"  Content="三角形"  GroupName="MouseAction" ToolTip="AddTriangle" Click="Select_Click" />
+            <RadioButton x:Name="Rectangular"  Content="矩形"  GroupName="MouseAction" ToolTip="AddRectangular" Click="Select_Click" />
+            <RadioButton x:Name="Circle"  Content="圆形"  GroupName="MouseAction" ToolTip="AddCircle" Click="Select_Click" />
+            <RadioButton x:Name="AddEllipse"  Content="椭圆"  GroupName="MouseAction" ToolTip="AddEllipse" Click="Select_Click" />
             
             
         </StackPanel>

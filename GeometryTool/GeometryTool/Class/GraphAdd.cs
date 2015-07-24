@@ -12,11 +12,9 @@ using System.Windows.Media;
 using System.Windows.Data;
 namespace GeometryTool
 {
-    /*----------------------------------------------------------------
-
-          // 文件功能描述：定义添加图形的动作
-
-   ----------------------------------------------------------------*/
+/// <summary>
+/// 用于绘制图形，如点，直线，三角形，矩形，圆，椭圆
+/// </summary>
     public class GraphAdd
     {
         BorderWithDrag border;//包装Path的border
@@ -87,13 +85,10 @@ namespace GeometryTool
                 LineGeometry vlastLine = vPath.Data as LineGeometry;
                 Binding binding1 = new Binding("Center") { Source = e };
                 BindingOperations.SetBinding(lineSegment, LineSegment.PointProperty, binding1);
-                //try
-                //{
-                //    binding1.Mode = BindingMode.TwoWay;
-                //}
-                //catch { }
+
                 
                 LineSegment newlineSegment = new LineSegment();
+                newlineSegment.Point = new Point() { X=e.Center.X,Y=e.Center.Y};
                 vPathFigure.Segments.Add(newlineSegment);
                 
 

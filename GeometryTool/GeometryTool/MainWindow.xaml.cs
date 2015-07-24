@@ -34,6 +34,11 @@ namespace GeometryTool
         System.Windows.Shapes.Path trianglePath;//表示绘制三角形的时候，三角形所在的Path
         System.Windows.Shapes.Path rectanglePath;//表示绘制正方形的时候，正方形所在的Path
         bool canMove = false;                   //表示图形是否可以拖动
+        System.Windows.Shapes.Path ellipseGeometryPath ; //表示绘制椭圆的时候，椭圆所在的Path
+        
+        /// <summary>
+        /// 构造函数，用于初始化对象
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
@@ -46,7 +51,11 @@ namespace GeometryTool
             this.RootCanvas.Tag = "Select";
         }
 
-
+        /// <summary>
+        /// 当前鼠标的模式
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Select_Click(object sender, RoutedEventArgs e)
         {
             //设置选定的模式
@@ -56,7 +65,11 @@ namespace GeometryTool
                 this.RootCanvas.Tag = radioButton.ToolTip;
                 ActionMode = radioButton.ToolTip.ToString();
             }
-            if (this.RootCanvas.Tag.ToString() == "Select")
+            if (isStartPoint != 0 && pathFigure.Segments.Count>0)
+            {
+                pathFigure.Segments.RemoveAt(pathFigure.Segments.Count-1);
+            }
+            if (this.RootCanvas.Tag.ToString() != "Point")
             {
                 this.RootCanvas.RemoveHandler(UIElement.MouseMoveEvent, new MouseEventHandler(DrawLine));
                 if (isStartPoint != 0)
@@ -64,12 +77,6 @@ namespace GeometryTool
                     isStartPoint = 0;
                 }         
             } 
-            e.Handled = true;
-        }
-
-        private void AddTriangle_Click(object sender, RoutedEventArgs e)
-        {
-            this.RootCanvas.Tag = "AddTriangle";
             e.Handled = true;
         }
 
@@ -102,7 +109,6 @@ namespace GeometryTool
 
             }
         }
-
 
         /// <summary>
         /// 鼠标移动的时候，画一条线段
@@ -178,7 +184,6 @@ namespace GeometryTool
             }
         }
 
-
         private void Save_Click(object sender, RoutedEventArgs e)
         {
             FileStream fs = new FileStream(@"E:\项目\GeometryTool\GeometryTool\bin\Debug\save.XML",FileMode.OpenOrCreate);
@@ -205,12 +210,17 @@ namespace GeometryTool
 
         }
 
+        /// <summary>
+        /// 修改图形的位置
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void RootCanvas_MouseMove(object sender, MouseEventArgs e)
         {
             if (canMove)
             {
-                System.Windows.Point p = e.GetPosition(Application.Current.MainWindow);
-                if (this.RootCanvas.Tag.ToString() == "AddTriangle")
+                System.Windows.Point p = e.GetPosition(Application.Current.MainWindow);     //获取当前鼠标的位置
+                if (this.RootCanvas.Tag.ToString() == "AddTriangle")                        //修改三角形的位置
                 {
                     if (trianglePath != null)
                     {
@@ -224,7 +234,7 @@ namespace GeometryTool
                         e.Handled = true;
                     }
                 }
-                else if (this.RootCanvas.Tag.ToString() == "AddRectangular") 
+                else if (this.RootCanvas.Tag.ToString() == "AddRectangular")                //修改矩形的位置
                 {
                     PathGeometry triangle = rectanglePath.Data as PathGeometry;
                     Point oldPaint = triangle.Figures[0].StartPoint;
@@ -237,49 +247,85 @@ namespace GeometryTool
                     line3.Point = new Point() { X = p.X, Y = oldPaint.Y };
                     e.Handled = true;
                 }
+                else if (this.RootCanvas.Tag.ToString() == "AddCircle")                     //修改圆的位置
+                {
+                    PathGeometry circel = circlePath.Data as PathGeometry;
+                    ArcSegment line1 = circel.Figures[0].Segments[0] as ArcSegment;
+                    line1.Point = new Point() { X = p.X, Y = p.Y };
+                    e.Handled = true;
+                }
+                else if (this.RootCanvas.Tag.ToString() == "AddEllipse")                    //修改椭圆的位置
+                {
+                    PathGeometry circel = ellipseGeometryPath.Data as PathGeometry;
+                    ArcSegment line1 = circel.Figures[0].Segments[0] as ArcSegment;
+                    ArcSegment line2 = circel.Figures[0].Segments[1] as ArcSegment;
+                    Point oldPoint1 = line1.Point;
+                    Point oldPoint2 = line2.Point;
+                    line1.Point = new Point() { X = p.X, Y = oldPoint1.Y };
+                    if ((oldPoint2.X - oldPoint1.X) != 0 && (p.Y - oldPoint1.Y)!=0)         //保证被除数被为0
+                    {
+                        line1.Size = new Size() { Width = Math.Abs(oldPoint2.X - oldPoint1.X) / 2.0, Height = Math.Abs(p.Y - oldPoint1.Y) };
+                        line2.Size = new Size() { Width = Math.Abs(oldPoint2.X - oldPoint1.X) / 2.0, Height = Math.Abs(p.Y - oldPoint1.Y) };
+                    }
+                    else if ((oldPoint2.X - oldPoint1.X) != 0)
+                    {
+                        line1.Size = new Size() { Width = Math.Abs(oldPoint2.X - oldPoint1.X) / 2.0};
+                        line2.Size = new Size() { Width = Math.Abs(oldPoint2.X - oldPoint1.X) / 2.0 };
+                    }
+                    else if ((p.Y - oldPoint1.Y) != 0)
+                    {
+                        line1.Size = new Size() { Height = Math.Abs(p.Y - oldPoint1.Y) };
+                        line2.Size = new Size() { Height = Math.Abs(p.Y - oldPoint1.Y)  };
+                    }
+                    e.Handled = true;
+                }
             }
         }
 
+        /// <summary>
+        /// 鼠标左击时，拖动图形移动
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void RootCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (this.RootCanvas.Tag.ToString() == "AddTriangle")
+            if (this.RootCanvas.Tag.ToString() == "AddTriangle")        //绘制三角形
             {
                 System.Windows.Point p = Mouse.GetPosition(e.Source as FrameworkElement);
-
                 graphAdd.AddGeometry(p, graphAppearance, this.RootCanvas, out trianglePath, 3);
                 canMove = true;
             }
-            else if (this.RootCanvas.Tag.ToString() == "AddRectangular")
+            else if (this.RootCanvas.Tag.ToString() == "AddRectangular")//绘制矩形
             {
                 System.Windows.Point p = Mouse.GetPosition(e.Source as FrameworkElement);
                 graphAdd.AddGeometry(p, graphAppearance, this.RootCanvas, out rectanglePath, 4);
                 canMove = true;
             }
-            else if (this.RootCanvas.Tag.ToString() == "AddCircle")
+            else if (this.RootCanvas.Tag.ToString() == "AddCircle")//绘制圆
             {
                 System.Windows.Point p = Mouse.GetPosition(e.Source as FrameworkElement);
                 graphAdd.AddGeometryOfCricle(p, graphAppearance, this.RootCanvas, out circlePath);
+                canMove = true;
+            }
+            else if (this.RootCanvas.Tag.ToString() == "AddEllipse")//绘制椭圆
+            {
+                System.Windows.Point p = Mouse.GetPosition(e.Source as FrameworkElement);
+                graphAdd.AddGeometryOfCricle(p, graphAppearance, this.RootCanvas, out ellipseGeometryPath);
+                canMove = true;
             }
         }
 
+        /// <summary>
+        /// 图形更改为不能拖动
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void RootCanvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            if (canMove)
+            if (canMove)        //图形更改为不能拖动
             {
                 canMove = false;
             }
-        }
-
-        private void AddRectangular_Click(object sender, RoutedEventArgs e)
-        {
-            this.RootCanvas.Tag = "AddRectangular";
-            e.Handled = true;
-        }
-
-        private void AddCircle_Click(object sender, RoutedEventArgs e)
-        {
-            this.RootCanvas.Tag = "AddCircle";
-            e.Handled = true;
         }
 
     }
