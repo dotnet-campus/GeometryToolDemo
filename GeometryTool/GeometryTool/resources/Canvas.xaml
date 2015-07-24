@@ -4,7 +4,28 @@
                     >
     
     <Style x:Key="CanvasTrigger" TargetType="{x:Type Canvas}">
+        <Style.Setters>
+            <Setter Property="Background" Value="White"></Setter> 
+        </Style.Setters>
         <Style.Triggers>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="Tag" Value="AddRectangular"></Condition>
+                </MultiTrigger.Conditions>
+                <MultiTrigger.Setters>
+                    <Setter Property="Background" Value="White"></Setter>
+                </MultiTrigger.Setters>
+            </MultiTrigger>
+
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="Tag" Value="Circle"></Condition>
+                </MultiTrigger.Conditions>
+                <MultiTrigger.Setters>
+                    <Setter Property="Background" Value="White"></Setter>
+                </MultiTrigger.Setters>
+            </MultiTrigger>
+
             <MultiTrigger>
                 <MultiTrigger.Conditions>
                     <Condition Property="Tag" Value="AddTriangle"></Condition>

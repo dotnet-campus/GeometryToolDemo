@@ -37,6 +37,7 @@ namespace GeometryTool
             rect.X = 0;
             rect.Y = 0;
         }
+        
         protected override Size ArrangeOverride(Size arrangeBounds)
         {
 

@@ -22,28 +22,28 @@ namespace GeometryTool
     /// </summary>
     public partial class MainWindow : Window
     {
-        public static string ActionMode="";
-        public int isStartPoint;
-        Polygon polygon;
-        System.Windows.Shapes.Path LinePath;
-        System.Windows.Shapes.Path EllipsePath;
-        GraphAdd graphAdd;
-        GraphAppearance graphAppearance;
-        PathFigure pathFigure;
-        System.Windows.Shapes.Path trianglePath;
-        bool canMove = false;
+        public static string ActionMode="";     //表示当前鼠标的模式
+        public int isStartPoint;                //绘制直线的时候，表示是否为第一个点
+        System.Windows.Shapes.Path linePath;    //表示绘制直线的时候，直线的Path
+        System.Windows.Shapes.Path ellipsePath; //表示绘制图形的时候，点所在Path
+        GraphAdd graphAdd;                      //表示绘制动作的类
+        GraphAppearance graphAppearance;        //表示图形的外观
+        PathFigure pathFigure;                  //表示绘制直线的时候，直线所在的PathFigure
+        System.Windows.Shapes.Path circlePath;  //表示绘制圆的时候，圆所在的Path
+        bool isClose;                           //表示图形是否是闭合的
+        System.Windows.Shapes.Path trianglePath;//表示绘制三角形的时候，三角形所在的Path
+        System.Windows.Shapes.Path rectanglePath;//表示绘制正方形的时候，正方形所在的Path
+        bool canMove = false;                   //表示图形是否可以拖动
         public MainWindow()
         {
             InitializeComponent();
-            polygon = new Polygon();
             graphAdd = new GraphAdd();
-            EllipsePath = new System.Windows.Shapes.Path();
+            ellipsePath = new System.Windows.Shapes.Path();
             graphAppearance = new GraphAppearance();
             pathFigure = new PathFigure();
             isStartPoint = 0;
-            LinePath = null;
+            linePath = new System.Windows.Shapes.Path();
             this.RootCanvas.Tag = "Select";
-            ReadXml(@"C:\Users\WeiCong\Documents\图形\123.XML", this.RootCanvas);
         }
 
 
@@ -61,17 +61,11 @@ namespace GeometryTool
                 this.RootCanvas.RemoveHandler(UIElement.MouseMoveEvent, new MouseEventHandler(DrawLine));
                 if (isStartPoint != 0)
                 {
-
                     isStartPoint = 0;
-                }
-                if (pathFigure.Segments.Count >= 1)
-                    pathFigure.Segments.RemoveAt(pathFigure.Segments.Count - 1);
-            }
-           
-          
+                }         
+            } 
             e.Handled = true;
         }
-
 
         private void AddTriangle_Click(object sender, RoutedEventArgs e)
         {
@@ -90,18 +84,19 @@ namespace GeometryTool
 
             if (this.RootCanvas.Tag.ToString() == "Point") //判断是不是画线
             {
+                isClose = false;
                 if (isStartPoint == 0)
                 {
                     pathFigure = new PathFigure();
-                    graphAdd.AddPoint(p, graphAppearance, this.RootCanvas, out EllipsePath);            //进行画点
-                    graphAdd.AddLine(graphAppearance, RootCanvas, ref LinePath, EllipsePath, ref isStartPoint, ref  pathFigure); //进行划线
+                    graphAdd.AddPoint(p, graphAppearance, this.RootCanvas, out ellipsePath);            //进行画点
+                    graphAdd.AddLine(graphAppearance, RootCanvas, ref linePath, ellipsePath, ref isStartPoint, ref  pathFigure, isClose); //进行划线
                     this.RootCanvas.AddHandler(UIElement.MouseMoveEvent, new MouseEventHandler(DrawLine));
                 }
                 else
                 {
                     isStartPoint = 2;
-                    graphAdd.AddPoint(p, graphAppearance, this.RootCanvas, out EllipsePath);            //进行画点
-                    graphAdd.AddLine(graphAppearance, RootCanvas, ref  LinePath, EllipsePath, ref isStartPoint, ref  pathFigure); //进行划线
+                    graphAdd.AddPoint(p, graphAppearance, this.RootCanvas, out ellipsePath);            //进行画点
+                    graphAdd.AddLine(graphAppearance, RootCanvas, ref  linePath, ellipsePath, ref isStartPoint, ref  pathFigure, isClose); //进行划线
                 }
                 e.Handled = true;
 
@@ -214,10 +209,9 @@ namespace GeometryTool
         {
             if (canMove)
             {
+                System.Windows.Point p = e.GetPosition(Application.Current.MainWindow);
                 if (this.RootCanvas.Tag.ToString() == "AddTriangle")
                 {
-                    System.Windows.Point p = e.GetPosition(Application.Current.MainWindow);
-
                     if (trianglePath != null)
                     {
                         PathGeometry triangle = trianglePath.Data as PathGeometry;
@@ -230,6 +224,19 @@ namespace GeometryTool
                         e.Handled = true;
                     }
                 }
+                else if (this.RootCanvas.Tag.ToString() == "AddRectangular") 
+                {
+                    PathGeometry triangle = rectanglePath.Data as PathGeometry;
+                    Point oldPaint = triangle.Figures[0].StartPoint;
+
+                    LineSegment line1 = triangle.Figures[0].Segments[0] as LineSegment;
+                    line1.Point = new Point() { X = oldPaint.X, Y = p.Y };
+                    LineSegment line2 = triangle.Figures[0].Segments[1] as LineSegment;
+                    line2.Point = new Point() { X = p.X, Y = p.Y };
+                    LineSegment line3 = triangle.Figures[0].Segments[2] as LineSegment;
+                    line3.Point = new Point() { X = p.X, Y = oldPaint.Y };
+                    e.Handled = true;
+                }
             }
         }
 
@@ -239,8 +246,19 @@ namespace GeometryTool
             {
                 System.Windows.Point p = Mouse.GetPosition(e.Source as FrameworkElement);
 
-                graphAdd.AddTriangle(p, graphAppearance, this.RootCanvas, out trianglePath);
+                graphAdd.AddGeometry(p, graphAppearance, this.RootCanvas, out trianglePath, 3);
                 canMove = true;
+            }
+            else if (this.RootCanvas.Tag.ToString() == "AddRectangular")
+            {
+                System.Windows.Point p = Mouse.GetPosition(e.Source as FrameworkElement);
+                graphAdd.AddGeometry(p, graphAppearance, this.RootCanvas, out rectanglePath, 4);
+                canMove = true;
+            }
+            else if (this.RootCanvas.Tag.ToString() == "AddCircle")
+            {
+                System.Windows.Point p = Mouse.GetPosition(e.Source as FrameworkElement);
+                graphAdd.AddGeometryOfCricle(p, graphAppearance, this.RootCanvas, out circlePath);
             }
         }
 
@@ -251,6 +269,19 @@ namespace GeometryTool
                 canMove = false;
             }
         }
+
+        private void AddRectangular_Click(object sender, RoutedEventArgs e)
+        {
+            this.RootCanvas.Tag = "AddRectangular";
+            e.Handled = true;
+        }
+
+        private void AddCircle_Click(object sender, RoutedEventArgs e)
+        {
+            this.RootCanvas.Tag = "AddCircle";
+            e.Handled = true;
+        }
+
     }
    
 }
