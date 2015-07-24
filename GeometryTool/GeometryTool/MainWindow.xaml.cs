@@ -189,11 +189,26 @@ namespace GeometryTool
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
-            FileStream fs = new FileStream(@"E:\项目\GeometryTool\GeometryTool\bin\Debug\save.XML",FileMode.OpenOrCreate);
-            //foreach (UIElement item in this.RootCanvas.Children)
-            //{
-            //    if()
-            //}
+            
+            StreamWriter sw=new StreamWriter(@"E:\项目\GeometryTool\GeometryTool\bin\Debug\save.XML");
+            GeomortyConvertFromXML GCXML =new GeomortyConvertFromXML(RootCanvas,graphAppearance);
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
+            
+            foreach (UIElement item in this.RootCanvas.Children)
+            {
+                System.Windows.Shapes.Path path = item as System.Windows.Shapes.Path;
+                if (path != null)
+                {
+                    sb.AppendLine("<Geometry>");
+                    sb.Append("<Figures>");
+                    sb.Append(GCXML.StringFromGeometry(path));
+                    sb.Append("</Figures>");
+                    sb.AppendLine("</Geometry>");
+                }
+            }
+            sw.Write(sb.ToString());
+            sw.Close();
         }
 
         
@@ -342,9 +357,11 @@ namespace GeometryTool
                 System.Windows.Shapes.Path ellipsePath2, ellipsePath3;
                 graphAdd.AddPoint(p, graphAppearance, RootCanvas, out ellipsePath2);
                 graphAdd.AddPoint(p, graphAppearance, RootCanvas, out ellipsePath3);
+
                 PathGeometry path = QBezierPath.Data as PathGeometry;
 
                 graphAdd.AddQuadraticSegment(path.Figures[0], ellipsePath3, ellipsePath2);
+               
                 canMove = true;
             }
             else if (this.RootCanvas.Tag.ToString() == "Bezier")//绘制二次方贝塞尔曲线

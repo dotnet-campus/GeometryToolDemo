@@ -185,13 +185,8 @@ namespace GeometryTool
                 vPathFigure.Segments = segmentCollection;
                 LineSegment lineSegment = new LineSegment();
                 
-                vPathFigure.Segments.Add(lineSegment);
-                AdornerDecorator adornerDecorator = new AdornerDecorator();
-                adornerDecorator.Child = vPath;
-                
+                vPathFigure.Segments.Add(lineSegment);      
                 vPath.Data = pathGeometry;
-                AdornerLayer myAdornerLayer = AdornerLayer.GetAdornerLayer(vPath);
-                myAdornerLayer.Add(new RectAdorner(vPath));
 
                 
                 //将直线的起点和某个点绑定在一起
@@ -200,7 +195,7 @@ namespace GeometryTool
                 binding.Mode = BindingMode.TwoWay;
                 BindingOperations.SetBinding(vPathFigure, PathFigure.StartPointProperty, binding);
                 lineSegment.Point = e.Center;
-                vRootCanvas.Children.Add(adornerDecorator);
+                vRootCanvas.Children.Add(vPath);
                 vIsStartPoint = 1;
             }
             else     //表示终点
@@ -307,9 +302,7 @@ namespace GeometryTool
                 BindingOperations.SetBinding(firstLineSe, LineSegment.PointProperty, SecondPointBD); //绑定Point
                 pathFigure.Segments.Add(firstLineSe);
              }
-            border = new BorderWithDrag();
-            border.Child = vPath;
-            vRootCanvas.Children.Add(border);
+            vRootCanvas.Children.Add(vPath);
         }
 
         /// <summary>
@@ -369,9 +362,7 @@ namespace GeometryTool
             secondLineSe.Size = new Size() { Height = 0.1, Width = 0.1 };
             firstLineSe.Size = new Size() { Height = 0.1, Width = 0.1 };
            
-            border = new BorderWithDrag();
-            border.Child = vPath;
-            vRootCanvas.Children.Add(border);
+            vRootCanvas.Children.Add(vPath);
         }
 
         /// <summary>
@@ -422,6 +413,8 @@ namespace GeometryTool
         }
         
         public void AddGeomotryOfXml()
-        { }
+        {
+
+        }
     }
 }
