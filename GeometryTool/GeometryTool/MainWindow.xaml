@@ -20,6 +20,7 @@
             <Button   Content="线条虚实"  ToolTip="Point" Click="DashArray_Click" />
             <Button  Content="线条颜色"   ToolTip="Line" Click="StrokColor_Click" />
             <Button  Content="填充颜色"   ToolTip="Line" Click="FillColor_Click" />
+            <Button  Content="打开"   ToolTip="Line" Click="Open_Click" />
             <Button  Content="保存"   ToolTip="Line" Click="Save_Click" />
         </StackPanel>
 

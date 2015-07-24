@@ -247,6 +247,8 @@ namespace GeometryTool
             border.Child = vPath;
             vRootCanvas.Children.Add(border);
         }
-       
+
+        public void AddGeomotryOfXml()
+        { }
     }
 }

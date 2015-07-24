@@ -328,6 +328,16 @@ namespace GeometryTool
             }
         }
 
+        private void Open_Click(object sender, RoutedEventArgs e)
+        {
+            Microsoft.Win32.OpenFileDialog openFileDlg = new Microsoft.Win32.OpenFileDialog();
+            openFileDlg.DefaultExt = ".xml";
+            openFileDlg.Filter = "xml file|*.xml";
+            if (openFileDlg.ShowDialog() == true)
+            {
+                MessageBox.Show("132");
+            }
+        }
     }
    
 }
