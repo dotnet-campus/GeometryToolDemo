@@ -229,7 +229,7 @@ namespace GeometryTool
             FirstPointBD.Mode = BindingMode.TwoWay;
             BindingOperations.SetBinding(pathFigure, PathFigure.StartPointProperty, FirstPointBD);
 
-            //绘制第二个点，并绑定终点
+            //绘制第二个点和第一条曲线，并绑定终点
             AddPoint(vPoint, vGraphAppearance, vRootCanvas, out  ellipsePath);  //添加点
             ellipseGeometry = ellipsePath.Data as EllipseGeometry;
             ArcSegment firstLineSe = new ArcSegment();
@@ -238,36 +238,16 @@ namespace GeometryTool
             BindingOperations.SetBinding(firstLineSe, ArcSegment.PointProperty, SecondPointBD); //绑定Point
             pathFigure.Segments.Add(firstLineSe);
 
-            
-            //绘制第二条曲线，绑定第一个点
-            PathFigure secondPathFigure = new PathFigure();
-            pathGeometry.Figures.Add(secondPathFigure);
-            PathSegmentCollection secondeSegmentCollection = new PathSegmentCollection();
-            secondPathFigure.Segments = secondeSegmentCollection;
-            Binding ThirdPointBD = new Binding("Center") { Source = ellipseGeometry };
-            ThirdPointBD.Mode = BindingMode.TwoWay;
-            BindingOperations.SetBinding(secondPathFigure, PathFigure.StartPointProperty, ThirdPointBD);
-
+            //绘制第二条曲线，并绑定终点
             ArcSegment secondLineSe = new ArcSegment();
             Binding forthPointBD = new Binding("Center") { Source = startGeometry };
             forthPointBD.Mode = BindingMode.TwoWay;
             BindingOperations.SetBinding(secondLineSe, ArcSegment.PointProperty, forthPointBD); //绑定Point
             pathFigure.Segments.Add(secondLineSe);
 
-            CircleSizeConverter sizeConverter = new CircleSizeConverter();
-            Binding FirstSizeBD = new Binding("Center") { Source = startGeometry };
-            FirstSizeBD.Converter = (IValueConverter)sizeConverter;
-            FirstSizeBD.ConverterParameter = ellipseGeometry.Center;
-            FirstSizeBD.Mode = BindingMode.TwoWay;
-            BindingOperations.SetBinding(firstLineSe, ArcSegment.SizeProperty, FirstSizeBD); //绑定Size
-
-            CircleSizeConverter sizeConverter2 = new CircleSizeConverter();
-            Binding secondSizeBD = new Binding("Center") { Source = startGeometry };
-            secondSizeBD.Converter = (IValueConverter)sizeConverter2;
-            secondSizeBD.ConverterParameter = ellipseGeometry.Center;
-            secondSizeBD.Mode = BindingMode.TwoWay;
-            BindingOperations.SetBinding(secondLineSe, ArcSegment.SizeProperty, secondSizeBD); //绑定Size
-
+            secondLineSe.Size = new Size() { Height = 0.1, Width = 0.1 };
+            firstLineSe.Size = new Size() { Height = 0.1, Width = 0.1 };
+           
             border = new BorderWithDrag();
             border.Child = vPath;
             vRootCanvas.Children.Add(border);

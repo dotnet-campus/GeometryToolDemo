@@ -20,6 +20,11 @@ namespace GeometryTool
                 double x = Math.Abs(startPoint.X - endPoint.X);
                 double y=Math.Abs(startPoint.Y-endPoint.Y);
                 double width=Math.Sqrt(x*x+y*y);
+                if (x == 0)
+                {
+                    int b=0;
+                    b++;
+                }
                 return new Size() { Width = width/2.0 ,Height=width/2.0};
             }
             return null;
@@ -27,7 +32,7 @@ namespace GeometryTool
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            throw new NotImplementedException();
+            return null;
         }
     }
 

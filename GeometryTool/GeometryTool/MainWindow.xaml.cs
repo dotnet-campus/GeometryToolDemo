@@ -37,12 +37,12 @@ namespace GeometryTool
         public MainWindow()
         {
             InitializeComponent();
-            graphAdd = new GraphAdd();
+            graphAdd    = new GraphAdd();
             ellipsePath = new System.Windows.Shapes.Path();
             graphAppearance = new GraphAppearance();
-            pathFigure = new PathFigure();
+            pathFigure      = new PathFigure();
             isStartPoint = 0;
-            linePath = new System.Windows.Shapes.Path();
+            linePath     = new System.Windows.Shapes.Path();
             this.RootCanvas.Tag = "Select";
         }
 

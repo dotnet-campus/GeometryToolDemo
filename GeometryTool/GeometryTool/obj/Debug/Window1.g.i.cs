@@ -9,6 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using BitsOfStuff;
 using GeometryTool;
 using System;
 using System.Diagnostics;
