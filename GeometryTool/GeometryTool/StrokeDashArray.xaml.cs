@@ -19,7 +19,7 @@ namespace GeometryTool
 	public partial class StrokeDashArray
 	{
         public DoubleCollection strokeDashArray;  //线条的粗细
-        public event PropertyChangedEventHandler PropertyChanged;
+        //public event PropertyChangedEventHandler PropertyChanged;
         //public DoubleCollection SDashArray
         //{
 

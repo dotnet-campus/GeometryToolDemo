@@ -32,10 +32,11 @@
             <RadioButton x:Name="Point"  Content="点"  GroupName="MouseAction" ToolTip="Point" Click="Select_Click" />
             <RadioButton x:Name="Line"  Content="三角形"  GroupName="MouseAction" ToolTip="AddTriangle" Click="Select_Click" />
             <RadioButton x:Name="Rectangular"  Content="矩形"  GroupName="MouseAction" ToolTip="AddRectangular" Click="Select_Click" />
+            <RadioButton x:Name="Curve"  Content="曲线"  GroupName="MouseAction" ToolTip="AddCurve" Click="Select_Click" />
             <RadioButton x:Name="Circle"  Content="圆形"  GroupName="MouseAction" ToolTip="AddCircle" Click="Select_Click" />
             <RadioButton x:Name="AddEllipse"  Content="椭圆"  GroupName="MouseAction" ToolTip="AddEllipse" Click="Select_Click" />
-            
-            
+            <RadioButton x:Name="QBezier"  Content="二次方贝塞尔曲线"  GroupName="MouseAction" ToolTip="QBezier" Click="Select_Click" />
+            <RadioButton x:Name="Bezier"  Content="三次方贝塞尔曲线"  GroupName="MouseAction" ToolTip="Bezier" Click="Select_Click" />
         </StackPanel>
     </Grid>
 </Window>

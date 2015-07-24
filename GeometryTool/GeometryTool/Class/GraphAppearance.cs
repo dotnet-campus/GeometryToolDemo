@@ -72,13 +72,28 @@ namespace GeometryTool
                     this.PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Fill"));
                 }
             }
-        }    
-        
+        }
+
+        public FillRule fillRule;
+        public FillRule FillRule
+        {
+            get { return fillRule; }
+            set
+            {
+                fillRule = value;
+                if (this.PropertyChanged != null)
+                {
+                    this.PropertyChanged.Invoke(this, new PropertyChangedEventArgs("FillRule"));
+                }
+            }
+        }
+       
         public GraphAppearance()
         {
             StrokeThickness = 1;
             Stroke = Brushes.Black;
             Fill = Brushes.Transparent;
+            FillRule = FillRule.EvenOdd;
         }
     }
 }

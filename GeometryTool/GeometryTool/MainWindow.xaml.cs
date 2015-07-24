@@ -35,7 +35,10 @@ namespace GeometryTool
         System.Windows.Shapes.Path rectanglePath;//表示绘制正方形的时候，正方形所在的Path
         bool canMove = false;                   //表示图形是否可以拖动
         System.Windows.Shapes.Path ellipseGeometryPath ; //表示绘制椭圆的时候，椭圆所在的Path
-        
+        System.Windows.Shapes.Path curvePath;   //表示绘制曲线的时候，曲线所在的Path
+        System.Windows.Shapes.Path QBezierPath; //表示绘制二次方贝塞尔曲线时候，曲线所在的Path
+        System.Windows.Shapes.Path BezierPath;  //表示绘制三次方贝塞尔曲线时候，曲线所在的Path
+
         /// <summary>
         /// 构造函数，用于初始化对象
         /// </summary>
@@ -193,22 +196,7 @@ namespace GeometryTool
             //}
         }
 
-        /// <summary>
-        /// 读取xml文件，生成图形
-        /// </summary>
-        /// <param name="vPath"></param>
-        /// <param name="vRootCanvas"></param>
-        public void ReadXml(string vPath, Canvas vRootCanvas)
-        {
-            StreamReader streamReader = new StreamReader(vPath);
-            GeomortyConvertFromXML GCxml = new GeomortyConvertFromXML();
-            MatchCollection MatchList = GCxml.GeomotryFromXML(streamReader.ReadToEnd().ToString(),@"<Geometry>\s*<Figures>([^<]*)</Figures>");
-            foreach (Match match in MatchList)
-            {
-                GCxml.GeomotryFromString(match.Groups[1].ToString(), vRootCanvas, graphAppearance);
-            }
-
-        }
+        
 
         /// <summary>
         /// 修改图形的位置
@@ -279,6 +267,32 @@ namespace GeometryTool
                     }
                     e.Handled = true;
                 }
+                else if (this.RootCanvas.Tag.ToString() == "AddCurve")  //修改曲线的位置
+                {
+                    PathGeometry circel = curvePath.Data as PathGeometry;
+                    ArcSegment line1 = circel.Figures[0].Segments[0] as ArcSegment;
+                    line1.Point = new Point() { X=p.X,Y=p.Y};
+                }
+                else if (this.RootCanvas.Tag.ToString() == "QBezier")   //修改二次方贝塞尔曲线的位置
+                {
+                    PathGeometry QBezier = QBezierPath.Data as PathGeometry;
+                    QuadraticBezierSegment qbSegment = QBezier.Figures[0].Segments[0] as QuadraticBezierSegment;
+                    Point oldPoint = qbSegment.Point1;
+                    Point oldPoint2 = qbSegment.Point2;
+                    qbSegment.Point1 = new Point() { X = (p.X + oldPoint.X)/2.0, Y = p.Y };
+                    qbSegment.Point2 = new Point() { X = p.X ,Y = oldPoint2.Y };
+                }
+                else if (this.RootCanvas.Tag.ToString() == "Bezier")    //修改三次方贝塞尔曲线的位置
+                {
+                    PathGeometry Bezier = BezierPath.Data as PathGeometry;
+                    BezierSegment bSegment = Bezier.Figures[0].Segments[0] as BezierSegment;
+                    Point oldPoint = bSegment.Point1;
+                    Point oldPoint2 = bSegment.Point2;
+                    Point oldPoint3 = bSegment.Point3;
+                    bSegment.Point1 = new Point() { X = oldPoint.X, Y = p.Y };
+                    bSegment.Point2 = new Point() { X = p.X, Y = p.Y };
+                    bSegment.Point3 = new Point() { X = p.X, Y = oldPoint3.Y };
+                }
             }
         }
 
@@ -292,13 +306,13 @@ namespace GeometryTool
             if (this.RootCanvas.Tag.ToString() == "AddTriangle")        //绘制三角形
             {
                 System.Windows.Point p = Mouse.GetPosition(e.Source as FrameworkElement);
-                graphAdd.AddGeometry(p, graphAppearance, this.RootCanvas, out trianglePath, 3);
+                graphAdd.AddGeometry(p, graphAppearance, this.RootCanvas, out trianglePath, 3,true);
                 canMove = true;
             }
             else if (this.RootCanvas.Tag.ToString() == "AddRectangular")//绘制矩形
             {
                 System.Windows.Point p = Mouse.GetPosition(e.Source as FrameworkElement);
-                graphAdd.AddGeometry(p, graphAppearance, this.RootCanvas, out rectanglePath, 4);
+                graphAdd.AddGeometry(p, graphAppearance, this.RootCanvas, out rectanglePath, 4,true);
                 canMove = true;
             }
             else if (this.RootCanvas.Tag.ToString() == "AddCircle")//绘制圆
@@ -311,6 +325,41 @@ namespace GeometryTool
             {
                 System.Windows.Point p = Mouse.GetPosition(e.Source as FrameworkElement);
                 graphAdd.AddGeometryOfCricle(p, graphAppearance, this.RootCanvas, out ellipseGeometryPath);
+                canMove = true;
+            }
+            else if (this.RootCanvas.Tag.ToString() == "AddCurve")//绘制椭圆
+            {
+                System.Windows.Point p = Mouse.GetPosition(e.Source as FrameworkElement);
+                graphAdd.AddCurve(p, graphAppearance, this.RootCanvas, out curvePath);
+                canMove = true;
+            }
+            else if (this.RootCanvas.Tag.ToString() == "QBezier")//绘制二次方贝塞尔曲线
+            {
+                System.Windows.Point p = Mouse.GetPosition(e.Source as FrameworkElement);
+                graphAdd.AddPoint(p,graphAppearance, RootCanvas,out ellipsePath);
+                graphAdd.NewPathGeomotry(graphAppearance, RootCanvas,out QBezierPath,ellipsePath, false);
+
+                System.Windows.Shapes.Path ellipsePath2, ellipsePath3;
+                graphAdd.AddPoint(p, graphAppearance, RootCanvas, out ellipsePath2);
+                graphAdd.AddPoint(p, graphAppearance, RootCanvas, out ellipsePath3);
+                PathGeometry path = QBezierPath.Data as PathGeometry;
+
+                graphAdd.AddQuadraticSegment(path.Figures[0], ellipsePath3, ellipsePath2);
+                canMove = true;
+            }
+            else if (this.RootCanvas.Tag.ToString() == "Bezier")//绘制二次方贝塞尔曲线
+            {
+                System.Windows.Point p = Mouse.GetPosition(e.Source as FrameworkElement);
+                graphAdd.AddPoint(p, graphAppearance, RootCanvas, out ellipsePath);
+                graphAdd.NewPathGeomotry(graphAppearance, RootCanvas, out BezierPath, ellipsePath, false);
+
+                System.Windows.Shapes.Path ellipsePath2, ellipsePath3,ellipsePath4;
+                graphAdd.AddPoint(p, graphAppearance, RootCanvas, out ellipsePath2);
+                graphAdd.AddPoint(p, graphAppearance, RootCanvas, out ellipsePath3);
+                graphAdd.AddPoint(p, graphAppearance, RootCanvas, out ellipsePath4);
+                PathGeometry path = BezierPath.Data as PathGeometry;
+
+                graphAdd.AddBezierSegment(path.Figures[0],ellipsePath4, ellipsePath3, ellipsePath2);
                 canMove = true;
             }
         }
@@ -328,14 +377,36 @@ namespace GeometryTool
             }
         }
 
+        /// <summary>
+        /// 打开XML文件读取XML中的图形
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Open_Click(object sender, RoutedEventArgs e)
         {
             Microsoft.Win32.OpenFileDialog openFileDlg = new Microsoft.Win32.OpenFileDialog();
             openFileDlg.DefaultExt = ".xml";
-            openFileDlg.Filter = "xml file|*.xml";
-            if (openFileDlg.ShowDialog() == true)
+            openFileDlg.Filter = "xml file|*.xml";      //只选择.xml文件
+            if (openFileDlg.ShowDialog() == true)       //打开对话框
             {
-                MessageBox.Show("132");
+                if (!string.IsNullOrEmpty(openFileDlg.FileName))
+                    ReadXml(openFileDlg.FileName,this.RootCanvas);
+            }
+        }
+
+        /// <summary>
+        /// 读取xml文件，生成图形
+        /// </summary>
+        /// <param name="vPath"></param>
+        /// <param name="vRootCanvas"></param>
+        public void ReadXml(string vPath, Canvas vRootCanvas)
+        {
+            StreamReader streamReader = new StreamReader(vPath);
+            GeomortyConvertFromXML GCxml = new GeomortyConvertFromXML(RootCanvas,graphAppearance);
+            MatchCollection MatchList = GCxml.GeomotryFromXML(streamReader.ReadToEnd().ToString(), @"<Geometry>\s*<Figures>([^<]*)</Figures>");
+            foreach (Match match in MatchList)
+            {
+                GCxml.GeomotryFromString(match.Groups[1].ToString());
             }
         }
     }
