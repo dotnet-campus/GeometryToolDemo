@@ -52,12 +52,13 @@
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
-    <Compile Include="Class\BorderWithAdornor.cs" />
-    <Compile Include="Class\MyConvert.cs" />
-    <Compile Include="Class\RectAdorner.cs" />
-    <Compile Include="Class\BorderWithDrag.cs" />
-    <Compile Include="Class\Points.cs" />
-    <Compile Include="Class\SizeConverter.cs" />
+    <Compile Include="Action\XMLHelper.cs" />
+    <Compile Include="Model\BorderWithAdornor.cs" />
+    <Compile Include="Action\GeomortyConvertFromString.cs" />
+    <Compile Include="Model\RectAdorner.cs" />
+    <Compile Include="Model\BorderWithDrag.cs" />
+    <Compile Include="Model\Points.cs" />
+    <Compile Include="Action\SizeConverter.cs" />
     <Compile Include="StrokeDashArray.xaml.cs">
       <DependentUpon>StrokeDashArray.xaml</DependentUpon>
     </Compile>
@@ -79,10 +80,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Class\Controlborder.cs" />
-    <Compile Include="Class\GraphAdd.cs" />
-    <Compile Include="Class\GraphAppearance.cs" />
-    <Compile Include="Class\MouseAction.cs" />
+    <Compile Include="Model\Controlborder.cs" />
+    <Compile Include="Action\GraphAdd.cs" />
+    <Compile Include="Model\GraphAppearance.cs" />
+    <Compile Include="Model\MouseAction.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

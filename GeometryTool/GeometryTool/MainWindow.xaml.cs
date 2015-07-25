@@ -191,24 +191,26 @@ namespace GeometryTool
         {
             
             StreamWriter sw=new StreamWriter(@"E:\项目\GeometryTool\GeometryTool\bin\Debug\save.XML");
-            GeomortyConvertFromXML GCXML =new GeomortyConvertFromXML(RootCanvas,graphAppearance);
+            GeomortyStringConverter GCXML = new GeomortyStringConverter(RootCanvas, graphAppearance);
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
-            
+            sb.AppendLine("<Canvase>");
             foreach (UIElement item in this.RootCanvas.Children)
             {
                 System.Windows.Shapes.Path path = item as System.Windows.Shapes.Path;
                 if (path != null)
                 {
-                    sb.AppendLine("<Geometry>");
-                    sb.Append("<Figures>");
+                    sb.AppendLine(" <Geometry>");
+                    sb.Append("     <Figures>");
                     sb.Append(GCXML.StringFromGeometry(path));
-                    sb.Append("</Figures>");
-                    sb.AppendLine("</Geometry>");
+                    sb.AppendLine("</Figures>");
+                    sb.AppendLine(" </Geometry>");
                 }
             }
+            sb.AppendLine("</Canvase>");
             sw.Write(sb.ToString());
             sw.Close();
+            MessageBox.Show(@"已保存到 E:\项目\GeometryTool\GeometryTool\bin\Debug\save.XML");
         }
 
         
@@ -406,26 +408,20 @@ namespace GeometryTool
             openFileDlg.Filter = "xml file|*.xml";      //只选择.xml文件
             if (openFileDlg.ShowDialog() == true)       //打开对话框
             {
-                if (!string.IsNullOrEmpty(openFileDlg.FileName))
-                    ReadXml(openFileDlg.FileName,this.RootCanvas);
+                if (!string.IsNullOrEmpty(openFileDlg.FileName))    //如果文件名不为空
+                {
+                    XMLHelper xmlHelper = new XMLHelper();
+                    GeomortyStringConverter GSC = new GeomortyStringConverter(RootCanvas,graphAppearance);
+                    MatchCollection MatchList = xmlHelper.ReadXml(openFileDlg.FileName);    //读取XML文件
+                    foreach (Match item in MatchList)
+                    {
+                        GSC.GeomotryFromString(item.Groups[0].ToString());                  //转化成为图形
+                    }
+                }
             }
         }
 
-        /// <summary>
-        /// 读取xml文件，生成图形
-        /// </summary>
-        /// <param name="vPath"></param>
-        /// <param name="vRootCanvas"></param>
-        public void ReadXml(string vPath, Canvas vRootCanvas)
-        {
-            StreamReader streamReader = new StreamReader(vPath);
-            GeomortyConvertFromXML GCxml = new GeomortyConvertFromXML(RootCanvas,graphAppearance);
-            MatchCollection MatchList = GCxml.GeomotryFromXML(streamReader.ReadToEnd().ToString(), @"<Geometry>\s*<Figures>([^<]*)</Figures>");
-            foreach (Match match in MatchList)
-            {
-                GCxml.GeomotryFromString(match.Groups[1].ToString());
-            }
-        }
+        
     }
    
 }

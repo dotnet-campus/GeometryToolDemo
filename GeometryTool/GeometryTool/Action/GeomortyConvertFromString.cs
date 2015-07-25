@@ -19,17 +19,17 @@ namespace GeometryTool
     /// <summary>
     /// 
     /// </summary>
-    public class GeomortyConvertFromXML
+    public class GeomortyStringConverter
     {
-        Canvas vRootCanvas;
-        GraphAppearance vGraphAppearance;
+        public Canvas vRootCanvas;
+        public GraphAppearance vGraphAppearance;
 
         /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="vRootCanvas"></param>
         /// <param name="vGraphAppearance"></param>
-        public GeomortyConvertFromXML(Canvas vRootCanvas, GraphAppearance vGraphAppearance)
+        public GeomortyStringConverter(Canvas vRootCanvas, GraphAppearance vGraphAppearance)
         {
             this.vRootCanvas=vRootCanvas;
             this.vGraphAppearance=vGraphAppearance;
@@ -54,14 +54,10 @@ namespace GeometryTool
             //定义直线
             PathGeometry pathGeometry = new PathGeometry();
             path.Data = pathGeometry;
-
-           
-
+   
             pathGeometry.Figures = new PathFigureCollection();
             PathFigure mPathFigure=new PathFigure();;
             Point EllipsePoint=new Point();
-
-            
 
             for (int i=0;i<matchList.Count;++i)
             {
@@ -190,20 +186,60 @@ namespace GeometryTool
             }
             vRootCanvas.Children.Add(path);
         }
-    
-        /// <summary>
-        /// 把图形从XML中读取出来
-        /// </summary>
-        /// <param name="vXMLString"></param>
-        /// <param name="vPattern"></param>
-        /// <returns></returns>
-        public MatchCollection GeomotryFromXML(string vXMLString,string vPattern)
-        {
-            Regex regex = new Regex(vPattern);
-            MatchCollection matchList = regex.Matches(vXMLString);
-            return matchList;
-        }
 
+        /// <summary>
+        /// 把图形转换成为字符串
+        /// </summary>
+        /// <param name="vPath"></param>
+        /// <returns></returns>
+        public string StringFromGeometry(Path vPath)
+        {
+            StringBuilder miniLanguage = new StringBuilder();
+            PathGeometry pathGemetry = vPath.Data as PathGeometry;
+            PathFigure pathFigure = pathGemetry.Figures[0];
+            PathSegmentCollection segmentCol = pathFigure.Segments;
+            miniLanguage.Append("M " + pathFigure.StartPoint.X.ToString() + "," + pathFigure.StartPoint.Y.ToString() + " ");
+
+            foreach (PathSegment item in segmentCol)
+            {
+                if (item.GetType() == typeof(LineSegment))
+                {
+                    miniLanguage.Append("L " + (item as LineSegment).Point.X + "," + (item as LineSegment).Point.Y + " ");
+                }
+                else if (item.GetType() == typeof(ArcSegment))
+                {
+                    ArcSegment arcSegment = item as ArcSegment;
+                    miniLanguage.Append("A " + arcSegment.Size.Width + "," + arcSegment.Size.Height + " " + arcSegment.RotationAngle + " ");
+                    miniLanguage.Append((arcSegment.IsLargeArc ? 1 : 0) + " " + (arcSegment.SweepDirection == SweepDirection.Clockwise ? 1 : 0) + " ");
+                    miniLanguage.Append(arcSegment.Point.X + "," + arcSegment.Point.Y + " ");
+                }
+                else if (item.GetType() == typeof(BezierSegment))
+                {
+                    BezierSegment bezierSegment = item as BezierSegment;
+                    miniLanguage.Append("C " + bezierSegment.Point1.X + "," + bezierSegment.Point1.Y + " ");
+                    miniLanguage.Append(bezierSegment.Point2.X + "," + bezierSegment.Point2.Y + " ");
+                    miniLanguage.Append(bezierSegment.Point3.X + "," + bezierSegment.Point3.Y + " ");
+                }
+                else if (item.GetType() == typeof(QuadraticBezierSegment))
+                {
+                    QuadraticBezierSegment QBezierSegment = new QuadraticBezierSegment();
+                    miniLanguage.Append("Q " + QBezierSegment.Point1.X + "," + QBezierSegment.Point1.Y + " ");
+                    miniLanguage.Append(QBezierSegment.Point2.X + "," + QBezierSegment.Point2.Y + " ");
+                }
+
+
+            }
+            if (pathFigure.IsClosed)
+            {
+                miniLanguage.Append("Z");
+            }
+            if (!miniLanguage.ToString().Contains("Z"))
+            {
+                miniLanguage.Remove(miniLanguage.Length - 1, 1);
+            }
+            return miniLanguage.ToString();
+        }
+    
         /// <summary>
         /// 产生一个EllipsePoint
         /// </summary>
@@ -218,52 +254,5 @@ namespace GeometryTool
             grapAdd.AddPoint(EllipsePoint, vGraphAppearance, vRootCanvas, out EllipsePath);
         }
 
-        public string StringFromGeometry(Path vPath)
-        {
-            StringBuilder miniLanguage = new StringBuilder();
-            PathGeometry pathGemetry = vPath.Data as PathGeometry;
-            PathFigure pathFigure =pathGemetry.Figures[0];
-            PathSegmentCollection segmentCol = pathFigure.Segments;
-            miniLanguage.Append("M " + pathFigure.StartPoint.X.ToString() + "," + pathFigure.StartPoint.Y.ToString() + " ");
-
-            foreach(PathSegment item in segmentCol)
-            {
-                if (item.GetType() == typeof(LineSegment))
-                {
-                    miniLanguage.Append("L "+(item as LineSegment).Point.X + "," + (item as LineSegment).Point.Y + " ");
-                }
-                else if(item.GetType() == typeof(ArcSegment))
-                {
-                    ArcSegment arcSegment = item as ArcSegment;
-                    miniLanguage.Append("A " + arcSegment.Size.Width + "," + arcSegment.Size.Height + " " + arcSegment.RotationAngle+" ");
-                    miniLanguage.Append((arcSegment.IsLargeArc ? 1 : 0) + " " + (arcSegment.SweepDirection==SweepDirection.Clockwise?1:0)+" ");
-                    miniLanguage.Append(arcSegment.Point.X+","+arcSegment.Point.Y+" ");
-                }
-                else if (item.GetType() == typeof(BezierSegment))
-                {
-                    BezierSegment bezierSegment = item as BezierSegment;
-                    miniLanguage.Append("C "+bezierSegment.Point1.X+","+bezierSegment.Point1.Y+" ");
-                    miniLanguage.Append( bezierSegment.Point2.X + "," + bezierSegment.Point2.Y + " ");
-                    miniLanguage.Append( bezierSegment.Point3.X + "," + bezierSegment.Point3.Y + " ");
-                }
-                else if (item.GetType() == typeof(QuadraticBezierSegment))
-                {
-                    QuadraticBezierSegment QBezierSegment = new QuadraticBezierSegment();
-                    miniLanguage.Append("Q " + QBezierSegment.Point1.X + "," + QBezierSegment.Point1.Y + " ");
-                    miniLanguage.Append(QBezierSegment.Point2.X + "," + QBezierSegment.Point2.Y + " ");
-                }
-
-               
-            }
-            if (pathFigure.IsClosed)
-            {
-                miniLanguage.Append("Z");
-            }
-            if (!miniLanguage.ToString().Contains("Z"))
-            {
-                miniLanguage.Remove(miniLanguage.Length-1,1);
-            }
-            return miniLanguage.ToString();
         }
-    }
 }
