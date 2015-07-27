@@ -52,6 +52,9 @@
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
+    <Compile Include="Action\BorderWidthHeightConverter.cs" />
+    <Compile Include="Action\CanvasScaleTransformConverter.cs" />
+    <Compile Include="Action\DashArrayConverter.cs" />
     <Compile Include="Action\XMLHelper.cs" />
     <Compile Include="Model\BorderWithAdornor.cs" />
     <Compile Include="Action\GeomortyConvertFromString.cs" />
@@ -59,6 +62,7 @@
     <Compile Include="Model\BorderWithDrag.cs" />
     <Compile Include="Model\Points.cs" />
     <Compile Include="Action\SizeConverter.cs" />
+    <Compile Include="Action\SliderConverterToDouble.cs" />
     <Compile Include="StrokeDashArray.xaml.cs">
       <DependentUpon>StrokeDashArray.xaml</DependentUpon>
     </Compile>
@@ -91,6 +95,10 @@
     <Page Include="Resources\Adornor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\ColorsStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Resources\ExpanderStyles.xaml">
       <Generator>MSBuild:Compile</Generator>

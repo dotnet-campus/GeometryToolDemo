@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Shapes;
 using System.Windows.Media;
 using System.ComponentModel;
+using System.Windows;
 
 namespace GeometryTool
 {
@@ -14,6 +15,7 @@ namespace GeometryTool
            // 文件功能描述：定义图形的外观
 
     ----------------------------------------------------------------*/
+    //public class GraphAppearance:DependencyObject
     public class GraphAppearance
     {
         public event PropertyChangedEventHandler PropertyChanged;
@@ -31,6 +33,7 @@ namespace GeometryTool
                 }
             }
         }
+       // public static readonly DependencyProperty 
 
         private DoubleCollection strokeDashArray;   //设置虚实
         public DoubleCollection StrokeDashArray

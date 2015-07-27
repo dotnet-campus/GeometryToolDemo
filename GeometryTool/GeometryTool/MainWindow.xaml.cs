@@ -22,7 +22,10 @@ namespace GeometryTool
     /// </summary>
     public partial class MainWindow : Window
     {
-        public static string ActionMode="";     //表示当前鼠标的模式
+        public static Canvas myRootCanvas;
+        public static string ActionMode = "";   //表示当前鼠标的模式
+        public static int GridX;
+        public static int GridY;
         public int isStartPoint;                //绘制直线的时候，表示是否为第一个点
         System.Windows.Shapes.Path linePath;    //表示绘制直线的时候，直线的Path
         System.Windows.Shapes.Path ellipsePath; //表示绘制图形的时候，点所在Path
@@ -34,24 +37,34 @@ namespace GeometryTool
         System.Windows.Shapes.Path trianglePath;//表示绘制三角形的时候，三角形所在的Path
         System.Windows.Shapes.Path rectanglePath;//表示绘制正方形的时候，正方形所在的Path
         bool canMove = false;                   //表示图形是否可以拖动
-        System.Windows.Shapes.Path ellipseGeometryPath ; //表示绘制椭圆的时候，椭圆所在的Path
+        System.Windows.Shapes.Path ellipseGeometryPath; //表示绘制椭圆的时候，椭圆所在的Path
         System.Windows.Shapes.Path curvePath;   //表示绘制曲线的时候，曲线所在的Path
         System.Windows.Shapes.Path QBezierPath; //表示绘制二次方贝塞尔曲线时候，曲线所在的Path
         System.Windows.Shapes.Path BezierPath;  //表示绘制三次方贝塞尔曲线时候，曲线所在的Path
-
+        
+        private DrawingBrush _gridBrush;        //绘制网格时所使用的Brush
         /// <summary>
         /// 构造函数，用于初始化对象
         /// </summary>
         public MainWindow()
         {
-            InitializeComponent();
-            graphAdd    = new GraphAdd();
-            ellipsePath = new System.Windows.Shapes.Path();
             graphAppearance = new GraphAppearance();
-            pathFigure      = new PathFigure();
+            InitializeComponent();
+            graphAdd = new GraphAdd();
+            ellipsePath = new System.Windows.Shapes.Path();
+            pathFigure = new PathFigure();
             isStartPoint = 0;
-            linePath     = new System.Windows.Shapes.Path();
+            linePath = new System.Windows.Shapes.Path();
             this.RootCanvas.Tag = "Select";
+            //this.WindowState = System.Windows.WindowState.Maximized;    //设置窗口最大化
+            Binding binding1 = new Binding("Value") { Source=this.StrokeDash1,ConverterParameter=this.StrokeDash2.Value,Converter=new DashArrayConverter1()};
+            Binding binding2 = new Binding("Value") { Source = this.StrokeDash2, ConverterParameter = this.StrokeDash1.Value, Converter = new DashArrayConverter2() };
+            BindingOperations.SetBinding(LineStyle, System.Windows.Shapes.Line.StrokeDashArrayProperty, binding1);
+            BindingOperations.SetBinding(LineStyle, System.Windows.Shapes.Line.StrokeDashArrayProperty, binding2);
+            docCanvas_Loaded();
+            StrokeCurrentColor.Background = graphAppearance.Stroke;
+            FillCurrentColor.Background = graphAppearance.Fill;
+            myRootCanvas = this.RootCanvas;
         }
 
         /// <summary>
@@ -68,9 +81,9 @@ namespace GeometryTool
                 this.RootCanvas.Tag = radioButton.ToolTip;
                 ActionMode = radioButton.ToolTip.ToString();
             }
-            if (isStartPoint != 0 && pathFigure.Segments.Count>0)
+            if (isStartPoint != 0 && pathFigure.Segments.Count > 0)
             {
-                pathFigure.Segments.RemoveAt(pathFigure.Segments.Count-1);
+                pathFigure.Segments.RemoveAt(pathFigure.Segments.Count - 1);
             }
             if (this.RootCanvas.Tag.ToString() != "Point")
             {
@@ -78,8 +91,8 @@ namespace GeometryTool
                 if (isStartPoint != 0)
                 {
                     isStartPoint = 0;
-                }         
-            } 
+                }
+            }
             e.Handled = true;
         }
 
@@ -187,10 +200,15 @@ namespace GeometryTool
             }
         }
 
+        /// <summary>
+        /// 将图形保存为XML文件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Save_Click(object sender, RoutedEventArgs e)
         {
             bool isCircel;  //用于判断是不是椭圆
-            StreamWriter sw=new StreamWriter(@"E:\项目\GeometryTool\GeometryTool\bin\Debug\save.XML");
+            StreamWriter sw = new StreamWriter(@"E:\项目\GeometryTool\GeometryTool\bin\Debug\save.XML");
             GeomortyStringConverter GCXML = new GeomortyStringConverter(RootCanvas, graphAppearance);
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
@@ -217,7 +235,7 @@ namespace GeometryTool
             MessageBox.Show(@"已保存到 E:\项目\GeometryTool\GeometryTool\bin\Debug\save.XML");
         }
 
-        
+
 
         /// <summary>
         /// 修改图形的位置
@@ -228,7 +246,7 @@ namespace GeometryTool
         {
             if (canMove)
             {
-                System.Windows.Point p = e.GetPosition(Application.Current.MainWindow);     //获取当前鼠标的位置
+                System.Windows.Point p = e.GetPosition(RootCanvas);     //获取当前鼠标的位置
                 if (this.RootCanvas.Tag.ToString() == "AddTriangle")                        //修改三角形的位置
                 {
                     if (trianglePath != null)
@@ -238,8 +256,8 @@ namespace GeometryTool
                         Point oldPoint = line2.Point;
                         line2.Point = new Point() { X = p.X, Y = p.Y };
                         LineSegment line1 = triangle.Figures[0].Segments[0] as LineSegment;
-                        oldPoint=triangle.Figures[0].StartPoint;
-                        line1.Point = new Point() { X = oldPoint.X +(oldPoint.X-p.X), Y = p.Y };
+                        oldPoint = triangle.Figures[0].StartPoint;
+                        line1.Point = new Point() { X = oldPoint.X + (oldPoint.X - p.X), Y = p.Y };
                         e.Handled = true;
                     }
                 }
@@ -271,20 +289,20 @@ namespace GeometryTool
                     Point oldPoint1 = line1.Point;
                     Point oldPoint2 = line2.Point;
                     line1.Point = new Point() { X = p.X, Y = oldPoint1.Y };
-                    if ((oldPoint2.X - oldPoint1.X) != 0 && (p.Y - oldPoint1.Y)!=0)         //保证被除数被为0
+                    if ((oldPoint2.X - oldPoint1.X) != 0 && (p.Y - oldPoint1.Y) != 0)         //保证被除数被为0
                     {
                         line1.Size = new Size() { Width = Math.Abs(oldPoint2.X - oldPoint1.X) / 2.0, Height = Math.Abs(p.Y - oldPoint1.Y) };
                         line2.Size = new Size() { Width = Math.Abs(oldPoint2.X - oldPoint1.X) / 2.0, Height = Math.Abs(p.Y - oldPoint1.Y) };
                     }
                     else if ((oldPoint2.X - oldPoint1.X) != 0)
                     {
-                        line1.Size = new Size() { Width = Math.Abs(oldPoint2.X - oldPoint1.X) / 2.0};
+                        line1.Size = new Size() { Width = Math.Abs(oldPoint2.X - oldPoint1.X) / 2.0 };
                         line2.Size = new Size() { Width = Math.Abs(oldPoint2.X - oldPoint1.X) / 2.0 };
                     }
                     else if ((p.Y - oldPoint1.Y) != 0)
                     {
                         line1.Size = new Size() { Height = Math.Abs(p.Y - oldPoint1.Y) };
-                        line2.Size = new Size() { Height = Math.Abs(p.Y - oldPoint1.Y)  };
+                        line2.Size = new Size() { Height = Math.Abs(p.Y - oldPoint1.Y) };
                     }
                     e.Handled = true;
                 }
@@ -292,7 +310,7 @@ namespace GeometryTool
                 {
                     PathGeometry circel = curvePath.Data as PathGeometry;
                     ArcSegment line1 = circel.Figures[0].Segments[0] as ArcSegment;
-                    line1.Point = new Point() { X=p.X,Y=p.Y};
+                    line1.Point = new Point() { X = p.X, Y = p.Y };
                 }
                 else if (this.RootCanvas.Tag.ToString() == "QBezier")   //修改二次方贝塞尔曲线的位置
                 {
@@ -300,8 +318,8 @@ namespace GeometryTool
                     QuadraticBezierSegment qbSegment = QBezier.Figures[0].Segments[0] as QuadraticBezierSegment;
                     Point oldPoint = qbSegment.Point1;
                     Point oldPoint2 = qbSegment.Point2;
-                    qbSegment.Point1 = new Point() { X = (p.X + oldPoint.X)/2.0, Y = p.Y };
-                    qbSegment.Point2 = new Point() { X = p.X ,Y = oldPoint2.Y };
+                    qbSegment.Point1 = new Point() { X = (p.X + oldPoint.X) / 2.0, Y = p.Y };
+                    qbSegment.Point2 = new Point() { X = p.X, Y = oldPoint2.Y };
                 }
                 else if (this.RootCanvas.Tag.ToString() == "Bezier")    //修改三次方贝塞尔曲线的位置
                 {
@@ -327,13 +345,13 @@ namespace GeometryTool
             if (this.RootCanvas.Tag.ToString() == "AddTriangle")        //绘制三角形
             {
                 System.Windows.Point p = Mouse.GetPosition(e.Source as FrameworkElement);
-                graphAdd.AddGeometry(p, graphAppearance, this.RootCanvas, out trianglePath, 3,true);
+                graphAdd.AddGeometry(p, graphAppearance, this.RootCanvas, out trianglePath, 3, true);
                 canMove = true;
             }
             else if (this.RootCanvas.Tag.ToString() == "AddRectangular")//绘制矩形
             {
                 System.Windows.Point p = Mouse.GetPosition(e.Source as FrameworkElement);
-                graphAdd.AddGeometry(p, graphAppearance, this.RootCanvas, out rectanglePath, 4,true);
+                graphAdd.AddGeometry(p, graphAppearance, this.RootCanvas, out rectanglePath, 4, true);
                 canMove = true;
             }
             else if (this.RootCanvas.Tag.ToString() == "AddCircle")//绘制圆
@@ -357,8 +375,8 @@ namespace GeometryTool
             else if (this.RootCanvas.Tag.ToString() == "QBezier")//绘制二次方贝塞尔曲线
             {
                 System.Windows.Point p = Mouse.GetPosition(e.Source as FrameworkElement);
-                graphAdd.AddPoint(p,graphAppearance, RootCanvas,out ellipsePath);
-                graphAdd.NewPathGeomotry(graphAppearance, RootCanvas,out QBezierPath,ellipsePath, false);
+                graphAdd.AddPoint(p, graphAppearance, RootCanvas, out ellipsePath);
+                graphAdd.NewPathGeomotry(graphAppearance, RootCanvas, out QBezierPath, ellipsePath, false);
 
                 System.Windows.Shapes.Path ellipsePath2, ellipsePath3;
                 graphAdd.AddPoint(p, graphAppearance, RootCanvas, out ellipsePath2);
@@ -367,7 +385,7 @@ namespace GeometryTool
                 PathGeometry path = QBezierPath.Data as PathGeometry;
 
                 graphAdd.AddQuadraticSegment(path.Figures[0], ellipsePath3, ellipsePath2);
-               
+
                 canMove = true;
             }
             else if (this.RootCanvas.Tag.ToString() == "Bezier")//绘制二次方贝塞尔曲线
@@ -376,13 +394,13 @@ namespace GeometryTool
                 graphAdd.AddPoint(p, graphAppearance, RootCanvas, out ellipsePath);
                 graphAdd.NewPathGeomotry(graphAppearance, RootCanvas, out BezierPath, ellipsePath, false);
 
-                System.Windows.Shapes.Path ellipsePath2, ellipsePath3,ellipsePath4;
+                System.Windows.Shapes.Path ellipsePath2, ellipsePath3, ellipsePath4;
                 graphAdd.AddPoint(p, graphAppearance, RootCanvas, out ellipsePath2);
                 graphAdd.AddPoint(p, graphAppearance, RootCanvas, out ellipsePath3);
                 graphAdd.AddPoint(p, graphAppearance, RootCanvas, out ellipsePath4);
                 PathGeometry path = BezierPath.Data as PathGeometry;
 
-                graphAdd.AddBezierSegment(path.Figures[0],ellipsePath4, ellipsePath3, ellipsePath2);
+                graphAdd.AddBezierSegment(path.Figures[0], ellipsePath4, ellipsePath3, ellipsePath2);
                 canMove = true;
             }
         }
@@ -415,7 +433,7 @@ namespace GeometryTool
                 if (!string.IsNullOrEmpty(openFileDlg.FileName))    //如果文件名不为空
                 {
                     XMLHelper xmlHelper = new XMLHelper();
-                    GeomortyStringConverter GSC = new GeomortyStringConverter(RootCanvas,graphAppearance);
+                    GeomortyStringConverter GSC = new GeomortyStringConverter(RootCanvas, graphAppearance);
                     MatchCollection MatchList = xmlHelper.ReadXml(openFileDlg.FileName);    //读取XML文件
                     foreach (Match item in MatchList)
                     {
@@ -426,24 +444,133 @@ namespace GeometryTool
             }
         }
 
-        private void Save2_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// 设置Stroke的颜色
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void StrokeColors_Click(object sender, RoutedEventArgs e)
         {
-            foreach (UIElement item in this.RootCanvas.Children)
+            Button button = e.OriginalSource as Button;
+            if (button != null)
             {
-                System.Windows.Shapes.Path path = item as System.Windows.Shapes.Path;
-                if (path != null)
+                this.StrokeCurrentColor.Background = button.Background;
+            }
+        }
+
+        /// <summary>
+        /// 设置Fill的颜色
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void FillColors_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = e.OriginalSource as Button;
+            if (button != null)
+            {
+                this.FillCurrentColor.Background = button.Background;
+            }
+        }
+
+        public static int multiple=1;
+        private void CanvasChange_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            try
+            {
+                multiple = (int)this.CanvasChange.Value / 10;
+                double height = RootCanvas.ActualHeight *  (int)this.CanvasChange.Value / 10.0;
+                double width = RootCanvas.ActualWidth * (int)this.CanvasChange.Value / 10.0;
+                this.CanvasBorder.Height = height>=CanvasBorder.ActualHeight?height:CanvasBorder.ActualHeight;
+                this.CanvasBorder.Width = width >= CanvasBorder.ActualWidth ? width : CanvasBorder.ActualWidth;
+            }
+            catch { }
+            
+        }
+
+        /// <summary>
+        /// 根据CheckBox是否被选中来绘制网格
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void hasGrid_Checked(object sender, RoutedEventArgs e)
+        {
+            docCanvas_Loaded();
+        }
+
+        
+        
+        /// <summary>
+        /// 用于绘制网格网格
+        /// </summary>
+        private void docCanvas_Loaded()
+        {
+            if (_gridBrush == null)
+            {
+                _gridBrush = new DrawingBrush(new GeometryDrawing(
+                    new SolidColorBrush(Colors.White),
+                            new Pen(new SolidColorBrush(Colors.LightGray), 1),  //网格粗细为1
+                                new RectangleGeometry(new Rect(0, 0, 10, 10))));   //绘制网格的右边和下边
+                _gridBrush.Stretch = Stretch.None;
+                _gridBrush.TileMode = TileMode.Tile;
+                _gridBrush.Viewport = new Rect(0.0, 0.0, 10, 10);
+                _gridBrush.ViewportUnits = BrushMappingMode.Absolute;
+                RootCanvas.Background = _gridBrush;
+            }
+        }
+
+       
+
+        /// <summary>
+        /// 改变Stroke
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Stroke_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = e.OriginalSource as Button;
+            if(button!=null)
+                graphAppearance.Stroke = button.Background;
+        }
+
+        /// <summary>
+        /// 改变Fill
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Fill_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = e.OriginalSource as Button;
+            if (button != null)
+                graphAppearance.Fill = button.Background;
+        }
+
+        /// <summary>
+        /// 拖动Slider改变StrokeThickness
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SliderStyle_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            graphAppearance.StrokeThickness =(int)e.NewValue;
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                ComboBoxItem cbi = (ComboBoxItem)(sender as ComboBox).SelectedItem;
+                if (cbi != null)
                 {
-                    PathGeometry path1=path.Data as PathGeometry;
-                    foreach(PathSegment seg in path1.Figures[0].Segments)
-                        if (seg.GetType() == typeof(QuadraticBezierSegment))
-                        {
-                            QuadraticBezierSegment s=seg as QuadraticBezierSegment;
-                            MessageBox.Show(s.Point1.X.ToString());
-                        }
+                    RootCanvas.Height = Convert.ToInt32(cbi.Tag) * 10;
+                    RootCanvas.Width = Convert.ToInt32(cbi.Tag) * 10;
+                    docCanvas_Loaded();
                 }
             }
-          
+            catch { }
         }
+
+
+       
     }
-   
+
 }

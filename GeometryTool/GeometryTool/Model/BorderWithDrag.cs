@@ -12,16 +12,14 @@ using System.Windows.Shapes;
 
 namespace GeometryTool
 {
-    /*----------------------------------------------------------------
-
-          // 文件功能描述：定义一个带响应拖动事件的Border
-
-   ----------------------------------------------------------------*/
+    /// <summary>
+    /// 主要让border添加了拖动响应，用于点
+    /// </summary>
     public class BorderWithDrag : Border
     {
         public RectAdorner rectAdornor;     //表示控件的装饰器
         bool isDragDropInEffect = false;    //表示是否可以拖动
-       
+        System.Windows.Point p;
         /// <summary>
         /// 无参数的构造函数，主要是为了给Border响应鼠标的事件
         /// </summary>
@@ -42,8 +40,22 @@ namespace GeometryTool
             //判断是否在选择模式下的操作以及是否可以拖动
             if (isDragDropInEffect && MainWindow.ActionMode == "Select")
             {
+                Point oldPoint = e.GetPosition(MainWindow.myRootCanvas); //获取目前鼠标的相对位置
+                // oldPoint.Y -= 100;
+                 //oldPoint.X /= MainWindow.multiple; //转化为真是的坐标
+                 //oldPoint.Y /= MainWindow.multiple;
+
+                 if (oldPoint.X * 10%10 > 5)
+                 { p.X = (oldPoint.X  + 1) ; }
+                 else
+                 { p.X = (oldPoint.X ); }
+
+                 if (oldPoint.Y * 10 % 10 > 5)
+                 { p.Y = (oldPoint.Y + 1) ; }
+                 else
+                 { p.Y = (oldPoint.Y ); }
+
                 FrameworkElement currEle = sender as FrameworkElement;
-                System.Windows.Point p = e.GetPosition(Application.Current.MainWindow); //获取目前鼠标的相对位置
                 BorderWithDrag myBorder = currEle as BorderWithDrag;
                 ((myBorder.Child as Path).Data as EllipseGeometry).Center = new Point() { X = p.X , Y = p.Y  };
                 e.Handled = true;
@@ -83,11 +95,11 @@ namespace GeometryTool
        public void Element_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             //判断是否在选择模式下的操作以及是否可以拖动
+            FrameworkElement currEle = sender as FrameworkElement;
             if (isDragDropInEffect&&MainWindow.ActionMode == "Select")
             {
-                FrameworkElement ele = sender as FrameworkElement;
                 isDragDropInEffect = false;
-                ele.ReleaseMouseCapture();
+                currEle.ReleaseMouseCapture();
                 e.Handled=true;
             }
         } 

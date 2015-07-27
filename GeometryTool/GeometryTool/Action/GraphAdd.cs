@@ -234,7 +234,7 @@ namespace GeometryTool
         /// <param name="vPoint"></param>
         /// <param name="vGraphAppearance"></param>
         /// <param name="vRootCanvas"></param>
-        public void AddPoint(Point vPoint, GraphAppearance vGraphAppearance, Canvas vRootCanvas,out Path vPath) 
+        public void AddPoint(Point vPoint, GraphAppearance vGraphAppearance, Canvas vRootCanvas, out Path vPath) 
         {
             //1.设置圆的外观
             vPath = new Path();
