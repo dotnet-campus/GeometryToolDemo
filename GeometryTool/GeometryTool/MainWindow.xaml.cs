@@ -189,7 +189,7 @@ namespace GeometryTool
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
-            
+            bool isCircel;  //用于判断是不是椭圆
             StreamWriter sw=new StreamWriter(@"E:\项目\GeometryTool\GeometryTool\bin\Debug\save.XML");
             GeomortyStringConverter GCXML = new GeomortyStringConverter(RootCanvas, graphAppearance);
             StringBuilder sb = new StringBuilder();
@@ -197,13 +197,17 @@ namespace GeometryTool
             sb.AppendLine("<Canvase>");
             foreach (UIElement item in this.RootCanvas.Children)
             {
-                System.Windows.Shapes.Path path = item as System.Windows.Shapes.Path;
+                System.Windows.Shapes.Path path = item as System.Windows.Shapes.Path;  //点是有BorderWithDrag包含着的，图形是Path
                 if (path != null)
                 {
                     sb.AppendLine(" <Geometry>");
                     sb.Append("     <Figures>");
-                    sb.Append(GCXML.StringFromGeometry(path));
+                    sb.Append(GCXML.StringFromGeometry(path, out isCircel));            //构造Mini-Language
                     sb.AppendLine("</Figures>");
+                    if (isCircel == true)
+                    {
+                        sb.AppendLine("     <IsCircel>1</IsCircel>");
+                    }
                     sb.AppendLine(" </Geometry>");
                 }
             }
@@ -415,13 +419,31 @@ namespace GeometryTool
                     MatchCollection MatchList = xmlHelper.ReadXml(openFileDlg.FileName);    //读取XML文件
                     foreach (Match item in MatchList)
                     {
-                        GSC.GeomotryFromString(item.Groups[0].ToString());                  //转化成为图形
+                        bool isCircel = Regex.IsMatch(item.Groups[0].ToString(), "<IsCircel>1</IsCircel>");
+                        GSC.GeomotryFromString(Regex.Match(item.Groups[0].ToString(), @"<Figures>([^<]*)</Figures>").Groups[1].ToString(), isCircel);                  //转化成为图形
                     }
                 }
             }
         }
 
-        
+        private void Save2_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (UIElement item in this.RootCanvas.Children)
+            {
+                System.Windows.Shapes.Path path = item as System.Windows.Shapes.Path;
+                if (path != null)
+                {
+                    PathGeometry path1=path.Data as PathGeometry;
+                    foreach(PathSegment seg in path1.Figures[0].Segments)
+                        if (seg.GetType() == typeof(QuadraticBezierSegment))
+                        {
+                            QuadraticBezierSegment s=seg as QuadraticBezierSegment;
+                            MessageBox.Show(s.Point1.X.ToString());
+                        }
+                }
+            }
+          
+        }
     }
    
 }

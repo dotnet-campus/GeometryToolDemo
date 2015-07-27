@@ -39,7 +39,7 @@ namespace GeometryTool
         /// 从字符串中读取图形，并绘制出来
         /// </summary>
         /// <param name="vMiniLanguege"></param>
-        public void GeomotryFromString(string vMiniLanguege )
+        public void GeomotryFromString(string vMiniLanguege,bool vIsCircel )
         {
             GraphAdd grapAdd = new GraphAdd();
             Path path = new Path()
@@ -58,34 +58,34 @@ namespace GeometryTool
             pathGeometry.Figures = new PathFigureCollection();
             PathFigure mPathFigure=new PathFigure();;
             Point EllipsePoint=new Point();
-
+            Path EllipseStartPath = new Path() ;
             for (int i=0;i<matchList.Count;++i)
             {
                 //产生点
                 Match match = matchList[i];
                 if (i == 0)  //处理起点的问题
                 {
-                    Path EllipsePath;
+                    
                     if (match.Groups[1].ToString() != "M")  //起点包含M
                     {
                         mPathFigure.StartPoint = new Point() { X = 0, Y = 0 };
-                        grapAdd.AddPoint(EllipsePoint, vGraphAppearance, vRootCanvas, out EllipsePath);
+                        grapAdd.AddPoint(EllipsePoint, vGraphAppearance, vRootCanvas, out EllipseStartPath);
                         pathGeometry.Figures.Add(mPathFigure);
                     }
                     else                                   //起点不包含M
                     {
                         //创建PathFigure，并绑定StartPoint
-                        GetEllipsePoint(match, out EllipsePath, out EllipsePoint, @"([\+\-\d\.]*),([\+\-\d\.]*)");   //构造EllipsePoint
+                        GetEllipsePoint(match, out EllipseStartPath, out EllipsePoint, @"([\+\-\d\.]*),([\+\-\d\.]*)");   //构造EllipsePoint
                     }
 
-                    EllipseGeometry e = EllipsePath.Data as EllipseGeometry;
+                    EllipseGeometry StartE = EllipseStartPath.Data as EllipseGeometry;
                     pathGeometry.Figures.Clear();
                     mPathFigure = new PathFigure();
                     if (Regex.IsMatch(vMiniLanguege, @"\sZ"))
                     {
                         mPathFigure.IsClosed = true;
                     }
-                    Binding binding = new Binding("Center") { Source = e };  //绑定起点
+                    Binding binding = new Binding("Center") { Source = StartE };  //绑定起点
                     binding.Mode = BindingMode.TwoWay;
                     BindingOperations.SetBinding(mPathFigure, PathFigure.StartPointProperty, binding);
                     pathGeometry.Figures.Add(mPathFigure);
@@ -126,31 +126,38 @@ namespace GeometryTool
 
                     case "A":
                         {
-                            //创建PathFigure，并绑定StartPoint
-                            Path EllipsePath;
-                            GetEllipsePoint(match, out EllipsePath, out EllipsePoint, @"\d ([\+\-\d\.]*),([\+\-\d\.]*)");   //构造EllipsePoint
-
                             //创建LineSegment，并绑定Point
-                            Size size = new Size() 
+                            Size size = new Size()
                             {
                                 Width = Convert.ToDouble(Regex.Match(match.Groups[0].ToString(), @"A ([\+\-\d\.]*),([\+\-\d\.]*)").Groups[1].ToString()),
                                 Height = Convert.ToDouble(Regex.Match(match.Groups[0].ToString(), @"A ([\+\-\d\.]*),([\+\-\d\.]*)").Groups[2].ToString())
                             };
 
                             SweepDirection vSweepDirection;
-                            bool vIsLargeArc=false;
-                            MatchCollection imatches = Regex.Matches(match.Groups[0].ToString(), @"([\+\-\d]+)");
-                            if ((Convert.ToInt32(imatches[3].Groups[1].ToString()) == 1))  //设置SweepDirection
+                            bool vIsLargeArc = false;
+                            MatchCollection imatches = Regex.Matches(match.Groups[0].ToString(), @"A\s*[\+\-\d\.]+,[\+\-\d\.]+\s*([\+\-\.\d]+)\s*([\+\-\.\d]+)\s*([\+\-\.\d]+)");
+                            if ((Convert.ToInt32(imatches[0].Groups[2].ToString()) == 1))  //设置SweepDirection
                             {
-                                vSweepDirection=SweepDirection.Clockwise;
+                                vSweepDirection = SweepDirection.Clockwise;
                             }
                             else
-                                vSweepDirection=SweepDirection.Counterclockwise;
-                            if ((Convert.ToInt32(imatches[4].Groups[1].ToString()) == 1)) //设置IsLargeArc
+                                vSweepDirection = SweepDirection.Counterclockwise;
+                            if ((Convert.ToInt32(imatches[0].Groups[3].ToString()) == 1)) //设置IsLargeArc
                             {
                                 vIsLargeArc = true;
                             }
-                            grapAdd.AddArcSegment(mPathFigure, EllipsePath,size, Convert.ToDouble(imatches[2].Groups[1].ToString()), vSweepDirection, vIsLargeArc);
+
+                            if (vIsCircel && i == 2)
+                            {
+                                grapAdd.AddArcSegment(mPathFigure, EllipseStartPath, size, Convert.ToDouble(imatches[0].Groups[1].ToString()), vSweepDirection, vIsLargeArc); 
+                            }
+                            else
+                            {
+                                //创建PathFigure，并绑定StartPoint
+                                Path EllipsePath;
+                                GetEllipsePoint(match, out EllipsePath, out EllipsePoint, @"\d ([\+\-\d\.]*),([\+\-\d\.]*)");   //构造EllipsePoint
+                                grapAdd.AddArcSegment(mPathFigure, EllipsePath, size, Convert.ToDouble(imatches[0].Groups[1].ToString()), vSweepDirection, vIsLargeArc); 
+                            }
                             break;
                         }
 
@@ -161,10 +168,10 @@ namespace GeometryTool
                             GetEllipsePoint(match, out EllipsePath, out EllipsePoint, @"([\+\-\d\.]*),([\+\-\d\.]*)");   //构造EllipsePoint
 
                             Path EllipsePath1;
-                            GetEllipsePoint(match, out EllipsePath1, out EllipsePoint, @"([\+\-\d\.]*),([\+\-\d\.]*)");   //构造EllipsePoint
+                            GetEllipsePoint(match, out EllipsePath1, out EllipsePoint, @"C\s+[\+\-\d\.]+,[\+\-\d\.]+\s*([\+\-\d\.]+),([\+\-\d\.]+)");   //构造EllipsePoint
 
                             Path EllipsePath2;
-                            GetEllipsePoint(match, out EllipsePath2, out EllipsePoint, @"([\+\-\d\.]*),([\+\-\d\.]*)");   //构造EllipsePoint
+                            GetEllipsePoint(match, out EllipsePath2, out EllipsePoint, @"([\+\-\d\.]+),([\+\-\d\.]+)$");   //构造EllipsePoint
                             grapAdd.AddBezierSegment(mPathFigure, EllipsePath, EllipsePath1, EllipsePath2);
                             break;
                         }
@@ -176,7 +183,7 @@ namespace GeometryTool
                             GetEllipsePoint(match, out EllipsePath, out EllipsePoint, @"([\+\-\d\.]*),([\+\-\d\.]*)");   //构造EllipsePoint
 
                             Path EllipsePath1;
-                            GetEllipsePoint(match, out EllipsePath1, out EllipsePoint, @"([\+\-\d\.]*),([\+\-\d\.]*)");   //构造EllipsePoint
+                            GetEllipsePoint(match, out EllipsePath1, out EllipsePoint, @"\d\s+([\+\-\d\.]*),([\+\-\d\.]*)");   //构造EllipsePoint
                             grapAdd.AddQuadraticSegment(mPathFigure, EllipsePath, EllipsePath1);
                             break;
                         }
@@ -192,14 +199,16 @@ namespace GeometryTool
         /// </summary>
         /// <param name="vPath"></param>
         /// <returns></returns>
-        public string StringFromGeometry(Path vPath)
+        public string StringFromGeometry(Path vPath,out bool vIsCircel)
         {
+            int count = 0;
+            vIsCircel = false;
             StringBuilder miniLanguage = new StringBuilder();
             PathGeometry pathGemetry = vPath.Data as PathGeometry;
             PathFigure pathFigure = pathGemetry.Figures[0];
             PathSegmentCollection segmentCol = pathFigure.Segments;
             miniLanguage.Append("M " + pathFigure.StartPoint.X.ToString() + "," + pathFigure.StartPoint.Y.ToString() + " ");
-
+            
             foreach (PathSegment item in segmentCol)
             {
                 if (item.GetType() == typeof(LineSegment))
@@ -212,6 +221,11 @@ namespace GeometryTool
                     miniLanguage.Append("A " + arcSegment.Size.Width + "," + arcSegment.Size.Height + " " + arcSegment.RotationAngle + " ");
                     miniLanguage.Append((arcSegment.IsLargeArc ? 1 : 0) + " " + (arcSegment.SweepDirection == SweepDirection.Clockwise ? 1 : 0) + " ");
                     miniLanguage.Append(arcSegment.Point.X + "," + arcSegment.Point.Y + " ");
+                    count++;
+                    if (segmentCol.Count == count && count == 2)    //判断是不是椭圆或者是圆
+                    {
+                        vIsCircel = true;
+                    }
                 }
                 else if (item.GetType() == typeof(BezierSegment))
                 {
@@ -222,7 +236,7 @@ namespace GeometryTool
                 }
                 else if (item.GetType() == typeof(QuadraticBezierSegment))
                 {
-                    QuadraticBezierSegment QBezierSegment = new QuadraticBezierSegment();
+                    QuadraticBezierSegment QBezierSegment = item as QuadraticBezierSegment;
                     miniLanguage.Append("Q " + QBezierSegment.Point1.X + "," + QBezierSegment.Point1.Y + " ");
                     miniLanguage.Append(QBezierSegment.Point2.X + "," + QBezierSegment.Point2.Y + " ");
                 }

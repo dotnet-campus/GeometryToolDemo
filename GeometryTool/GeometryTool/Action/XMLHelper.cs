@@ -19,7 +19,7 @@ namespace GeometryTool
         public MatchCollection ReadXml(string vPath)
         {
             StreamReader streamReader = new StreamReader(vPath);
-            Regex regex = new Regex(@"<Geometry>\s*<Figures>([^<]*)</Figures>");
+            Regex regex = new Regex(@"<Geometry>\s*([^G]*)</Geometry>");
             MatchCollection matchList = regex.Matches(streamReader.ReadToEnd());
             streamReader.Close();
             return matchList;

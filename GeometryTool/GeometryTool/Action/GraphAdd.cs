@@ -329,6 +329,7 @@ namespace GeometryTool
             vPath.Data = pathGeometry;
             pathGeometry.Figures = new PathFigureCollection();
             PathFigure pathFigure = new PathFigure();
+            //pathFigure.IsClosed = true;
             pathGeometry.Figures.Add(pathFigure);
             PathSegmentCollection segmentCollection = new PathSegmentCollection();
             pathFigure.Segments = segmentCollection;
