@@ -24,8 +24,7 @@ namespace GeometryTool
     {
         public static Canvas myRootCanvas;
         public static string ActionMode = "";   //表示当前鼠标的模式
-        public static int GridX;
-        public static int GridY;
+        int GridSize = 0;                       //表示画板大小
         public int isStartPoint;                //绘制直线的时候，表示是否为第一个点
         System.Windows.Shapes.Path linePath;    //表示绘制直线的时候，直线的Path
         System.Windows.Shapes.Path ellipsePath; //表示绘制图形的时候，点所在Path
@@ -142,65 +141,6 @@ namespace GeometryTool
         }
 
         /// <summary>
-        /// 选择线条颜色
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void StrokColor_Click(object sender, RoutedEventArgs e)
-        {
-            StylusSettings dlg = new StylusSettings();
-            dlg.Owner = this;
-            dlg.currColor = graphAppearance.Stroke;
-            if ((bool)dlg.ShowDialog().GetValueOrDefault())
-            {
-                graphAppearance.Stroke = dlg.currColor;
-            }
-        }
-
-        /// <summary>
-        /// 选择填充的颜色
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void FillColor_Click(object sender, RoutedEventArgs e)
-        {
-            StylusSettings dlg = new StylusSettings();
-            dlg.Owner = this;
-            dlg.currColor = graphAppearance.Stroke;
-            if ((bool)dlg.ShowDialog().GetValueOrDefault())
-            {
-                graphAppearance.Stroke = dlg.currColor;
-            }
-        }
-
-        /// <summary>
-        /// 选择线条的粗细
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e">1</param>
-        private void ThickNess_Click(object sender, RoutedEventArgs e)
-        {
-            StrokeThickness dlg = new StrokeThickness();
-            dlg.Owner = this;
-            dlg.ThickNess = graphAppearance.StrokeThickness;
-            if ((bool)dlg.ShowDialog().GetValueOrDefault())
-            {
-                graphAppearance.StrokeThickness = (int)dlg.ThickNess;
-            }
-        }
-
-        private void DashArray_Click(object sender, RoutedEventArgs e)
-        {
-            StrokeDashArray dlg = new StrokeDashArray();
-            dlg.Owner = this;
-            dlg.strokeDashArray = graphAppearance.StrokeDashArray;
-            if ((bool)dlg.ShowDialog().GetValueOrDefault())
-            {
-                graphAppearance.StrokeDashArray = dlg.strokeDashArray;
-            }
-        }
-
-        /// <summary>
         /// 将图形保存为XML文件
         /// </summary>
         /// <param name="sender"></param>
@@ -234,8 +174,6 @@ namespace GeometryTool
             sw.Close();
             MessageBox.Show(@"已保存到 E:\项目\GeometryTool\GeometryTool\bin\Debug\save.XML");
         }
-
-
 
         /// <summary>
         /// 修改图形的位置
@@ -477,11 +415,12 @@ namespace GeometryTool
         {
             try
             {
-                multiple = (int)this.CanvasChange.Value / 10;
-                double height = RootCanvas.ActualHeight *  (int)this.CanvasChange.Value / 10.0;
-                double width = RootCanvas.ActualWidth * (int)this.CanvasChange.Value / 10.0;
+                multiple = (int)this.CanvasChange.Value ;
+                double height = GridSize *  (int)this.CanvasChange.Value ;
+                double width = GridSize * (int)this.CanvasChange.Value;
                 this.CanvasBorder.Height = height>=CanvasBorder.ActualHeight?height:CanvasBorder.ActualHeight;
                 this.CanvasBorder.Width = width >= CanvasBorder.ActualWidth ? width : CanvasBorder.ActualWidth;
+                docCanvas_Loaded();
             }
             catch { }
             
@@ -497,8 +436,6 @@ namespace GeometryTool
             docCanvas_Loaded();
         }
 
-        
-        
         /// <summary>
         /// 用于绘制网格网格
         /// </summary>
@@ -509,10 +446,10 @@ namespace GeometryTool
                 _gridBrush = new DrawingBrush(new GeometryDrawing(
                     new SolidColorBrush(Colors.White),
                             new Pen(new SolidColorBrush(Colors.LightGray), 1),  //网格粗细为1
-                                new RectangleGeometry(new Rect(0, 0, 10, 10))));   //绘制网格的右边和下边
+                                new RectangleGeometry(new Rect(0, 0, multiple, multiple))));   //绘制网格的右边和下边
                 _gridBrush.Stretch = Stretch.None;
                 _gridBrush.TileMode = TileMode.Tile;
-                _gridBrush.Viewport = new Rect(0.0, 0.0, 10, 10);
+                _gridBrush.Viewport = new Rect(0.0, 0.0, multiple, multiple);
                 _gridBrush.ViewportUnits = BrushMappingMode.Absolute;
                 RootCanvas.Background = _gridBrush;
             }
@@ -563,7 +500,9 @@ namespace GeometryTool
                 {
                     RootCanvas.Height = Convert.ToInt32(cbi.Tag) * 10;
                     RootCanvas.Width = Convert.ToInt32(cbi.Tag) * 10;
+                    GridSize = Convert.ToInt32(cbi.Tag);
                     docCanvas_Loaded();
+
                 }
             }
             catch { }

@@ -63,15 +63,6 @@
     <Compile Include="Model\Points.cs" />
     <Compile Include="Action\SizeConverter.cs" />
     <Compile Include="Action\SliderConverterToDouble.cs" />
-    <Compile Include="StrokeDashArray.xaml.cs">
-      <DependentUpon>StrokeDashArray.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="StrokeThickness.xaml.cs">
-      <DependentUpon>StrokeThickness.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="StylusSettings.xaml.cs">
-      <DependentUpon>StylusSettings.xaml</DependentUpon>
-    </Compile>
     <Page Include="Resources\Canvas.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -105,18 +96,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Resources\GreyButton.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="StrokeDashArray.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="StrokeThickness.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="StylusSettings.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -18,6 +18,7 @@ namespace GeometryTool
     public class BorderWithDrag : Border
     {
         public RectAdorner rectAdornor;     //表示控件的装饰器
+        public Path path;
         bool isDragDropInEffect = false;    //表示是否可以拖动
         System.Windows.Point p;
         /// <summary>
@@ -28,6 +29,7 @@ namespace GeometryTool
             this.MouseLeftButtonDown += Element_MouseLeftButtonDown;
             this.MouseMove += Element_MouseMove;
             this.MouseLeftButtonUp += Element_MouseLeftButtonUp;
+            //path = vPath;
         }
 
         /// <summary>
@@ -41,25 +43,36 @@ namespace GeometryTool
             if (isDragDropInEffect && MainWindow.ActionMode == "Select")
             {
                 Point oldPoint = e.GetPosition(MainWindow.myRootCanvas); //获取目前鼠标的相对位置
-                // oldPoint.Y -= 100;
-                 //oldPoint.X /= MainWindow.multiple; //转化为真是的坐标
-                 //oldPoint.Y /= MainWindow.multiple;
-
-                 if (oldPoint.X * 10%10 > 5)
-                 { p.X = (oldPoint.X  + 1) ; }
+                int size = MainWindow.multiple;
+                int a = Convert.ToInt32((oldPoint.X));
+                Console.WriteLine(a);
+                if (oldPoint.X  % size >= size/2)
+                { 
+                    int b=( (int)( oldPoint.X ))/ size * size;
+                    
+                    p.X = ((int)(oldPoint.X) / size * size + size);
+                    //Console.WriteLine("+ ox:{0} ox:{1} px:{2} px:{3}",oldPoint.X,oldPoint.Y,p.X,p.Y);
+                }
                  else
-                 { p.X = (oldPoint.X ); }
+                {
+                    p.X = ((int)(oldPoint.X) / size * size); 
+                }
 
-                 if (oldPoint.Y * 10 % 10 > 5)
-                 { p.Y = (oldPoint.Y + 1) ; }
+                if (oldPoint.Y % size >= size/2)
+                { 
+                    p.Y = ((int)(oldPoint.Y) / size * size + size);
+                    Console.WriteLine("++ size:{0} ox:{1} oy:{2} px:{3} py:{4}",size, oldPoint.X, oldPoint.Y, p.X, p.Y);
+                }
                  else
-                 { p.Y = (oldPoint.Y ); }
+                { 
+                    p.Y = ((int)(oldPoint.Y) / size * size);
+                    Console.WriteLine("-- size:{0} ox:{1} oy:{2} px:{3} py:{4}", size, oldPoint.X, oldPoint.Y, p.X, p.Y);
+                }
 
                 FrameworkElement currEle = sender as FrameworkElement;
                 BorderWithDrag myBorder = currEle as BorderWithDrag;
                 ((myBorder.Child as Path).Data as EllipseGeometry).Center = new Point() { X = p.X , Y = p.Y  };
                 e.Handled = true;
-
             }
         }
 

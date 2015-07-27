@@ -308,7 +308,7 @@
                             <Label SnapsToDevicePixels="True" FontFamily="Arial" Foreground="DarkBlue" FontSize="11" FontWeight="Bold" VerticalContentAlignment="Center" VerticalAlignment="Center" Content="画板缩放"/>
                         </DockPanel>
                     </Border>
-                    <Slider x:Name="CanvasChange" HorizontalAlignment="Center"  Width="150" VerticalAlignment="Center" Minimum="10" Maximum="50" ValueChanged="CanvasChange_ValueChanged"  />
+                    <Slider x:Name="CanvasChange" HorizontalAlignment="Center"  Width="150" VerticalAlignment="Center" Minimum="25" Maximum="100" ValueChanged="CanvasChange_ValueChanged"  />
                 </StackPanel>
             </StackPanel>
         </Border>
