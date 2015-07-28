@@ -240,10 +240,10 @@ namespace GeometryTool
             vPath = new Path();
             vPath.Stroke = vGraphAppearance.Stroke;
             vPath.Fill = vGraphAppearance.Stroke;
-            vPath.StrokeThickness = 2;
+            vPath.StrokeThickness = vGraphAppearance.StrokeThickness;
             EllipseGeometry ellipse = new EllipseGeometry();
-            ellipse.RadiusX = vGraphAppearance.StrokeThickness+2;
-            ellipse.RadiusY = vGraphAppearance.StrokeThickness +2;
+            ellipse.RadiusX = vGraphAppearance.StrokeThickness+0.2;
+            ellipse.RadiusY = vGraphAppearance.StrokeThickness +0.2;
             ellipse.Center  = vPoint;
             vPath.Data = ellipse;
 

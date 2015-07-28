@@ -283,7 +283,7 @@
                         </DockPanel>
                     </Border>
                     <Line x:Name="LineStyle"  X1="25" X2="175" Y1="0" Y2="0"  Stroke="{Binding ElementName=StrokeCurrentColor,Path=Background,Mode=TwoWay}"    Margin="0,20,0,10"  StrokeThickness="{Binding ElementName=SliderStyle,Path=Value,Converter={StaticResource sliderConverterToDouble}}"/>
-                    <Slider x:Name="SliderStyle" HorizontalAlignment="Center"  Width="150" VerticalAlignment="Center" Minimum="1" Maximum="20" ValueChanged="SliderStyle_ValueChanged"  />
+                    <Slider x:Name="SliderStyle" HorizontalAlignment="Center"  Width="150" VerticalAlignment="Center" Minimum="0.1" Maximum="1" ValueChanged="SliderStyle_ValueChanged"  />
 
                     <Slider x:Name="StrokeDash1" HorizontalAlignment="Center"  Width="150" VerticalAlignment="Center" Minimum="1" Maximum="10"   Margin="0,10"/>
                     <Slider x:Name="StrokeDash2" HorizontalAlignment="Center"  Width="150" VerticalAlignment="Center" Minimum="1" Maximum="10"  />
@@ -293,14 +293,14 @@
                             <Label SnapsToDevicePixels="True" FontFamily="Arial" Foreground="DarkBlue" FontSize="11" FontWeight="Bold" VerticalContentAlignment="Center" VerticalAlignment="Center" Content="杂项"/>
                         </DockPanel>
                     </Border>
-                    <ComboBox SelectionChanged="ComboBox_SelectionChanged" >
-                        <ComboBoxItem Tag="16">16*16</ComboBoxItem>
+                    <ComboBox SelectionChanged="ComboBox_SelectionChanged" x:Name="CBGridSize">
+                        <ComboBoxItem Tag="16" >16*16</ComboBoxItem>
                         <ComboBoxItem Tag="24">24*24</ComboBoxItem>
                         <ComboBoxItem Tag="32">32*32</ComboBoxItem>
-                        <ComboBoxItem Tag="48" IsSelected="True">48*48</ComboBoxItem>
-                        <ComboBoxItem Tag="64">64*64</ComboBoxItem>
+                        <ComboBoxItem Tag="48" >48*48</ComboBoxItem>
+                        <ComboBoxItem Tag="64" >64*64</ComboBoxItem>
                         <ComboBoxItem Tag="100">100*100</ComboBoxItem>
-                        <ComboBoxItem Tag="238">128*128</ComboBoxItem>
+                        <ComboBoxItem Tag="128">128*128</ComboBoxItem>
                     </ComboBox>
 
                     <Border Width="196" Height="23" Background="#DDE7EE"  BorderThickness="0,0,0,2" BorderBrush="#BFBFBF" Margin="0,20,0,0">
@@ -320,12 +320,13 @@
                     Height="{Binding ElementName=RootGrid,Path=ActualHeight,Converter={StaticResource BorderWidthHeightConverter},ConverterParameter=115}">
                 <Canvas>
                     <Canvas x:Name="RootCanvas" MouseDown="RootCanvas_MouseDown" MouseLeftButtonUp="RootCanvas_MouseLeftButtonUp"  MouseLeftButtonDown="RootCanvas_MouseLeftButtonDown"  MouseMove="RootCanvas_MouseMove"
-                        Width="1000"
-                            Height="1000">
+                        Width="64" Height="64">
                         <Canvas.RenderTransform>
                             <ScaleTransform x:Name="CanvasScaleTsf" CenterX="0" CenterY="0" ScaleX="{Binding ElementName=CanvasChange,Path=Value,Converter={StaticResource canvasScaleTransformConverter}}"
                                         ScaleY="{Binding ElementName=CanvasChange,Path=Value,Converter={StaticResource canvasScaleTransformConverter}}">
-                            </ScaleTransform>
+                            <!--<ScaleTransform x:Name="CanvasScaleTsf" CenterX="0" CenterY="0" ScaleX="100"
+                                        ScaleY="0">-->    
+                        </ScaleTransform>
                     </Canvas.RenderTransform>
                 </Canvas>
             </Canvas>

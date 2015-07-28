@@ -46,26 +46,26 @@ namespace GeometryTool
                 int size = MainWindow.multiple;
                 int a = Convert.ToInt32((oldPoint.X));
                 Console.WriteLine(a);
-                if (oldPoint.X  % size >= size/2)
+                if (oldPoint.X*10  % 10 >= 5)
                 { 
-                    int b=( (int)( oldPoint.X ))/ size * size;
+                    int b=( (int)( oldPoint.X ));
                     
-                    p.X = ((int)(oldPoint.X) / size * size + size);
+                    p.X = ((int)(oldPoint.X)  + 1);
                     //Console.WriteLine("+ ox:{0} ox:{1} px:{2} px:{3}",oldPoint.X,oldPoint.Y,p.X,p.Y);
                 }
                  else
                 {
-                    p.X = ((int)(oldPoint.X) / size * size); 
+                    p.X = ((int)(oldPoint.X)); 
                 }
 
-                if (oldPoint.Y % size >= size/2)
+                if (oldPoint.Y * 10 % 10 >= 5)
                 { 
-                    p.Y = ((int)(oldPoint.Y) / size * size + size);
+                    p.Y = ((int)(oldPoint.Y) + 1);
                     Console.WriteLine("++ size:{0} ox:{1} oy:{2} px:{3} py:{4}",size, oldPoint.X, oldPoint.Y, p.X, p.Y);
                 }
                  else
                 { 
-                    p.Y = ((int)(oldPoint.Y) / size * size);
+                    p.Y = ((int)(oldPoint.Y) );
                     Console.WriteLine("-- size:{0} ox:{1} oy:{2} px:{3} py:{4}", size, oldPoint.X, oldPoint.Y, p.X, p.Y);
                 }
 

@@ -48,6 +48,7 @@ namespace GeometryTool
         public MainWindow()
         {
             graphAppearance = new GraphAppearance();
+            graphAppearance.StrokeThickness = 0.1;
             InitializeComponent();
             graphAdd = new GraphAdd();
             ellipsePath = new System.Windows.Shapes.Path();
@@ -64,6 +65,8 @@ namespace GeometryTool
             StrokeCurrentColor.Background = graphAppearance.Stroke;
             FillCurrentColor.Background = graphAppearance.Fill;
             myRootCanvas = this.RootCanvas;
+            CBGridSize.SelectedIndex = 4;
+
         }
 
         /// <summary>
@@ -416,11 +419,15 @@ namespace GeometryTool
             try
             {
                 multiple = (int)this.CanvasChange.Value ;
-                double height = GridSize *  (int)this.CanvasChange.Value ;
+                //RootCanvas.Height = GridSize * (int)this.CanvasChange.Value; //比较缩放后的RootCanvas是否比现在的CanvasBorder大
+                //RootCanvas.Width = GridSize * (int)this.CanvasChange.Value;
+                double height = GridSize * (int)this.CanvasChange.Value; //比较缩放后的RootCanvas是否比现在的CanvasBorder大
                 double width = GridSize * (int)this.CanvasChange.Value;
                 this.CanvasBorder.Height = height>=CanvasBorder.ActualHeight?height:CanvasBorder.ActualHeight;
                 this.CanvasBorder.Width = width >= CanvasBorder.ActualWidth ? width : CanvasBorder.ActualWidth;
                 docCanvas_Loaded();
+
+                Console.WriteLine("Height:{0} Width:{1} CB.Height{2} CB.Width{2}", height,width,CanvasBorder.Height,CanvasBorder.Width);
             }
             catch { }
             
@@ -436,11 +443,11 @@ namespace GeometryTool
 
             _gridBrush = new DrawingBrush(new GeometryDrawing(
                 new SolidColorBrush(Colors.White),
-                        new Pen(new SolidColorBrush(Colors.LightGray), 1),  //网格粗细为1
-                            new RectangleGeometry(new Rect(0, 0, multiple, multiple))));   //绘制网格的右边和下边
+                        new Pen(new SolidColorBrush(Colors.LightGray), 0.1),  //网格粗细为1
+                            new RectangleGeometry(new Rect(0, 0, 1, 1))));   //绘制网格的右边和下边
             _gridBrush.Stretch = Stretch.None;
             _gridBrush.TileMode = TileMode.Tile;
-            _gridBrush.Viewport = new Rect(0.0, 0.0, multiple, multiple);
+            _gridBrush.Viewport = new Rect(0.0, 0.0, 1, 1);
             _gridBrush.ViewportUnits = BrushMappingMode.Absolute;
             RootCanvas.Background = _gridBrush;
  
@@ -479,9 +486,14 @@ namespace GeometryTool
         /// <param name="e"></param>
         private void SliderStyle_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            graphAppearance.StrokeThickness =(int)e.NewValue;
+            graphAppearance.StrokeThickness =e.NewValue;
         }
 
+        /// <summary>
+        /// 选择画布的大小
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try
@@ -489,11 +501,11 @@ namespace GeometryTool
                 ComboBoxItem cbi = (ComboBoxItem)(sender as ComboBox).SelectedItem;
                 if (cbi != null)
                 {
-                    RootCanvas.Height = Convert.ToInt32(cbi.Tag) * 10;
-                    RootCanvas.Width = Convert.ToInt32(cbi.Tag) * 10;
+                    RootCanvas.Height = Convert.ToInt32(cbi.Tag) * (int)this.CanvasChange.Value;
+                    RootCanvas.Width = Convert.ToInt32(cbi.Tag) * (int)this.CanvasChange.Value;
+                   
                     GridSize = Convert.ToInt32(cbi.Tag);
                     docCanvas_Loaded();
-
                 }
             }
             catch { }

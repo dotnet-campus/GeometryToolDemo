@@ -20,8 +20,8 @@ namespace GeometryTool
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private int strokeThickness;  //设置图形的线条的大小
-        public int StrokeThickness 
+        private double strokeThickness;  //设置图形的线条的大小
+        public double StrokeThickness 
         { 
             get{return strokeThickness;}
             set 
@@ -93,7 +93,7 @@ namespace GeometryTool
        
         public GraphAppearance()
         {
-            StrokeThickness = 1;
+            StrokeThickness = 0.1;
             Stroke = Brushes.Black;
             Fill = Brushes.Transparent;
             FillRule = FillRule.EvenOdd;
