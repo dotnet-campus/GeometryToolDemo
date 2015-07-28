@@ -22,20 +22,7 @@ namespace GeometryTool
         double Y1=100;
         double Y2=100;
         public BorderWithAdornor BorderWithAdornor;
-        //public RectAdorner(UIElement adornedElement, double x1, double y1, double width, double height, BorderWithAdornor vBorderWithAdornor)
-        //    : base(adornedElement)
-        //{
-        //    this.x = x;
-        //    this.y = y;
-        //    this.width = width;
-        //    this.height = height;
-        //    this.BorderWithAdornor = vBorderWithAdornor;
-
-        //    BorderWithAdornor.rectAdornor = this;
-        //    //this.MouseLeftButtonDown += this.ButtonClicked;
-        //    this.Visibility = Visibility.Hidden;
-            
-        //}
+       
 
         public RectAdorner(UIElement adornedElement)
             : base(adornedElement)
@@ -44,11 +31,11 @@ namespace GeometryTool
 
         protected override void OnRender(DrawingContext drawingContext)
         {
-            Rect adornedElementRect = new Rect(X1, X2, Y1, Y2);
+            Rect adornedElementRect = new Rect(this.AdornedElement.DesiredSize);
             SolidColorBrush renderBrush = new SolidColorBrush(Colors.Green);
             renderBrush.Opacity = 0.2;
-            Pen renderPen = new Pen(new SolidColorBrush(Colors.Navy), 1.5);
-            double renderRadius = 5.0;
+            Pen renderPen = new Pen(new SolidColorBrush(Colors.Navy), 0.3);
+            double renderRadius = 0.1;
             drawingContext.DrawEllipse(renderBrush, renderPen, adornedElementRect.TopLeft, renderRadius, renderRadius);
             drawingContext.DrawEllipse(renderBrush, renderPen, adornedElementRect.TopRight, renderRadius, renderRadius);
             drawingContext.DrawEllipse(renderBrush, renderPen, adornedElementRect.BottomLeft, renderRadius, renderRadius);

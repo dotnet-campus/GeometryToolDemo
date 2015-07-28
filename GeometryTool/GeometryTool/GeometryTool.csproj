@@ -60,6 +60,9 @@
     <Compile Include="Action\XMLHelper.cs" />
     <Compile Include="Model\BorderWithAdornor.cs" />
     <Compile Include="Action\GeomortyConvertFromString.cs" />
+    <Compile Include="Model\ImageVisibilityConverter.cs" />
+    <Compile Include="Model\LockAdorner.cs" />
+    <Compile Include="Model\LockChrome.cs" />
     <Compile Include="Model\RectAdorner.cs" />
     <Compile Include="Model\BorderWithDrag.cs" />
     <Compile Include="Model\Points.cs" />
@@ -131,6 +134,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Image\icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\unlock.png" />
+    <Resource Include="Image\lock.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

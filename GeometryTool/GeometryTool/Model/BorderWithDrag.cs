@@ -9,6 +9,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Windows.Data;
 
 namespace GeometryTool
 {
@@ -17,10 +18,14 @@ namespace GeometryTool
     /// </summary>
     public class BorderWithDrag : Border
     {
-        public RectAdorner rectAdornor;     //表示控件的装饰器
+        public LockAdorner lockAdornor;     //表示控件的装饰器
         public Path path;
+        public BorderWithDrag BrotherBorder;
+        public BorderWithDrag FirstBrotherBorder;
         bool isDragDropInEffect = false;    //表示是否可以拖动
+        public Binding binding;
         System.Windows.Point p;
+        int count;
         /// <summary>
         /// 无参数的构造函数，主要是为了给Border响应鼠标的事件
         /// </summary>
@@ -29,7 +34,7 @@ namespace GeometryTool
             this.MouseLeftButtonDown += Element_MouseLeftButtonDown;
             this.MouseMove += Element_MouseMove;
             this.MouseLeftButtonUp += Element_MouseLeftButtonUp;
-            //path = vPath;
+          
         }
 
         /// <summary>
@@ -111,11 +116,83 @@ namespace GeometryTool
             FrameworkElement currEle = sender as FrameworkElement;
             if (isDragDropInEffect&&MainWindow.ActionMode == "Select")
             {
+                Point pt = e.GetPosition((UIElement)sender);
+
+                count = 0;
+
+                VisualTreeHelper.HitTest(this.Parent as Canvas, null,   //进行命中测试
+                    new HitTestResultCallback(MyHitTestResult),
+                    new PointHitTestParameters(pt));
+
+                if (count > 1)      //如果该点有两个BorderWithDrag，说明有点融合
+                {
+                    this.HasOtherPoint = true;
+                    if (lockAdornor == null)
+                    {
+                        lockAdornor = new LockAdorner(this);
+                        AdornerLayer layer = AdornerLayer.GetAdornerLayer(this.Parent as Canvas);
+                        if (layer != null)
+                        {
+                            layer.Add(lockAdornor);
+                        }
+                    }
+                    binding = new Binding("Center") { Source = ((this.BrotherBorder.Child as Path).Data as EllipseGeometry) };
+                    binding.Mode = BindingMode.TwoWay;
+                    BindingOperations.SetBinding(((this.Child as Path).Data as EllipseGeometry), EllipseGeometry.CenterProperty,binding);
+                   
+                }
+                else
+                {
+                    this.HasOtherPoint = false;
+                }
+
+
                 isDragDropInEffect = false;
                 currEle.ReleaseMouseCapture();
                 e.Handled=true;
             }
-        } 
+        }
+
+       public HitTestResultBehavior MyHitTestResult(HitTestResult result)
+       {
+
+           Path path = result.VisualHit as Path;
+           if (path != null)
+           {
+               BorderWithDrag border = path.Parent as BorderWithDrag;
+               if (border != null)
+               {    
+                   count++;
+                   if (count == 1)
+                       FirstBrotherBorder = border;
+                   if (count == 2) 
+                   {
+                       BrotherBorder = border;
+                       if (this == BrotherBorder)
+                           BrotherBorder = FirstBrotherBorder;
+                       return HitTestResultBehavior.Stop;
+                   }
+               }
+           }
+               
+           return HitTestResultBehavior.Continue;
+       }
+
+       public static readonly DependencyProperty HasOtherPointProperty =
+           DependencyProperty.Register("HasOtherPoint", typeof(bool), typeof(BorderWithDrag),
+           new FrameworkPropertyMetadata(false, null));
+
+       public bool HasOtherPoint
+       {
+           get
+           {
+               return (bool)this.GetValue(HasOtherPointProperty);
+           }
+           set
+           {
+               this.SetValue(HasOtherPointProperty, value);
+           }
+       }
     }
 }
 
