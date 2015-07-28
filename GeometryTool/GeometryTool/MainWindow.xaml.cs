@@ -426,33 +426,24 @@ namespace GeometryTool
             
         }
 
-        /// <summary>
-        /// 根据CheckBox是否被选中来绘制网格
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void hasGrid_Checked(object sender, RoutedEventArgs e)
-        {
-            docCanvas_Loaded();
-        }
+     
 
         /// <summary>
         /// 用于绘制网格网格
         /// </summary>
         private void docCanvas_Loaded()
         {
-            if (_gridBrush == null)
-            {
-                _gridBrush = new DrawingBrush(new GeometryDrawing(
-                    new SolidColorBrush(Colors.White),
-                            new Pen(new SolidColorBrush(Colors.LightGray), 1),  //网格粗细为1
-                                new RectangleGeometry(new Rect(0, 0, multiple, multiple))));   //绘制网格的右边和下边
-                _gridBrush.Stretch = Stretch.None;
-                _gridBrush.TileMode = TileMode.Tile;
-                _gridBrush.Viewport = new Rect(0.0, 0.0, multiple, multiple);
-                _gridBrush.ViewportUnits = BrushMappingMode.Absolute;
-                RootCanvas.Background = _gridBrush;
-            }
+
+            _gridBrush = new DrawingBrush(new GeometryDrawing(
+                new SolidColorBrush(Colors.White),
+                        new Pen(new SolidColorBrush(Colors.LightGray), 1),  //网格粗细为1
+                            new RectangleGeometry(new Rect(0, 0, multiple, multiple))));   //绘制网格的右边和下边
+            _gridBrush.Stretch = Stretch.None;
+            _gridBrush.TileMode = TileMode.Tile;
+            _gridBrush.Viewport = new Rect(0.0, 0.0, multiple, multiple);
+            _gridBrush.ViewportUnits = BrushMappingMode.Absolute;
+            RootCanvas.Background = _gridBrush;
+ 
         }
 
        
