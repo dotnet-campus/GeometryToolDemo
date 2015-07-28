@@ -65,8 +65,8 @@ namespace GeometryTool
             StrokeCurrentColor.Background = graphAppearance.Stroke;
             FillCurrentColor.Background = graphAppearance.Fill;
             myRootCanvas = this.RootCanvas;
-            CBGridSize.SelectedIndex = 4;
-
+            CBGridSize.SelectedIndex = 3;
+            CanvasChange.Value = 20;
         }
 
         /// <summary>
@@ -83,11 +83,11 @@ namespace GeometryTool
                 this.RootCanvas.Tag = radioButton.ToolTip;
                 ActionMode = radioButton.ToolTip.ToString();
             }
-            if (isStartPoint != 0 && pathFigure.Segments.Count > 0)
+            if (isStartPoint != 0 && pathFigure.Segments.Count > 0) //移除额外的线
             {
                 pathFigure.Segments.RemoveAt(pathFigure.Segments.Count - 1);
             }
-            if (this.RootCanvas.Tag.ToString() != "Point")
+            if (this.RootCanvas.Tag.ToString() != "Point")          //移除划线功能
             {
                 this.RootCanvas.RemoveHandler(UIElement.MouseMoveEvent, new MouseEventHandler(DrawLine));
                 if (isStartPoint != 0)
@@ -487,7 +487,7 @@ namespace GeometryTool
         /// <param name="e"></param>
         private void SliderStyle_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            graphAppearance.StrokeThickness =e.NewValue;
+            graphAppearance.StrokeThickness =e.NewValue/10;
         }
 
         /// <summary>
@@ -502,14 +502,45 @@ namespace GeometryTool
                 ComboBoxItem cbi = (ComboBoxItem)(sender as ComboBox).SelectedItem;
                 if (cbi != null)
                 {
-                    RootCanvas.Height = Convert.ToInt32(cbi.Tag) * (int)this.CanvasChange.Value;
-                    RootCanvas.Width = Convert.ToInt32(cbi.Tag) * (int)this.CanvasChange.Value;
-                   
+                    RootCanvas.Height = Convert.ToInt32(cbi.Tag);
+                    RootCanvas.Width = Convert.ToInt32(cbi.Tag) ;
                     GridSize = Convert.ToInt32(cbi.Tag);
+                    double height = GridSize * (int)this.CanvasChange.Value + 200; //计算画布放大后的坐标
+                    double width  = GridSize * (int)this.CanvasChange.Value + 200;
+                    this.CanvasBorder.Height = height >= CanvasBorder.ActualHeight ? height : RootGrid.ActualHeight - 115;  //修改Border的大小，使得其能显示放大后的画布
+                    this.CanvasBorder.Width = width >= CanvasBorder.ActualWidth ? width : RootGrid.ActualWidth - 215;
                     docCanvas_Loaded();
                 }
             }
             catch { }
+        }
+
+        /// <summary>
+        /// 右击鼠标，变成选择模式
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void RootCanvas_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (MainWindow.ActionMode != "Select")
+            {
+                Select.IsChecked = true;            //更正鼠标模式为选择模式
+                this.RootCanvas.Tag = "Select";
+                ActionMode = "Select";
+                if (isStartPoint != 0 && pathFigure.Segments.Count > 0) //移除额外的线
+                {
+                    pathFigure.Segments.RemoveAt(pathFigure.Segments.Count - 1);
+                }
+                if (this.RootCanvas.Tag.ToString() != "Point")          //移除划线功能
+                {
+                    this.RootCanvas.RemoveHandler(UIElement.MouseMoveEvent, new MouseEventHandler(DrawLine));
+                    if (isStartPoint != 0)
+                    {
+                        isStartPoint = 0;
+                    }
+                }
+                e.Handled = true;
+            }
         }
 
 

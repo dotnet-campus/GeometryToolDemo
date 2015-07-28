@@ -56,6 +56,7 @@
     <Compile Include="Action\CanvasScaleTransformConverter.cs" />
     <Compile Include="Action\DashArrayConverter.cs" />
     <Compile Include="Action\ScaleCenterConverter.cs" />
+    <Compile Include="Action\NDecimalConverter.cs" />
     <Compile Include="Action\XMLHelper.cs" />
     <Compile Include="Model\BorderWithAdornor.cs" />
     <Compile Include="Action\GeomortyConvertFromString.cs" />

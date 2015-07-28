@@ -284,8 +284,10 @@
                         </DockPanel>
                     </Border>
                     <Line x:Name="LineStyle"  X1="25" X2="175" Y1="0" Y2="0"  Stroke="{Binding ElementName=StrokeCurrentColor,Path=Background,Mode=TwoWay}"    Margin="0,20,0,10"  StrokeThickness="{Binding ElementName=SliderStyle,Path=Value,Converter={StaticResource sliderConverterToDouble}}"/>
-                    <Slider x:Name="SliderStyle" HorizontalAlignment="Center"  Width="150" VerticalAlignment="Center" Minimum="0.1" Maximum="1" ValueChanged="SliderStyle_ValueChanged"  />
-
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal">
+                        <Slider x:Name="SliderStyle" HorizontalAlignment="Center"  Width="120" IsSnapToTickEnabled="True" VerticalAlignment="Center" Minimum="1" Maximum="10" ValueChanged="SliderStyle_ValueChanged"  />
+                        <Label Content="{Binding ElementName=SliderStyle,Path=Value}"/>
+                    </StackPanel>
                     <Slider x:Name="StrokeDash1" HorizontalAlignment="Center"  Width="150" VerticalAlignment="Center" Minimum="1" Maximum="10"   Margin="0,10"/>
                     <Slider x:Name="StrokeDash2" HorizontalAlignment="Center"  Width="150" VerticalAlignment="Center" Minimum="1" Maximum="10"  />
 
@@ -309,19 +311,22 @@
                             <Label SnapsToDevicePixels="True" FontFamily="Arial" Foreground="DarkBlue" FontSize="11" FontWeight="Bold" VerticalContentAlignment="Center" VerticalAlignment="Center" Content="画板缩放"/>
                         </DockPanel>
                     </Border>
-                    <Slider x:Name="CanvasChange" HorizontalAlignment="Center"  Width="150" VerticalAlignment="Center" Minimum="1"  Maximum="100" ValueChanged="CanvasChange_ValueChanged"  />
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal">
+                    <Slider x:Name="CanvasChange"  IsSnapToTickEnabled="True"   Width="120"  Minimum="1"  Maximum="50" ValueChanged="CanvasChange_ValueChanged"  />
+                        <Label Content="{Binding ElementName=CanvasChange,Path=Value}"/>
+                    </StackPanel>
                 </StackPanel>
             </StackPanel>
         </Border>
 
 
-        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Visible" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalScrollBarVisibility="Auto">
         <Border Grid.Row="1" x:Name="CanvasBorder" HorizontalAlignment="Center" VerticalAlignment="Center"  
                      Width="{Binding ElementName=RootGrid,Path=ActualWidth,Converter={StaticResource BorderWidthHeightConverter},ConverterParameter=215}"
                     Height="{Binding ElementName=RootGrid,Path=ActualHeight,Converter={StaticResource BorderWidthHeightConverter},ConverterParameter=115}">
                 <Canvas VerticalAlignment="Top" HorizontalAlignment="Center">
                     <Canvas x:Name="RootCanvas" MouseDown="RootCanvas_MouseDown" MouseLeftButtonUp="RootCanvas_MouseLeftButtonUp"  MouseLeftButtonDown="RootCanvas_MouseLeftButtonDown"  MouseMove="RootCanvas_MouseMove"
-                        Width="64" Height="64" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        Width="64" Height="64" HorizontalAlignment="Center" VerticalAlignment="Center" MouseRightButtonDown="RootCanvas_MouseRightButtonDown">
                         <Canvas.RenderTransform>
                             <ScaleTransform x:Name="CanvasScaleTsf" CenterX="{Binding ElementName=RootCanvas,Path=Width,Converter={StaticResource scaleCenterConverter}}" CenterY="0" ScaleX="{Binding ElementName=CanvasChange,Path=Value,Converter={StaticResource canvasScaleTransformConverter}}"
                                         ScaleY="{Binding ElementName=CanvasChange,Path=Value,Converter={StaticResource canvasScaleTransformConverter}}"> 
