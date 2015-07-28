@@ -12,6 +12,7 @@
             <local:SliderConverterToDouble x:Key="sliderConverterToDouble"/>
             <local:BorderWidthHeightConverter x:Key="BorderWidthHeightConverter"/>
             <local:CanvasScaleTransformConverter x:Key="canvasScaleTransformConverter" />
+            <local:ScaleCenterConverter x:Key="scaleCenterConverter"/>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Canvas.xaml"/>
                 <ResourceDictionary Source="Resources/Adornor.xaml"/>
@@ -314,18 +315,16 @@
         </Border>
 
 
-        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Visible" HorizontalAlignment="Left" VerticalAlignment="Top">
-        <Border Grid.Row="1" x:Name="CanvasBorder" HorizontalAlignment="Left" VerticalAlignment="Top"  
+        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Visible" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Border Grid.Row="1" x:Name="CanvasBorder" HorizontalAlignment="Center" VerticalAlignment="Center"  
                      Width="{Binding ElementName=RootGrid,Path=ActualWidth,Converter={StaticResource BorderWidthHeightConverter},ConverterParameter=215}"
                     Height="{Binding ElementName=RootGrid,Path=ActualHeight,Converter={StaticResource BorderWidthHeightConverter},ConverterParameter=115}">
-                <Canvas>
+                <Canvas VerticalAlignment="Top" HorizontalAlignment="Center">
                     <Canvas x:Name="RootCanvas" MouseDown="RootCanvas_MouseDown" MouseLeftButtonUp="RootCanvas_MouseLeftButtonUp"  MouseLeftButtonDown="RootCanvas_MouseLeftButtonDown"  MouseMove="RootCanvas_MouseMove"
-                        Width="64" Height="64">
+                        Width="64" Height="64" HorizontalAlignment="Center" VerticalAlignment="Center">
                         <Canvas.RenderTransform>
-                            <ScaleTransform x:Name="CanvasScaleTsf" CenterX="0" CenterY="0" ScaleX="{Binding ElementName=CanvasChange,Path=Value,Converter={StaticResource canvasScaleTransformConverter}}"
-                                        ScaleY="{Binding ElementName=CanvasChange,Path=Value,Converter={StaticResource canvasScaleTransformConverter}}">
-                            <!--<ScaleTransform x:Name="CanvasScaleTsf" CenterX="0" CenterY="0" ScaleX="100"
-                                        ScaleY="0">-->    
+                            <ScaleTransform x:Name="CanvasScaleTsf" CenterX="{Binding ElementName=RootCanvas,Path=Width,Converter={StaticResource scaleCenterConverter}}" CenterY="0" ScaleX="{Binding ElementName=CanvasChange,Path=Value,Converter={StaticResource canvasScaleTransformConverter}}"
+                                        ScaleY="{Binding ElementName=CanvasChange,Path=Value,Converter={StaticResource canvasScaleTransformConverter}}"> 
                         </ScaleTransform>
                     </Canvas.RenderTransform>
                 </Canvas>

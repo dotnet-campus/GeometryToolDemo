@@ -53,8 +53,9 @@ namespace GeometryTool
 
             //定义直线
             PathGeometry pathGeometry = new PathGeometry();
+            
             path.Data = pathGeometry;
-   
+            path.StrokeThickness = vGraphAppearance.StrokeThickness;
             pathGeometry.Figures = new PathFigureCollection();
             PathFigure mPathFigure=new PathFigure();;
             Point EllipsePoint=new Point();

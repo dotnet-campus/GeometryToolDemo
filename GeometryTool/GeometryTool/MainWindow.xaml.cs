@@ -56,7 +56,7 @@ namespace GeometryTool
             isStartPoint = 0;
             linePath = new System.Windows.Shapes.Path();
             this.RootCanvas.Tag = "Select";
-            //this.WindowState = System.Windows.WindowState.Maximized;    //设置窗口最大化
+            this.WindowState = System.Windows.WindowState.Maximized;    //设置窗口最大化
             Binding binding1 = new Binding("Value") { Source=this.StrokeDash1,ConverterParameter=this.StrokeDash2.Value,Converter=new DashArrayConverter1()};
             Binding binding2 = new Binding("Value") { Source = this.StrokeDash2, ConverterParameter = this.StrokeDash1.Value, Converter = new DashArrayConverter2() };
             BindingOperations.SetBinding(LineStyle, System.Windows.Shapes.Line.StrokeDashArrayProperty, binding1);
@@ -413,21 +413,22 @@ namespace GeometryTool
             }
         }
 
+        /// <summary>
+        /// 调整画布，进行缩放
+        /// </summary>
         public static int multiple=1;
         private void CanvasChange_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             try
             {
                 multiple = (int)this.CanvasChange.Value ;
-                //RootCanvas.Height = GridSize * (int)this.CanvasChange.Value; //比较缩放后的RootCanvas是否比现在的CanvasBorder大
-                //RootCanvas.Width = GridSize * (int)this.CanvasChange.Value;
-                double height = GridSize * (int)this.CanvasChange.Value; //比较缩放后的RootCanvas是否比现在的CanvasBorder大
-                double width = GridSize * (int)this.CanvasChange.Value;
-                this.CanvasBorder.Height = height>=CanvasBorder.ActualHeight?height:CanvasBorder.ActualHeight;
-                this.CanvasBorder.Width = width >= CanvasBorder.ActualWidth ? width : CanvasBorder.ActualWidth;
+                double height = GridSize * (int)this.CanvasChange.Value+100; //计算画布放大后的坐标
+                double width = GridSize * (int)this.CanvasChange.Value+100;
+                this.CanvasBorder.Height = height >= CanvasBorder.ActualHeight ? height : RootGrid.ActualHeight - 115;  //修改Border的大小，使得其能显示放大后的画布
+                this.CanvasBorder.Width = width >= CanvasBorder.ActualWidth ? width : RootGrid.ActualWidth - 215;
                 docCanvas_Loaded();
 
-                Console.WriteLine("Height:{0} Width:{1} CB.Height{2} CB.Width{2}", height,width,CanvasBorder.Height,CanvasBorder.Width);
+                //Console.WriteLine("Height:{0} Width:{1} CB.Height{2} CB.Width{2} this.H：{3} this.W{4}", height, width, CanvasBorder.Height, CanvasBorder.Width, this.RootGrid.ActualHeight, this.RootGrid.ActualWidth);
             }
             catch { }
             
