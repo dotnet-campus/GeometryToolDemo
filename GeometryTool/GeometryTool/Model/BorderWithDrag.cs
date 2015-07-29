@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Data;
+using System.Windows.Media.Imaging;
 
 namespace GeometryTool
 {
@@ -48,31 +49,7 @@ namespace GeometryTool
             if (isDragDropInEffect && MainWindow.ActionMode == "Select")
             {
                 Point oldPoint = e.GetPosition(MainWindow.myRootCanvas); //获取目前鼠标的相对位置
-                int size = MainWindow.multiple;
-                int a = Convert.ToInt32((oldPoint.X));
-                Console.WriteLine(a);
-                if (oldPoint.X*10  % 10 >= 5)
-                { 
-                    int b=( (int)( oldPoint.X ));
-                    
-                    p.X = ((int)(oldPoint.X)  + 1);
-                    //Console.WriteLine("+ ox:{0} ox:{1} px:{2} px:{3}",oldPoint.X,oldPoint.Y,p.X,p.Y);
-                }
-                 else
-                {
-                    p.X = ((int)(oldPoint.X)); 
-                }
-
-                if (oldPoint.Y * 10 % 10 >= 5)
-                { 
-                    p.Y = ((int)(oldPoint.Y) + 1);
-                    Console.WriteLine("++ size:{0} ox:{1} oy:{2} px:{3} py:{4}",size, oldPoint.X, oldPoint.Y, p.X, p.Y);
-                }
-                 else
-                { 
-                    p.Y = ((int)(oldPoint.Y) );
-                    Console.WriteLine("-- size:{0} ox:{1} oy:{2} px:{3} py:{4}", size, oldPoint.X, oldPoint.Y, p.X, p.Y);
-                }
+                p = (new AutoPoints()).GetAutoAdsorbPoint(oldPoint);    //计算最近的网格的位置
 
                 FrameworkElement currEle = sender as FrameworkElement;
                 BorderWithDrag myBorder = currEle as BorderWithDrag;
@@ -117,7 +94,7 @@ namespace GeometryTool
             if (isDragDropInEffect&&MainWindow.ActionMode == "Select")
             {
                 Point pt = e.GetPosition((UIElement)sender);
-
+                pt = (new AutoPoints()).GetAutoAdsorbPoint(pt);
                 count = 0;
 
                 VisualTreeHelper.HitTest(this.Parent as Canvas, null,   //进行命中测试
@@ -127,6 +104,7 @@ namespace GeometryTool
                 if (count > 1)      //如果该点有两个BorderWithDrag，说明有点融合
                 {
                     this.HasOtherPoint = true;
+                    
                     if (lockAdornor == null)
                     {
                         lockAdornor = new LockAdorner(this);
@@ -136,6 +114,7 @@ namespace GeometryTool
                             layer.Add(lockAdornor);
                         }
                     }
+                    lockAdornor.chrome.Source = new BitmapImage(new Uri("Image/lock.png", UriKind.Relative));
                     binding = new Binding("Center") { Source = ((this.BrotherBorder.Child as Path).Data as EllipseGeometry) };
                     binding.Mode = BindingMode.TwoWay;
                     BindingOperations.SetBinding(((this.Child as Path).Data as EllipseGeometry), EllipseGeometry.CenterProperty,binding);
@@ -144,6 +123,8 @@ namespace GeometryTool
                 else
                 {
                     this.HasOtherPoint = false;
+                    if (lockAdornor!=null)
+                    lockAdornor.chrome.Source = new BitmapImage(new Uri("Image/unlock.png", UriKind.Relative));
                 }
 
 
@@ -153,6 +134,11 @@ namespace GeometryTool
             }
         }
 
+        /// <summary>
+        /// 命中测试
+        /// </summary>
+        /// <param name="result"></param>
+        /// <returns></returns>
        public HitTestResultBehavior MyHitTestResult(HitTestResult result)
        {
 
@@ -163,7 +149,7 @@ namespace GeometryTool
                if (border != null)
                {    
                    count++;
-                   if (count == 1)
+                   if (count == 1)          //寻找其border
                        FirstBrotherBorder = border;
                    if (count == 2) 
                    {
@@ -191,6 +177,22 @@ namespace GeometryTool
            set
            {
                this.SetValue(HasOtherPointProperty, value);
+           }
+       }
+
+       public static readonly DependencyProperty IsLockProperty =
+              DependencyProperty.Register("IsLock", typeof(bool), typeof(BorderWithDrag),
+              new FrameworkPropertyMetadata(false, null));
+
+       public bool IsLock
+       {
+           get
+           {
+               return (bool)this.GetValue(IsLockProperty);
+           }
+           set
+           {
+               this.SetValue(IsLockProperty, value);
            }
        }
     }

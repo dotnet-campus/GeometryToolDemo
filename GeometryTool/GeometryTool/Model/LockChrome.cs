@@ -15,7 +15,7 @@ namespace GeometryTool
 {
     public class LockChrome:Image
     {
-        bool isLock;
+        public bool isLock;
         public LockChrome()
         {
             this.MouseDown += Element_MouseLeftButtonDown;  //给这个Image添加点击事件，用于解开融合
@@ -41,8 +41,12 @@ namespace GeometryTool
             tt.Y = -0.3;
             this.RenderTransform = tt;
 
+            //Binding IsLcokbinding = new Binding("IsLock") { Converter = new ImageLockSourceConverter() };
+            //this.SetBinding(Image.SourceProperty, IsLcokbinding);  
             Binding binding = new Binding("HasOtherPoint") { Converter=new ImageVisibilityConverter()};
             this.SetBinding(Image.VisibilityProperty, binding);                     //当没有重合点的时候，隐藏锁
+
+               
 
             return base.ArrangeOverride(arrangeBounds);
         }
@@ -62,8 +66,10 @@ namespace GeometryTool
                     Point p = e.GetPosition(MainWindow.myRootCanvas);
                     Chrome.Source = new BitmapImage(new Uri("Image/unlock.png", UriKind.Relative));
                     BorderWithDrag border = this.DataContext as BorderWithDrag;
+                    BorderWithDrag brotherBorder = border.BrotherBorder;
                     BindingOperations.ClearBinding(((border.Child as Path).Data as EllipseGeometry), EllipseGeometry.CenterProperty);
-                    ((border.Child as Path).Data as EllipseGeometry).Center = p;
+                    border.BrotherBorder = null;
+                    ((border.Child as Path).Data as EllipseGeometry).Center = (new AutoPoints()).GetAutoAdsorbPoint(new Point() {X=p.X-1.2,Y=p.Y+0.3 });
                     isLock = false;
                 }
                 else                //不融合变融合

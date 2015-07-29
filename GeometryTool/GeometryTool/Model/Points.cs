@@ -3,39 +3,36 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-
-namespace GeometryTool.Class
+using System.Threading;
+using System.Windows;
+namespace GeometryTool
 {
-    public class Points:INotifyPropertyChanged
+    public class AutoPoints 
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-        private int x;
-        public int X
+        public Point GetAutoAdsorbPoint(Point oldPoint)
         {
-            get{return x;}
-            set 
+            Point p = new Point();
+            if (oldPoint.X * 10 % 10 >= 5)
             {
-                x = value;
-                if (this.PropertyChanged != null)
-                {
-                    this.PropertyChanged.Invoke(this,new PropertyChangedEventArgs("X"));
-                }
+                int b = ((int)(oldPoint.X));           //计算离其最近的一个X坐标
+                p.X = ((int)(oldPoint.X) + 1);
+               
             }
-        }
+            else
+            {
+                p.X = ((int)(oldPoint.X));
+            }
 
-        private int y;
-        public int Y
-        {
-            get { return Y; }
-            set
+            if (oldPoint.Y * 10 % 10 >= 5)              //计算离其最近的一个Y坐标
             {
-                Y = value;
-                if (this.PropertyChanged != null)
-                {
-                    this.PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Y"));
-                }
+                p.Y = ((int)(oldPoint.Y) + 1);
+               
             }
+            else
+            {
+                p.Y = ((int)(oldPoint.Y));
+            }
+            return p;
         }
     }
 }

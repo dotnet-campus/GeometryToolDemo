@@ -16,7 +16,7 @@ namespace GeometryTool
     public class LockAdorner: Adorner
     {
         private VisualCollection visuals;
-        private LockChrome chrome;
+        public LockChrome chrome;
 
         protected override int VisualChildrenCount
         {
