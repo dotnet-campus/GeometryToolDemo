@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
+using System.Windows.Controls.Primitives;
 
 namespace GeometryTool
 {
@@ -20,13 +21,15 @@ namespace GeometryTool
     public class BorderWithDrag : Border
     {
         public LockAdorner lockAdornor;     //表示控件的装饰器
+        public List<Path> EllipseList;      //用于表示所在的图形中所拥有的点集
         public Path path;
+        public Path GeometryPath;           //表示点所在的图形
+        public int number;
         public BorderWithDrag BrotherBorder;
-        public BorderWithDrag FirstBrotherBorder;
         bool isDragDropInEffect = false;    //表示是否可以拖动
-        public Binding binding;
         public List<BorderWithDrag> PointList = new List<BorderWithDrag>();
         System.Windows.Point p;
+        bool CanLock=false;
         int count;
         /// <summary>
         /// 无参数的构造函数，主要是为了给Border响应鼠标的事件
@@ -36,7 +39,31 @@ namespace GeometryTool
             this.MouseLeftButtonDown += Element_MouseLeftButtonDown;
             this.MouseMove += Element_MouseMove;
             this.MouseLeftButtonUp += Element_MouseLeftButtonUp;
-          
+            this.ContextMenu = new ContextMenu();
+            MenuItem LockItem = new MenuItem();
+            LockItem.Header = "组合";
+            LockItem.Click += new RoutedEventHandler(DeletedItem_Click);
+            this.ContextMenu.Items.Add(LockItem);
+            MenuItem unLockItem = new MenuItem();
+            unLockItem.Header = "取消组合";
+            unLockItem.Click += new RoutedEventHandler(DeletedItem_Click);
+            this.ContextMenu.Items.Add(unLockItem);
+        }
+
+        public BorderWithDrag(Path path, int number, List<Path> EllipseList)
+        {
+            GeometryPath = path;
+            this.EllipseList = EllipseList;
+            this.number = number;
+            this.MouseLeftButtonDown += Element_MouseLeftButtonDown;
+            this.MouseMove += Element_MouseMove;
+            this.MouseLeftButtonUp += Element_MouseLeftButtonUp;
+            this.ContextMenu = new ContextMenu();
+
+            MenuItem DeleteItem = new MenuItem();
+            DeleteItem.Header = "删除";
+            DeleteItem.Click += new RoutedEventHandler(DeletedItem_Click);
+            this.ContextMenu.Items.Add(DeleteItem);
         }
 
         /// <summary>
@@ -77,6 +104,7 @@ namespace GeometryTool
                     currEle.CaptureMouse();
                     currEle.Cursor = Cursors.Hand;
                     isDragDropInEffect = true;      //设置可以拖动
+                    CanLock = true;
                 };
                 
                 e.Handled = true;
@@ -92,7 +120,7 @@ namespace GeometryTool
         {
             //判断是否在选择模式下的操作以及是否可以拖动
             FrameworkElement currEle = sender as FrameworkElement;
-            if (isDragDropInEffect&&MainWindow.ActionMode == "Select")
+            if (isDragDropInEffect&&MainWindow.ActionMode == "Select"&&CanLock)
             {
                 Point pt = e.GetPosition((UIElement)sender);
                 pt = (new AutoPoints()).GetAutoAdsorbPoint(pt);
@@ -127,7 +155,7 @@ namespace GeometryTool
                     {
                         if (border != BrotherBorder)
                         {
-                            binding = new Binding("Center") { Source = ((BrotherBorder.Child as Path).Data as EllipseGeometry) };
+                            Binding binding = new Binding("Center") { Source = ((BrotherBorder.Child as Path).Data as EllipseGeometry) };
                             binding.Mode = BindingMode.TwoWay;
                             BindingOperations.SetBinding(((border.Child as Path).Data as EllipseGeometry), EllipseGeometry.CenterProperty, binding);
                         }
@@ -140,10 +168,12 @@ namespace GeometryTool
 
                 isDragDropInEffect = false;
                 currEle.ReleaseMouseCapture();
+                CanLock = false;
                 e.Handled=true;
             }
         }
 
+     
         /// <summary>
         /// 命中测试
         /// </summary>
@@ -199,6 +229,48 @@ namespace GeometryTool
            set
            {
                this.SetValue(IsLockProperty, value);
+           }
+       }
+
+        /// <summary>
+        /// 添加Border的删除功能
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+       public void DeletedItem_Click(object sender, RoutedEventArgs e)
+       {
+           PathGeometry path = GeometryPath.Data as PathGeometry;   //获取该Border所在PathGeometry
+           PathFigure pf = path.Figures[0];
+           if (number != 1)                             //如果要删除的不是起点
+           {
+               pf.Segments.RemoveAt(number - 2);        //直接移除Segment
+           }
+           else                                         //如果要删除的是起点
+           {
+               PathFigure pf2 = new PathFigure();
+               for (int i=0;i<pf.Segments.Count;++i)
+               {
+                   if (i == 0)                          //复制出另外一个PathFigure，令其起点为原来的PathFigure中的LineSegment的Point
+                   {
+                       Binding binding = new Binding("Center") { Source=(EllipseList[1].Data as EllipseGeometry)};
+                       BindingOperations.SetBinding(pf2,PathFigure.StartPointProperty,binding);
+                   }
+                   else
+                   {
+                       pf2.Segments.Add(pf.Segments[i]);
+                   }
+               }
+               path.Figures.Add(pf2);
+               path.Figures.RemoveAt(0);
+           }
+
+           MainWindow.myRootCanvas.Children.Remove(this); //在窗体上移除该点
+           EllipseList.RemoveAt(number-1);                //在该图形中的点集中移除该点
+
+           for (int j = 0; j < EllipseList.Count; ++j)      //重新定位点集的位置
+           {
+               BorderWithDrag border = EllipseList[j].Parent as BorderWithDrag;
+               border.number = j + 1;
            }
        }
     }

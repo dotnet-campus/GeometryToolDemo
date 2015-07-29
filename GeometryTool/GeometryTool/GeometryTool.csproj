@@ -52,6 +52,7 @@
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
+    <Compile Include="Action\BorderLock.cs" />
     <Compile Include="Action\BorderWidthHeightConverter.cs" />
     <Compile Include="Action\CanvasScaleTransformConverter.cs" />
     <Compile Include="Action\DashArrayConverter.cs" />

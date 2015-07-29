@@ -207,24 +207,9 @@ namespace GeometryTool
                 Binding binding1 = new Binding("Center") { Source = e };
                 BindingOperations.SetBinding(lineSegment, LineSegment.PointProperty, binding1);
 
-                
                 LineSegment newlineSegment = new LineSegment();
                 newlineSegment.Point = new Point() { X=e.Center.X,Y=e.Center.Y};
-                vPathFigure.Segments.Add(newlineSegment);
-                
-
-                if (border != null)
-                {
-                    // Adorner myAdorner=new SimpleCircleAdorner(vlastLine, Math.Min(vlastLine.X2, vlastLine.X1), Math.Min(vlastLine.Y2, vlastLine.Y1), Math.Abs(vlastLine.X2 - vlastLine.X1), Math.Abs(vlastLine.Y2 - vlastLine.Y1), border);
-
-                    //layer.Add(new SimpleCircleAdorner(vlastLine, Math.Min(vlastLine.X2, vlastLine.X1), Math.Min(vlastLine.Y2, vlastLine.Y1), Math.Abs(vlastLine.X2 - vlastLine.X1), Math.Abs(vlastLine.Y2 - vlastLine.Y1), border));
-                     //layer.Add(new GeometryTool.RectAdorner(vlastLine,Math.Min(vlastLine.X2 , vlastLine.X1),Math.Min(vlastLine.Y2 ,vlastLine.Y1) ,Math.Abs(vlastLine.X2 - vlastLine.X1), Math.Abs(vlastLine.Y2 - vlastLine.Y1)));
-                    //layer.Add(myAdorner);
-
-                    //myAdorner.MouseMove += new MouseEventHandler(Element_MouseMove);
-                    //myAdorner.MouseLeftButtonDown += new MouseButtonEventHandler(Element_MouseLeftButtonDown);
-                    //myAdorner.MouseLeftButtonUp += new MouseButtonEventHandler(Element_MouseLeftButtonUp);
-                }
+                vPathFigure.Segments.Add(newlineSegment);   
             }
         }
 
@@ -249,9 +234,29 @@ namespace GeometryTool
 
             //把圆放进border里面，因为Border中有装饰器，同时可以使圆可以被拖动
             border = new BorderWithDrag();
+            
             border.Child = vPath;
             vRootCanvas.Children.Add(border);
-           
+        }
+
+        /// <summary>
+        /// 在面板上面画一个圆
+        /// </summary>
+        /// <param name="vPoint"></param>
+        /// <param name="vGraphAppearance"></param>
+        /// <param name="vRootCanvas"></param>
+        public void AddPointWithNoBorder(Point vPoint, GraphAppearance vGraphAppearance, Canvas vRootCanvas, out Path vPath)
+        {
+            //1.设置圆的外观
+            vPath = new Path();
+            vPath.Stroke = vGraphAppearance.Stroke;
+            vPath.Fill = vGraphAppearance.Stroke;
+            vPath.StrokeThickness = vGraphAppearance.StrokeThickness;
+            EllipseGeometry ellipse = new EllipseGeometry();
+            ellipse.RadiusX = vGraphAppearance.StrokeThickness + 0.2;
+            ellipse.RadiusY = vGraphAppearance.StrokeThickness + 0.2;
+            ellipse.Center = vPoint;
+            vPath.Data = ellipse;
         }
 
         /// <summary>

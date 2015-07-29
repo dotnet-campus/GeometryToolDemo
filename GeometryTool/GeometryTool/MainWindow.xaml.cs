@@ -40,7 +40,8 @@ namespace GeometryTool
         System.Windows.Shapes.Path curvePath;   //表示绘制曲线的时候，曲线所在的Path
         System.Windows.Shapes.Path QBezierPath; //表示绘制二次方贝塞尔曲线时候，曲线所在的Path
         System.Windows.Shapes.Path BezierPath;  //表示绘制三次方贝塞尔曲线时候，曲线所在的Path
-        
+        List<System.Windows.Shapes.Path> EllipseList;
+
         private DrawingBrush _gridBrush;        //绘制网格时所使用的Brush
         /// <summary>
         /// 构造函数，用于初始化对象
@@ -51,6 +52,7 @@ namespace GeometryTool
             graphAppearance.StrokeThickness = 0.1;
             InitializeComponent();
             graphAdd = new GraphAdd();
+            EllipseList = new List<System.Windows.Shapes.Path>();
             ellipsePath = new System.Windows.Shapes.Path();
             pathFigure = new PathFigure();
             isStartPoint = 0;
@@ -113,16 +115,20 @@ namespace GeometryTool
                 if (isStartPoint == 0)
                 {
                     pathFigure = new PathFigure();
-                    graphAdd.AddPoint(p, graphAppearance, this.RootCanvas, out ellipsePath);            //进行画点
+                    graphAdd.AddPointWithNoBorder(p, graphAppearance, this.RootCanvas, out ellipsePath);            //进行画点
                     graphAdd.AddLine(graphAppearance, RootCanvas, ref linePath, ellipsePath, ref isStartPoint, ref  pathFigure, isClose); //进行划线
                     this.RootCanvas.AddHandler(UIElement.MouseMoveEvent, new MouseEventHandler(DrawLine));
                 }
                 else
                 {
-                    isStartPoint = 2;
-                    graphAdd.AddPoint(p, graphAppearance, this.RootCanvas, out ellipsePath);            //进行画点
+                    isStartPoint ++;
+                    graphAdd.AddPointWithNoBorder(p, graphAppearance, this.RootCanvas, out ellipsePath);            //进行画点
                     graphAdd.AddLine(graphAppearance, RootCanvas, ref  linePath, ellipsePath, ref isStartPoint, ref  pathFigure, isClose); //进行划线
                 }
+                EllipseList.Add(ellipsePath);
+                BorderWithDrag border = new BorderWithDrag(linePath, isStartPoint, EllipseList);
+                    border.Child = ellipsePath;
+                    this.RootCanvas.Children.Add(border);
                 e.Handled = true;
 
             }
@@ -137,7 +143,7 @@ namespace GeometryTool
         {
             if (this.RootCanvas.Tag.ToString() == "Point")
             {
-                isStartPoint = 1;
+                //isStartPoint = 1;
                 System.Windows.Point p = Mouse.GetPosition(e.Source as FrameworkElement);   //获取鼠标当前位置
                 graphAdd.AddHorvorLine(pathFigure, p); //进行划线
             }
