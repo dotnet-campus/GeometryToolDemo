@@ -43,9 +43,7 @@ namespace GeometryTool
 
             Binding binding = new Binding("HasOtherPoint") { Converter=new ImageVisibilityConverter()};
             this.SetBinding(Image.VisibilityProperty, binding);                     //当没有重合点的时候，隐藏锁
-
-               
-
+     
             return base.ArrangeOverride(arrangeBounds);
         }
 
@@ -61,17 +59,22 @@ namespace GeometryTool
             {
                 if (isLock == true) //融合变不融合
                 {
-                    Chrome.Source = new BitmapImage(new Uri("Image/unlock.png", UriKind.Relative));
-                    BorderWithDrag border = this.DataContext as BorderWithDrag;
-                    BorderWithDrag brotherBorder = border.BrotherBorder;
-                    Point p = ((border.Child as Path).Data as EllipseGeometry).Center;
-                    foreach (BorderWithDrag item in border.PointList)   //解开所用的Binding
-                    {
-                        BindingOperations.ClearBinding(((item.Child as Path).Data as EllipseGeometry), EllipseGeometry.CenterProperty);
-                        item.BrotherBorder = null;
-                        ((item.Child as Path).Data as EllipseGeometry).Center = p;  //重定位到原来的位置
-                    }
-                    border.HasOtherPoint = false;
+                    #region
+                    //Chrome.Source = new BitmapImage(new Uri("Image/unlock.png", UriKind.Relative));
+                    //BorderWithDrag border = this.DataContext as BorderWithDrag;
+                    //BorderWithDrag brotherBorder = border.BrotherBorder;
+                    //Point p = ((border.Child as Path).Data as EllipseGeometry).Center;
+                    //foreach (BorderWithDrag item in border.PointList)   //解开所用的Binding
+                    //{
+                    //    BindingOperations.ClearBinding(((item.Child as Path).Data as EllipseGeometry), EllipseGeometry.CenterProperty);
+                    //    item.BrotherBorder = null;
+                    //    ((item.Child as Path).Data as EllipseGeometry).Center = p;  //重定位到原来的位置
+                    //}
+                    //border.HasOtherPoint = false;
+                    #endregion
+                    BorderWithDrag _border = this.DataContext as BorderWithDrag;
+                    BorderLock _borderLock = new BorderLock();
+                    _borderLock.unLock(_border);
                 }  
                 e.Handled = true;
             }

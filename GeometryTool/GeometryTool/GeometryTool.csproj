@@ -59,12 +59,11 @@
     <Compile Include="Action\ScaleCenterConverter.cs" />
     <Compile Include="Action\NDecimalConverter.cs" />
     <Compile Include="Action\XMLHelper.cs" />
-    <Compile Include="Model\BorderWithAdornor.cs" />
     <Compile Include="Action\GeomortyConvertFromString.cs" />
     <Compile Include="Model\ImageVisibilityConverter.cs" />
+    <Compile Include="Model\IsEnbleBindingConverter.cs" />
     <Compile Include="Model\LockAdorner.cs" />
     <Compile Include="Model\LockChrome.cs" />
-    <Compile Include="Model\RectAdorner.cs" />
     <Compile Include="Model\BorderWithDrag.cs" />
     <Compile Include="Model\Points.cs" />
     <Compile Include="Action\SizeConverter.cs" />

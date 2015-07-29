@@ -69,6 +69,7 @@ namespace GeometryTool
             myRootCanvas = this.RootCanvas;
             CBGridSize.SelectedIndex = 3;
             CanvasChange.Value = 20;
+            graphAppearance.Fill = Brushes.Transparent;
         }
 
         /// <summary>
@@ -193,7 +194,7 @@ namespace GeometryTool
         {
             if (canMove)
             {
-                System.Windows.Point p = e.GetPosition(RootCanvas);     //获取当前鼠标的位置
+                System.Windows.Point p = new AutoPoints().GetAutoAdsorbPoint( e.GetPosition(RootCanvas));     //获取当前鼠标的位置
                 if (this.RootCanvas.Tag.ToString() == "AddTriangle")                        //修改三角形的位置
                 {
                     if (trianglePath != null)
@@ -289,40 +290,41 @@ namespace GeometryTool
         /// <param name="e"></param>
         private void RootCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            
             if (this.RootCanvas.Tag.ToString() == "AddTriangle")        //绘制三角形
             {
-                System.Windows.Point p = Mouse.GetPosition(e.Source as FrameworkElement);
+                System.Windows.Point p = new AutoPoints().GetAutoAdsorbPoint(Mouse.GetPosition(e.Source as FrameworkElement));
                 graphAdd.AddGeometry(p, graphAppearance, this.RootCanvas, out trianglePath, 3, true);
                 canMove = true;
             }
             else if (this.RootCanvas.Tag.ToString() == "AddRectangular")//绘制矩形
             {
-                System.Windows.Point p = Mouse.GetPosition(e.Source as FrameworkElement);
+                System.Windows.Point p = new AutoPoints().GetAutoAdsorbPoint(Mouse.GetPosition(e.Source as FrameworkElement));
                 graphAdd.AddGeometry(p, graphAppearance, this.RootCanvas, out rectanglePath, 4, true);
                 canMove = true;
             }
             else if (this.RootCanvas.Tag.ToString() == "AddCircle")//绘制圆
             {
-                System.Windows.Point p = Mouse.GetPosition(e.Source as FrameworkElement);
+                System.Windows.Point p = new AutoPoints().GetAutoAdsorbPoint(Mouse.GetPosition(e.Source as FrameworkElement));
                 graphAdd.AddGeometryOfCricle(p, graphAppearance, this.RootCanvas, out circlePath);
                 canMove = true;
             }
             else if (this.RootCanvas.Tag.ToString() == "AddEllipse")//绘制椭圆
             {
-                System.Windows.Point p = Mouse.GetPosition(e.Source as FrameworkElement);
+                System.Windows.Point p = new AutoPoints().GetAutoAdsorbPoint(Mouse.GetPosition(e.Source as FrameworkElement));
                 graphAdd.AddGeometryOfCricle(p, graphAppearance, this.RootCanvas, out ellipseGeometryPath);
                 canMove = true;
             }
             else if (this.RootCanvas.Tag.ToString() == "AddCurve")//绘制椭圆
             {
-                System.Windows.Point p = Mouse.GetPosition(e.Source as FrameworkElement);
+                System.Windows.Point p = new AutoPoints().GetAutoAdsorbPoint(Mouse.GetPosition(e.Source as FrameworkElement));
                 graphAdd.AddCurve(p, graphAppearance, this.RootCanvas, out curvePath);
                 canMove = true;
             }
             else if (this.RootCanvas.Tag.ToString() == "QBezier")//绘制二次方贝塞尔曲线
             {
-                System.Windows.Point p = Mouse.GetPosition(e.Source as FrameworkElement);
-                graphAdd.AddPoint(p, graphAppearance, RootCanvas, out ellipsePath);
+                System.Windows.Point p = new AutoPoints().GetAutoAdsorbPoint(Mouse.GetPosition(e.Source as FrameworkElement));
+                graphAdd.AddPointWithNoBorder(p, graphAppearance, RootCanvas, out ellipsePath);
                 graphAdd.NewPathGeomotry(graphAppearance, RootCanvas, out QBezierPath, ellipsePath, false);
 
                 System.Windows.Shapes.Path ellipsePath2, ellipsePath3;
@@ -332,13 +334,16 @@ namespace GeometryTool
                 PathGeometry path = QBezierPath.Data as PathGeometry;
 
                 graphAdd.AddQuadraticSegment(path.Figures[0], ellipsePath3, ellipsePath2);
+                BorderWithDrag border = new BorderWithDrag();
+                border.Child = ellipsePath;
+                this.RootCanvas.Children.Add(border);
 
                 canMove = true;
             }
             else if (this.RootCanvas.Tag.ToString() == "Bezier")//绘制二次方贝塞尔曲线
             {
-                System.Windows.Point p = Mouse.GetPosition(e.Source as FrameworkElement);
-                graphAdd.AddPoint(p, graphAppearance, RootCanvas, out ellipsePath);
+                System.Windows.Point p = new AutoPoints().GetAutoAdsorbPoint(Mouse.GetPosition(e.Source as FrameworkElement));
+                graphAdd.AddPointWithNoBorder(p, graphAppearance, RootCanvas, out ellipsePath);
                 graphAdd.NewPathGeomotry(graphAppearance, RootCanvas, out BezierPath, ellipsePath, false);
 
                 System.Windows.Shapes.Path ellipsePath2, ellipsePath3, ellipsePath4;
@@ -348,6 +353,9 @@ namespace GeometryTool
                 PathGeometry path = BezierPath.Data as PathGeometry;
 
                 graphAdd.AddBezierSegment(path.Figures[0], ellipsePath4, ellipsePath3, ellipsePath2);
+                BorderWithDrag border = new BorderWithDrag();
+                border.Child = ellipsePath;
+                this.RootCanvas.Children.Add(border);
                 canMove = true;
             }
         }

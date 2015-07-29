@@ -33,10 +33,14 @@ namespace GeometryTool
             vPath = new Path()
             {
                 Stroke = vGraphAppearance.Stroke,
-                StrokeThickness = vGraphAppearance.StrokeThickness,
-                Fill = vGraphAppearance.Fill
+                StrokeThickness = vGraphAppearance.StrokeThickness
                
             };
+
+            if (vGraphAppearance.Fill != Brushes.Transparent)
+            {
+                vPath.Fill = vGraphAppearance.Fill;
+            }
 
             PathGeometry pathGeometry = new PathGeometry();
             vPath.Data = pathGeometry;
@@ -173,9 +177,13 @@ namespace GeometryTool
                 { 
                     Stroke = vGraphAppearance.Stroke,
                     StrokeThickness = vGraphAppearance.StrokeThickness,
-                    Fill=vGraphAppearance.Fill
+                    
                };
 
+                if (vGraphAppearance.Fill != Brushes.Transparent)
+                {
+                    vPath.Fill = vGraphAppearance.Fill;
+                }
                 //定义直线
                 PathGeometry pathGeometry = new PathGeometry();
                 pathGeometry.Figures = new PathFigureCollection();
@@ -274,14 +282,18 @@ namespace GeometryTool
             vPath = new Path()
             {
                 Stroke = vGraphAppearance.Stroke,
-                StrokeThickness = vGraphAppearance.StrokeThickness,
-                Fill = vGraphAppearance.Fill
+                StrokeThickness = vGraphAppearance.StrokeThickness
             };
 
+            if (vGraphAppearance.Fill != Brushes.Transparent)
+            {
+                vPath.Fill = vGraphAppearance.Fill;
+            }
             //定义直线
             
             PathGeometry pathGeometry = new PathGeometry();
             vPath.Data =pathGeometry;
+            vRootCanvas.Children.Add(vPath);
             pathGeometry.Figures = new PathFigureCollection();
             PathFigure pathFigure = new PathFigure() { IsClosed = isClose };
             pathGeometry.Figures.Add(pathFigure);
@@ -307,7 +319,7 @@ namespace GeometryTool
                 BindingOperations.SetBinding(firstLineSe, LineSegment.PointProperty, SecondPointBD); //绑定Point
                 pathFigure.Segments.Add(firstLineSe);
              }
-            vRootCanvas.Children.Add(vPath);
+            
         }
 
         /// <summary>
@@ -325,13 +337,18 @@ namespace GeometryTool
             vPath = new Path()
             {
                 Stroke = vGraphAppearance.Stroke,
-                StrokeThickness = vGraphAppearance.StrokeThickness,
-                Fill = vGraphAppearance.Fill
+                StrokeThickness = vGraphAppearance.StrokeThickness
             };
+
+            if (vGraphAppearance.Fill != Brushes.Transparent)
+            {
+                vPath.Fill = vGraphAppearance.Fill;
+            }
 
             //定义第一个PathFigure
             PathGeometry pathGeometry = new PathGeometry();
             vPath.Data = pathGeometry;
+            vRootCanvas.Children.Add(vPath);
             pathGeometry.Figures = new PathFigureCollection();
             PathFigure pathFigure = new PathFigure();
             //pathFigure.IsClosed = true;
@@ -368,7 +385,6 @@ namespace GeometryTool
             secondLineSe.Size = new Size() { Height = 0.1, Width = 0.1 };
             firstLineSe.Size = new Size() { Height = 0.1, Width = 0.1 };
            
-            vRootCanvas.Children.Add(vPath);
         }
 
         /// <summary>
@@ -384,13 +400,18 @@ namespace GeometryTool
             vPath = new Path()
             {
                 Stroke = vGraphAppearance.Stroke,
-                StrokeThickness = vGraphAppearance.StrokeThickness,
-                Fill = vGraphAppearance.Fill
+                StrokeThickness = vGraphAppearance.StrokeThickness
             };
+
+            if (vGraphAppearance.Fill != Brushes.Transparent)
+            {
+                vPath.Fill = vGraphAppearance.Fill;
+            }
 
             //定义第一个PathFigure
             PathGeometry pathGeometry = new PathGeometry();
             vPath.Data = pathGeometry;
+            vRootCanvas.Children.Add(vPath);
             pathGeometry.Figures = new PathFigureCollection();
             PathFigure pathFigure = new PathFigure();
             pathGeometry.Figures.Add(pathFigure);
@@ -415,7 +436,7 @@ namespace GeometryTool
             BindingOperations.SetBinding(firstLineSe, ArcSegment.PointProperty, SecondPointBD); //绑定Point
             pathFigure.Segments.Add(firstLineSe);
 
-            vRootCanvas.Children.Add(vPath);
+            
         }
         
         public void AddGeomotryOfXml()
