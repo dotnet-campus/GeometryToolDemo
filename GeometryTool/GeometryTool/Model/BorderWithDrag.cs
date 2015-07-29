@@ -25,6 +25,7 @@ namespace GeometryTool
         public BorderWithDrag FirstBrotherBorder;
         bool isDragDropInEffect = false;    //表示是否可以拖动
         public Binding binding;
+        public List<BorderWithDrag> PointList = new List<BorderWithDrag>();
         System.Windows.Point p;
         int count;
         /// <summary>
@@ -96,37 +97,46 @@ namespace GeometryTool
                 Point pt = e.GetPosition((UIElement)sender);
                 pt = (new AutoPoints()).GetAutoAdsorbPoint(pt);
                 count = 0;
-
+                PointList.Clear();
                 VisualTreeHelper.HitTest(this.Parent as Canvas, null,   //进行命中测试
                     new HitTestResultCallback(MyHitTestResult),
                     new PointHitTestParameters(pt));
 
-                if (count > 1)      //如果该点有两个BorderWithDrag，说明有点融合
+               
+                if (count > 1)      //如果该点有多于两个BorderWithDrag，说明有点融合
                 {
-                    this.HasOtherPoint = true;
-                    
-                    if (lockAdornor == null)
+                    if (BrotherBorder == null)
                     {
-                        lockAdornor = new LockAdorner(this);
+                        BrotherBorder = this;
+                    }
+                    if (BrotherBorder.lockAdornor == null)  //只选择一个图层来显示Adorner
+                    {
+                        BrotherBorder.lockAdornor = new LockAdorner(this);
                         AdornerLayer layer = AdornerLayer.GetAdornerLayer(this.Parent as Canvas);
                         if (layer != null)
                         {
                             layer.Add(lockAdornor);
                         }
                     }
-                    lockAdornor.chrome.Source = new BitmapImage(new Uri("Image/lock.png", UriKind.Relative));
-                    binding = new Binding("Center") { Source = ((this.BrotherBorder.Child as Path).Data as EllipseGeometry) };
-                    binding.Mode = BindingMode.TwoWay;
-                    BindingOperations.SetBinding(((this.Child as Path).Data as EllipseGeometry), EllipseGeometry.CenterProperty,binding);
-                   
+
+                    BrotherBorder.HasOtherPoint = true;     //显示锁
+                    BrotherBorder.lockAdornor.chrome.Source = new BitmapImage(new Uri("Image/lock.png", UriKind.Relative));
+
+                    BrotherBorder.PointList = PointList;    //把所有的Border都绑定到显示Adorner的Border的Point上
+                    foreach (BorderWithDrag border in PointList)
+                    {
+                        if (border != BrotherBorder)
+                        {
+                            binding = new Binding("Center") { Source = ((BrotherBorder.Child as Path).Data as EllipseGeometry) };
+                            binding.Mode = BindingMode.TwoWay;
+                            BindingOperations.SetBinding(((border.Child as Path).Data as EllipseGeometry), EllipseGeometry.CenterProperty, binding);
+                        }
+                    }
                 }
                 else
                 {
                     this.HasOtherPoint = false;
-                    if (lockAdornor!=null)
-                    lockAdornor.chrome.Source = new BitmapImage(new Uri("Image/unlock.png", UriKind.Relative));
                 }
-
 
                 isDragDropInEffect = false;
                 currEle.ReleaseMouseCapture();
@@ -147,16 +157,12 @@ namespace GeometryTool
            {
                BorderWithDrag border = path.Parent as BorderWithDrag;
                if (border != null)
-               {    
+               {
+                   PointList.Add(border);
                    count++;
-                   if (count == 1)          //寻找其border
-                       FirstBrotherBorder = border;
-                   if (count == 2) 
+                   if (border.lockAdornor != null)
                    {
                        BrotherBorder = border;
-                       if (this == BrotherBorder)
-                           BrotherBorder = FirstBrotherBorder;
-                       return HitTestResultBehavior.Stop;
                    }
                }
            }

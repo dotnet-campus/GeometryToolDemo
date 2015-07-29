@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
-using System.Windows.Media.Imaging;
 
 namespace GeometryTool
 {
-    public class ImageLockSourceConverter : IValueConverter
+    class ImageVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             if ((bool)value)
-                return new BitmapImage(new Uri(@"E:\暑期考核\GeometryTool\GeometryTool\Image\lock.png", UriKind.Absolute));
+                return Visibility.Visible;
             else
-                return new BitmapImage(new Uri(@"E:\暑期考核\GeometryTool\GeometryTool\Image\unlock.png", UriKind.Absolute));
+                return Visibility.Hidden;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

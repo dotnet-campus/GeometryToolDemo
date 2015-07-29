@@ -41,8 +41,6 @@ namespace GeometryTool
             tt.Y = -0.3;
             this.RenderTransform = tt;
 
-            //Binding IsLcokbinding = new Binding("IsLock") { Converter = new ImageLockSourceConverter() };
-            //this.SetBinding(Image.SourceProperty, IsLcokbinding);  
             Binding binding = new Binding("HasOtherPoint") { Converter=new ImageVisibilityConverter()};
             this.SetBinding(Image.VisibilityProperty, binding);                     //当没有重合点的时候，隐藏锁
 
@@ -52,7 +50,7 @@ namespace GeometryTool
         }
 
         /// <summary>
-        /// 用于切换融合和解开融合
+        /// 用于解开融合
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -63,21 +61,18 @@ namespace GeometryTool
             {
                 if (isLock == true) //融合变不融合
                 {
-                    Point p = e.GetPosition(MainWindow.myRootCanvas);
                     Chrome.Source = new BitmapImage(new Uri("Image/unlock.png", UriKind.Relative));
                     BorderWithDrag border = this.DataContext as BorderWithDrag;
                     BorderWithDrag brotherBorder = border.BrotherBorder;
-                    BindingOperations.ClearBinding(((border.Child as Path).Data as EllipseGeometry), EllipseGeometry.CenterProperty);
-                    border.BrotherBorder = null;
-                    ((border.Child as Path).Data as EllipseGeometry).Center = (new AutoPoints()).GetAutoAdsorbPoint(new Point() {X=p.X-1.2,Y=p.Y+0.3 });
-                    isLock = false;
-                }
-                else                //不融合变融合
-                {
-                    Chrome.Source = new BitmapImage(new Uri("Image/lock.png", UriKind.Relative));
-                    isLock = true;
-                }
-                
+                    Point p = ((border.Child as Path).Data as EllipseGeometry).Center;
+                    foreach (BorderWithDrag item in border.PointList)   //解开所用的Binding
+                    {
+                        BindingOperations.ClearBinding(((item.Child as Path).Data as EllipseGeometry), EllipseGeometry.CenterProperty);
+                        item.BrotherBorder = null;
+                        ((item.Child as Path).Data as EllipseGeometry).Center = p;  //重定位到原来的位置
+                    }
+                    border.HasOtherPoint = false;
+                }  
                 e.Handled = true;
             }
             
