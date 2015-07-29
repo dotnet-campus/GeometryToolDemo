@@ -303,7 +303,12 @@ namespace GeometryTool
             
             //定义第一个点,并绑定起点
             Path ellipsePath;
-            AddPoint(vPoint, vGraphAppearance, vRootCanvas, out  ellipsePath);
+            AddPointWithNoBorder(vPoint, vGraphAppearance, vRootCanvas, out  ellipsePath);
+            List<System.Windows.Shapes.Path> EllipseList=new List<Path>();
+            EllipseList.Add(ellipsePath);
+            BorderWithDrag border = new BorderWithDrag(vPath, 1, EllipseList);
+            border.Child = ellipsePath;
+            vRootCanvas.Children.Add(border);
             EllipseGeometry ellipseGeometry = ellipsePath.Data as EllipseGeometry;
             Binding FirstPointBD = new Binding("Center") { Source = ellipseGeometry };
             FirstPointBD.Mode = BindingMode.TwoWay;
@@ -311,7 +316,11 @@ namespace GeometryTool
             
             for (int i = 0; i < count-1; ++i)
             {
-                AddPoint(vPoint, vGraphAppearance, vRootCanvas, out  ellipsePath);  //添加点
+                AddPointWithNoBorder(vPoint, vGraphAppearance, vRootCanvas, out  ellipsePath);  //添加点
+                EllipseList.Add(ellipsePath);
+                BorderWithDrag border2 = new BorderWithDrag(vPath, i+2, EllipseList);
+                border2.Child = ellipsePath;
+                vRootCanvas.Children.Add(border2);
                 ellipseGeometry = ellipsePath.Data as EllipseGeometry;
                 LineSegment firstLineSe = new LineSegment();
                 Binding SecondPointBD = new Binding("Center") { Source = ellipseGeometry };

@@ -113,7 +113,7 @@ namespace GeometryTool
             {
                 Point _oldPoint = e.GetPosition(MainWindow.myRootCanvas); //获取目前鼠标的相对位置
                 System.Windows.Point _pt = (new AutoPoints()).GetAutoAdsorbPoint(_oldPoint);    //计算最近的网格的位置
-
+                Pt = _pt;
                 FrameworkElement _currEle = sender as FrameworkElement;
                 BorderWithDrag _borderWithDrag = _currEle as BorderWithDrag;
                 ((_borderWithDrag.Child as Path).Data as EllipseGeometry).Center = new Point() { X = _pt.X, Y = _pt.Y };
@@ -169,7 +169,6 @@ namespace GeometryTool
             
         }
 
-       
 
         /// <summary>
         /// 添加Border的删除功能
@@ -178,41 +177,54 @@ namespace GeometryTool
         /// <param name="e"></param>
        public void DeletedItem_Click(object sender, RoutedEventArgs e)
        {
-           PathGeometry _path = GeometryPath.Data as PathGeometry;   //获取该Border所在PathGeometry
-           PathFigure _pf = _path.Figures[0];
-           if (Number != 1)                             //如果要删除的不是起点
+           BWDList.Clear();
+           VisualTreeHelper.HitTest(this.Parent as Canvas, null,   //进行命中测试
+                new HitTestResultCallback(MyHitTestResult),
+                new PointHitTestParameters(Pt));
+           bool _deleteAll = false;
+
+           foreach (BorderWithDrag item in BWDList)
            {
-               _pf.Segments.RemoveAt(Number - 2);        //直接移除Segment
-           }
-           else                                         //如果要删除的是起点
-           {
-               PathFigure _pf2 = new PathFigure();
-               for (int i=0;i<_pf.Segments.Count;++i)
+               if (item.HasOtherPoint)
                {
-                   if (i == 0)                          //复制出另外一个PathFigure，令其起点为原来的PathFigure中的LineSegment的Point
+                   _deleteAll = true;
+                   break;
+               }
+           }
+           if (_deleteAll)
+               foreach (BorderWithDrag item in BWDList)
+               {
+                   if (item.Number != 0)
                    {
-                       Binding binding = new Binding("Center") { Source=(EllipseList[1].Data as EllipseGeometry)};
-                       BindingOperations.SetBinding(_pf2,PathFigure.StartPointProperty,binding);
-                   }
-                   else
-                   {
-                       _pf2.Segments.Add(_pf.Segments[i]);
+                       DeletePoint(item);
                    }
                }
-               _path.Figures.Add(_pf2);
-               _path.Figures.RemoveAt(0);
-           }
-
-           MainWindow.myRootCanvas.Children.Remove(this); //在窗体上移除该点
-           EllipseList.RemoveAt(Number-1);                //在该图形中的点集中移除该点
-
-           for (int j = 0; j < EllipseList.Count; ++j)      //重新定位点集的位置
-           {
-               BorderWithDrag border = EllipseList[j].Parent as BorderWithDrag;
-               border.Number = j + 1;
-           }
+           else
+               DeletePoint(this);
        }
-       
+
+       List<BorderWithDrag> BWDList = new List<BorderWithDrag>();
+       /// <summary>
+       /// 命中测试
+       /// </summary>
+       /// <param name="result"></param>
+       /// <returns></returns>
+       ///
+       public HitTestResultBehavior MyHitTestResult(HitTestResult result)
+       {
+           
+           Path path = result.VisualHit as Path;
+           if (path != null)
+           {
+               BorderWithDrag border = path.Parent as BorderWithDrag;
+               if (border != null)         //如果命中的图形是BorderWithDrag，就Count++
+               {
+                   BWDList.Add(border);
+               }
+           }
+
+           return HitTestResultBehavior.Continue;
+       }
         /// <summary>
         /// 融合点
         /// </summary>
@@ -235,7 +247,47 @@ namespace GeometryTool
             BorderLock _borderLock = new BorderLock();
             _borderLock.unLock(this);
             this.HasOtherPoint = false;
-        }  
+        }
+
+        public void DeletePoint(BorderWithDrag item)
+        {
+            if (item.Number != 0)
+            {
+                PathGeometry _path = item.GeometryPath.Data as PathGeometry;   //获取该Border所在PathGeometry
+                PathFigure _pf = _path.Figures[0];
+                if (Number != 1)                             //如果要删除的不是起点
+                {
+                    _pf.Segments.RemoveAt(Number - 2);        //直接移除Segment
+                }
+                else                                         //如果要删除的是起点
+                {
+                    PathFigure _pf2 = new PathFigure();
+                    for (int i = 0; i < _pf.Segments.Count; ++i)
+                    {
+                        if (i == 0)                          //复制出另外一个PathFigure，令其起点为原来的PathFigure中的LineSegment的Point
+                        {
+                            Binding binding = new Binding("Center") { Source = (EllipseList[1].Data as EllipseGeometry) };
+                            BindingOperations.SetBinding(_pf2, PathFigure.StartPointProperty, binding);
+                        }
+                        else
+                        {
+                            _pf2.Segments.Add(_pf.Segments[i]);
+                        }
+                    }
+                    _path.Figures.Add(_pf2);
+                    _path.Figures.RemoveAt(0);
+                }
+
+                MainWindow.myRootCanvas.Children.Remove(item); //在窗体上移除该点
+                item.EllipseList.RemoveAt(Number - 1);                //在该图形中的点集中移除该点
+
+                for (int j = 0; j < EllipseList.Count; ++j)      //重新定位点集的位置
+                {
+                    BorderWithDrag border = EllipseList[j].Parent as BorderWithDrag;
+                    border.Number = j + 1;
+                }
+            }
+        }
     }
 }
 

@@ -93,6 +93,7 @@ namespace GeometryTool
             if (this.RootCanvas.Tag.ToString() != "Point")          //移除划线功能
             {
                 this.RootCanvas.RemoveHandler(UIElement.MouseMoveEvent, new MouseEventHandler(DrawLine));
+                EllipseList = new List<System.Windows.Shapes.Path>();
                 if (isStartPoint != 0)
                 {
                     isStartPoint = 0;
@@ -540,6 +541,7 @@ namespace GeometryTool
             {
                 Select.IsChecked = true;            //更正鼠标模式为选择模式
                 this.RootCanvas.Tag = "Select";
+                EllipseList = new List<System.Windows.Shapes.Path>();
                 ActionMode = "Select";
                 if (isStartPoint != 0 && pathFigure.Segments.Count > 0) //移除额外的线
                 {
