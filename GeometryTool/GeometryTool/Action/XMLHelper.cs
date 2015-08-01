@@ -16,13 +16,13 @@ namespace GeometryTool
         /// </summary>
         /// <param name="vPath"></param>
         /// <param name="vRootCanvas"></param>
-        public MatchCollection ReadXml(string vPath)
+        public Match ReadXml(string vPath)
         {
-            StreamReader streamReader = new StreamReader(vPath);
-            Regex regex = new Regex(@"<Geometry>\s*([^G]*)</Geometry>");
-            MatchCollection matchList = regex.Matches(streamReader.ReadToEnd());
-            streamReader.Close();
-            return matchList;
+            StreamReader _streamReader = new StreamReader(vPath);
+            Regex _regex = new Regex(@"<Figures>\s*([^F]*)</Figures>");
+            Match _match = _regex.Match(_streamReader.ReadToEnd());
+            _streamReader.Close();
+            return _match;
         }
 
         /// <summary>

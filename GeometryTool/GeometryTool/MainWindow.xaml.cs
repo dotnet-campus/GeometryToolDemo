@@ -14,6 +14,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Text.RegularExpressions;
+using System.Windows.Controls.Primitives;
+using Microsoft.Win32;
 
 namespace GeometryTool
 {
@@ -42,6 +44,8 @@ namespace GeometryTool
         System.Windows.Shapes.Path BezierPath;  //表示绘制三次方贝塞尔曲线时候，曲线所在的Path
         List<System.Windows.Shapes.Path> EllipseList;
 
+        public string FileName;
+
         private DrawingBrush _gridBrush;        //绘制网格时所使用的Brush
         /// <summary>
         /// 构造函数，用于初始化对象
@@ -58,6 +62,7 @@ namespace GeometryTool
             isStartPoint = 0;
             linePath = new System.Windows.Shapes.Path();
             this.RootCanvas.Tag = "Select";
+            MainWindow.ActionMode = "Select";
             this.WindowState = System.Windows.WindowState.Maximized;    //设置窗口最大化
             Binding binding1 = new Binding("Value") { Source=this.StrokeDash1,ConverterParameter=this.StrokeDash2.Value,Converter=new DashArrayConverter1()};
             Binding binding2 = new Binding("Value") { Source = this.StrokeDash2, ConverterParameter = this.StrokeDash1.Value, Converter = new DashArrayConverter2() };
@@ -70,6 +75,8 @@ namespace GeometryTool
             CBGridSize.SelectedIndex = 3;
             CanvasChange.Value = 20;
             graphAppearance.Fill = Brushes.Transparent;
+            FileName = "";
+           
         }
 
         /// <summary>
@@ -109,7 +116,7 @@ namespace GeometryTool
         /// <param name="e"></param>
         private void RootCanvas_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            System.Windows.Point p = Mouse.GetPosition(e.Source as FrameworkElement);   //获取鼠标当前位置
+            System.Windows.Point p =(new AutoPoints()).GetAutoAdsorbPoint( Mouse.GetPosition(e.Source as FrameworkElement));   //获取鼠标当前位置
 
             if (this.RootCanvas.Tag.ToString() == "Point") //判断是不是画线
             {
@@ -158,32 +165,36 @@ namespace GeometryTool
         /// <param name="e"></param>
         private void Save_Click(object sender, RoutedEventArgs e)
         {
-            bool isCircel;  //用于判断是不是椭圆
-            StreamWriter sw = new StreamWriter(@"E:\项目\GeometryTool\GeometryTool\bin\Debug\save.XML");
+            if(string.IsNullOrEmpty(FileName))
+            {
+                System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog();
+                fbd.ShowDialog();
+                if (fbd.SelectedPath != string.Empty)
+                    FileName = fbd.SelectedPath;
+                FileName += "\\" + DateTime.Now.ToLongDateString()+".xml";
+            }
+            StreamWriter sw = new StreamWriter(FileName);
             GeomortyStringConverter GCXML = new GeomortyStringConverter(RootCanvas, graphAppearance);
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
             sb.AppendLine("<Canvase>");
+            sb.AppendLine(" <Geometry>");
+            sb.Append("     <Figures>");
             foreach (UIElement item in this.RootCanvas.Children)
             {
-                System.Windows.Shapes.Path path = item as System.Windows.Shapes.Path;  //点是有BorderWithDrag包含着的，图形是Path
-                if (path != null)
+                BorderWithAdorner borderWA = item as BorderWithAdorner;  //点是有BorderWithDrag包含着的，图形是Path
+                if (borderWA != null)
                 {
-                    sb.AppendLine(" <Geometry>");
-                    sb.Append("     <Figures>");
-                    sb.Append(GCXML.StringFromGeometry(path, out isCircel));            //构造Mini-Language
-                    sb.AppendLine("</Figures>");
-                    if (isCircel == true)
-                    {
-                        sb.AppendLine("     <IsCircel>1</IsCircel>");
-                    }
-                    sb.AppendLine(" </Geometry>");
+                    sb.Append(GCXML.StringFromGeometry(borderWA.Child as System.Windows.Shapes.Path));            //构造Mini-Language
+                   
                 }
             }
+            sb.AppendLine("</Figures>");
+            sb.AppendLine(" </Geometry>");
             sb.AppendLine("</Canvase>");
             sw.Write(sb.ToString());
             sw.Close();
-            MessageBox.Show(@"已保存到 E:\项目\GeometryTool\GeometryTool\bin\Debug\save.XML");
+            MessageBox.Show(@"已保存到 "+FileName);
         }
 
         /// <summary>
@@ -291,7 +302,9 @@ namespace GeometryTool
         /// <param name="e"></param>
         private void RootCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            
+            if (this.RootCanvas.Tag.ToString() == "AddTriangle")
+            { canMove = true; }
+
             if (this.RootCanvas.Tag.ToString() == "AddTriangle")        //绘制三角形
             {
                 System.Windows.Point p = new AutoPoints().GetAutoAdsorbPoint(Mouse.GetPosition(e.Source as FrameworkElement));
@@ -390,11 +403,11 @@ namespace GeometryTool
                 {
                     XMLHelper xmlHelper = new XMLHelper();
                     GeomortyStringConverter GSC = new GeomortyStringConverter(RootCanvas, graphAppearance);
-                    MatchCollection MatchList = xmlHelper.ReadXml(openFileDlg.FileName);    //读取XML文件
+                    Match _match = xmlHelper.ReadXml(openFileDlg.FileName);    //读取XML文件
+                    MatchCollection MatchList = Regex.Matches(_match.Groups[0].ToString(), @"M[\.\,\s\+\-\dLACQZ]+");
                     foreach (Match item in MatchList)
                     {
-                        bool isCircel = Regex.IsMatch(item.Groups[0].ToString(), "<IsCircel>1</IsCircel>");
-                        GSC.GeomotryFromString(Regex.Match(item.Groups[0].ToString(), @"<Figures>([^<]*)</Figures>").Groups[1].ToString(), isCircel);                  //转化成为图形
+                        GSC.GeomotryFromString(item.Groups[0].ToString());                  //转化成为图形
                     }
                 }
             }
@@ -558,9 +571,7 @@ namespace GeometryTool
                 e.Handled = true;
             }
         }
-
-
-       
+ 
     }
 
 }

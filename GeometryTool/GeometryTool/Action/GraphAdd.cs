@@ -158,8 +158,8 @@ namespace GeometryTool
             vlastLine.Point = vPoint;
         }
 
-       
-        
+
+        BorderWithAdorner borderWA;
         /// <summary>
         /// 画一条直线
         /// </summary>
@@ -203,7 +203,10 @@ namespace GeometryTool
                 binding.Mode = BindingMode.TwoWay;
                 BindingOperations.SetBinding(vPathFigure, PathFigure.StartPointProperty, binding);
                 lineSegment.Point = e.Center;
-                vRootCanvas.Children.Add(vPath);
+                borderWA = new BorderWithAdorner();
+                borderWA.EllipseList.Add(e);
+                borderWA.Child = vPath;
+                vRootCanvas.Children.Add(borderWA);
                 vIsStartPoint = 1;
             }
             else     //表示终点
@@ -217,7 +220,9 @@ namespace GeometryTool
 
                 LineSegment newlineSegment = new LineSegment();
                 newlineSegment.Point = new Point() { X=e.Center.X,Y=e.Center.Y};
-                vPathFigure.Segments.Add(newlineSegment);   
+                vPathFigure.Segments.Add(newlineSegment);
+
+                borderWA.EllipseList.Add(e);
             }
         }
 
@@ -292,8 +297,10 @@ namespace GeometryTool
             //定义直线
             
             PathGeometry pathGeometry = new PathGeometry();
+            BorderWithAdorner borderWA = new BorderWithAdorner();
+            borderWA.Child = vPath;
             vPath.Data =pathGeometry;
-            vRootCanvas.Children.Add(vPath);
+            vRootCanvas.Children.Add(borderWA);
             pathGeometry.Figures = new PathFigureCollection();
             PathFigure pathFigure = new PathFigure() { IsClosed = isClose };
             pathGeometry.Figures.Add(pathFigure);
@@ -305,6 +312,7 @@ namespace GeometryTool
             Path ellipsePath;
             AddPointWithNoBorder(vPoint, vGraphAppearance, vRootCanvas, out  ellipsePath);
             List<System.Windows.Shapes.Path> EllipseList=new List<Path>();
+            borderWA.EllipseList.Add(ellipsePath.Data as EllipseGeometry);
             EllipseList.Add(ellipsePath);
             BorderWithDrag border = new BorderWithDrag(vPath, 1, EllipseList);
             border.Child = ellipsePath;
@@ -318,6 +326,7 @@ namespace GeometryTool
             {
                 AddPointWithNoBorder(vPoint, vGraphAppearance, vRootCanvas, out  ellipsePath);  //添加点
                 EllipseList.Add(ellipsePath);
+                borderWA.EllipseList.Add(ellipsePath.Data as EllipseGeometry);
                 BorderWithDrag border2 = new BorderWithDrag(vPath, i+2, EllipseList);
                 border2.Child = ellipsePath;
                 vRootCanvas.Children.Add(border2);
@@ -332,7 +341,7 @@ namespace GeometryTool
         }
 
         /// <summary>
-        /// 绘制一个圆或者椭圆
+        /// 绘制一个圆
         /// </summary>
         /// <param name="vPoint"></param>
         /// <param name="vGraphAppearance"></param>
@@ -357,7 +366,9 @@ namespace GeometryTool
             //定义第一个PathFigure
             PathGeometry pathGeometry = new PathGeometry();
             vPath.Data = pathGeometry;
-            vRootCanvas.Children.Add(vPath);
+            BorderWithAdorner borderWA = new BorderWithAdorner();
+            borderWA.Child = vPath;
+            vRootCanvas.Children.Add(borderWA);
             pathGeometry.Figures = new PathFigureCollection();
             PathFigure pathFigure = new PathFigure();
             //pathFigure.IsClosed = true;
@@ -369,6 +380,7 @@ namespace GeometryTool
             //绘制第一个点,并绑定起点
             Path ellipsePath;
             AddPoint(vPoint, vGraphAppearance, vRootCanvas, out  ellipsePath);
+            borderWA.EllipseList.Add(ellipsePath.Data as EllipseGeometry);
             EllipseGeometry ellipseGeometry = ellipsePath.Data as EllipseGeometry;
             EllipseGeometry startGeometry = ellipseGeometry;
             Binding FirstPointBD = new Binding("Center") { Source = ellipseGeometry };
@@ -377,6 +389,7 @@ namespace GeometryTool
 
             //绘制第二个点和第一条曲线，并绑定终点
             AddPoint(vPoint, vGraphAppearance, vRootCanvas, out  ellipsePath);  //添加点
+            borderWA.EllipseList.Add(ellipsePath.Data as EllipseGeometry);
             ellipseGeometry = ellipsePath.Data as EllipseGeometry;
             ArcSegment firstLineSe = new ArcSegment();
             Binding SecondPointBD = new Binding("Center") { Source = ellipseGeometry };
@@ -386,10 +399,15 @@ namespace GeometryTool
 
             //绘制第二条曲线，并绑定终点
             ArcSegment secondLineSe = new ArcSegment();
-            Binding forthPointBD = new Binding("Center") { Source = startGeometry };
+            AddPoint(vPoint, vGraphAppearance, vRootCanvas, out  ellipsePath);  //添加点
+            borderWA.EllipseList.Add(ellipsePath.Data as EllipseGeometry);
+            ellipseGeometry = ellipsePath.Data as EllipseGeometry;
+            Binding forthPointBD = new Binding("Center") { Source = ellipseGeometry };
             forthPointBD.Mode = BindingMode.TwoWay;
             BindingOperations.SetBinding(secondLineSe, ArcSegment.PointProperty, forthPointBD); //绑定Point
             pathFigure.Segments.Add(secondLineSe);
+            Binding Fivebinding = new Binding("Center") { Source=startGeometry,Mode=BindingMode.TwoWay};
+            BindingOperations.SetBinding(ellipseGeometry, EllipseGeometry.CenterProperty, Fivebinding);
 
             secondLineSe.Size = new Size() { Height = 0.1, Width = 0.1 };
             firstLineSe.Size = new Size() { Height = 0.1, Width = 0.1 };
@@ -420,7 +438,9 @@ namespace GeometryTool
             //定义第一个PathFigure
             PathGeometry pathGeometry = new PathGeometry();
             vPath.Data = pathGeometry;
-            vRootCanvas.Children.Add(vPath);
+            BorderWithAdorner borderWA = new BorderWithAdorner();
+            borderWA.Child = vPath;
+            vRootCanvas.Children.Add(borderWA);
             pathGeometry.Figures = new PathFigureCollection();
             PathFigure pathFigure = new PathFigure();
             pathGeometry.Figures.Add(pathFigure);
@@ -431,6 +451,7 @@ namespace GeometryTool
             Path ellipsePath;
             AddPoint(vPoint, vGraphAppearance, vRootCanvas, out  ellipsePath);
             EllipseGeometry ellipseGeometry = ellipsePath.Data as EllipseGeometry;
+            borderWA.EllipseList.Add(ellipseGeometry);
             EllipseGeometry startGeometry = ellipseGeometry;
             Binding FirstPointBD = new Binding("Center") { Source = ellipseGeometry };
             FirstPointBD.Mode = BindingMode.TwoWay;
@@ -439,6 +460,7 @@ namespace GeometryTool
             //绘制第二个点和第一条曲线，并绑定终点
             AddPoint(vPoint, vGraphAppearance, vRootCanvas, out  ellipsePath);  //添加点
             ellipseGeometry = ellipsePath.Data as EllipseGeometry;
+            borderWA.EllipseList.Add(ellipseGeometry);
             ArcSegment firstLineSe = new ArcSegment() { Size = new Size() { Width=50,Height=25} };
             Binding SecondPointBD = new Binding("Center") { Source = ellipseGeometry };
             SecondPointBD.Mode = BindingMode.TwoWay;
@@ -448,9 +470,5 @@ namespace GeometryTool
             
         }
         
-        public void AddGeomotryOfXml()
-        {
-
-        }
     }
 }

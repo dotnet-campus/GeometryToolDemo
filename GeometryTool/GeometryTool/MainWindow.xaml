@@ -15,10 +15,9 @@
             <local:ScaleCenterConverter x:Key="scaleCenterConverter"/>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Canvas.xaml"/>
-                <ResourceDictionary Source="Resources/Adornor.xaml"/>
                 <ResourceDictionary Source="Resources/ExpanderStyles.xaml"/>
                 <ResourceDictionary Source="Resources/ColorsStyle.xaml"/>
-                
+                <ResourceDictionary Source="Resources/DesignerItem.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
         
