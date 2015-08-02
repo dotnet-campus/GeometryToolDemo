@@ -13,10 +13,7 @@ namespace GeometryTool
 
         public bool isLock;
 
-        public void ReArrange(Size arrangeBounds)
-        {
-            //ArrangeOverride(arrangeBounds);
-        }
+       
         /// <summary>
         /// 绘制这个锁
         /// </summary>
@@ -52,21 +49,26 @@ namespace GeometryTool
            }
 
             PathGeometry pg = (border.Child as Path).Data as PathGeometry;
-            if (pg.Figures[0].Segments[0].GetType() == typeof(ArcSegment))
+            if (pg.Figures[0].Segments.Count>0)
             {
+            //if (pg.Figures[0].Segments[0].GetType() == typeof(ArcSegment))
+            //{
                 var geometry = pg.GetFlattenedPathGeometry();
                 var bound = geometry.Bounds;
                 this.Margin = new Thickness(border.ActualWidth - bound.Width - 0.5, border.ActualHeight - bound.Height - 0.5, 0, 0);
+            //}
+
             }
             else
-            { 
-                this.Width = border.MaxX-border.MinX+1;
-                this.Height = border.MaxY - border.MinY+1;
+            {
+                this.Width = border.MaxX - border.MinX + 1;
+                this.Height = border.MaxY - border.MinY + 1;
 
-                this.Margin = new Thickness(border.MinX-0.5, border.MinY-0.5,0,0);
+                this.Margin = new Thickness(border.MinX - 0.5, border.MinY - 0.5, 0, 0);
             }
             return base.ArrangeOverride(arrangeBounds);
         }
-        }
-    
+
+      
+    }
 }

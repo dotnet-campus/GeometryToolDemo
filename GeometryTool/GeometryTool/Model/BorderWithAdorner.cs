@@ -25,7 +25,6 @@ namespace GeometryTool
         {
             this.MouseDown += Element_MouseDown;
             EllipseList = new List<Path>();
-            this.LostFocus+=BorderWithAdorner_LostFocus;
         }
         public void Element_MouseDown(object sender, MouseEventArgs e)
         {
@@ -68,14 +67,14 @@ namespace GeometryTool
                         GAdorner = new MyAdorner(this);
                         layer.Add(this.GAdorner);
                     }
+                    //if (MainWindow.SelectedBorder != null)
+                    //{ 
+                    //    MainWindow.SelectedBorder.GAdorner.Visibility = Visibility.Hidden; 
+                    //}
+                    //GAdorner.Visibility = Visibility.Visible;
+                    //MainWindow.SelectedBorder=this;
                 }
             }
-        }
-
-        public void BorderWithAdorner_LostFocus(object sender,RoutedEventArgs e)
-        {
-            if (GAdorner != null)
-                GAdorner = null;
         }
     }
 }

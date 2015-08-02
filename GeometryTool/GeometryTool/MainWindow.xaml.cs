@@ -24,7 +24,8 @@ namespace GeometryTool
     /// </summary>
     public partial class MainWindow : Window
     {
-        public static Canvas myRootCanvas;
+        public static Canvas myRootCanvas;      //表示装着当前图形的Canvas
+        public static BorderWithAdorner SelectedBorder;//表示当前和之前选择中的图形
         public static string ActionMode = "";   //表示当前鼠标的模式
         int GridSize = 0;                       //表示画板大小
         public int isStartPoint;                //绘制直线的时候，表示是否为第一个点
@@ -302,10 +303,16 @@ namespace GeometryTool
         /// <param name="e"></param>
         private void RootCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (this.RootCanvas.Tag.ToString() == "AddTriangle")
-            { canMove = true; }
-
-            if (this.RootCanvas.Tag.ToString() == "AddTriangle")        //绘制三角形
+            if (this.RootCanvas.Tag.ToString() == "Select" )
+            {
+                if (SelectedBorder!=null)       //隐藏之前点击的图形的选择框
+                    SelectedBorder.GAdorner.Visibility = Visibility.Hidden;
+                System.Windows.Point p = Mouse.GetPosition(e.Source as FrameworkElement);
+                VisualTreeHelper.HitTest(RootCanvas, null,   //进行命中测试
+                new HitTestResultCallback(MyHitTestResult),
+                new PointHitTestParameters(p));
+            }
+            else if (this.RootCanvas.Tag.ToString() == "AddTriangle")        //绘制三角形
             {
                 System.Windows.Point p = new AutoPoints().GetAutoAdsorbPoint(Mouse.GetPosition(e.Source as FrameworkElement));
                 graphAdd.AddGeometry(p, graphAppearance, this.RootCanvas, out trianglePath, 3, true);
@@ -591,7 +598,25 @@ namespace GeometryTool
                 e.Handled = true;
             }
         }
- 
+
+        /// <summary>
+        /// 显示被选中的图形的选择框
+        /// </summary>
+        /// <param name="result"></param>
+        /// <returns></returns>
+        public HitTestResultBehavior MyHitTestResult(HitTestResult result)
+        {
+            System.Windows.Shapes.Path path = result.VisualHit as System.Windows.Shapes.Path;
+            if (path != null)
+            {
+                BorderWithAdorner borderWA = path.Parent as BorderWithAdorner;
+                borderWA.GAdorner.Visibility = Visibility.Visible;
+                SelectedBorder = borderWA;
+                return HitTestResultBehavior.Stop;
+            }
+
+            return HitTestResultBehavior.Continue;
+        }
     }
 
 }
