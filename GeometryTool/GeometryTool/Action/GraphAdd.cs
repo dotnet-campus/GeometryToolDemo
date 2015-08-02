@@ -33,7 +33,7 @@ namespace GeometryTool
             vPath = new Path()
             {
                 Stroke = vGraphAppearance.Stroke,
-                StrokeThickness = vGraphAppearance.StrokeThickness
+                StrokeThickness = vGraphAppearance.StrokeThickness,
                
             };
 
@@ -56,7 +56,8 @@ namespace GeometryTool
             Binding binding = new Binding("Center") { Source = e };
             binding.Mode = BindingMode.TwoWay;
             BindingOperations.SetBinding(pathFigure, PathFigure.StartPointProperty, binding);
-            vRootCanvas.Children.Add(vPath);
+
+            
         }
 
         /// <summary>
@@ -177,7 +178,7 @@ namespace GeometryTool
                 { 
                     Stroke = vGraphAppearance.Stroke,
                     StrokeThickness = vGraphAppearance.StrokeThickness,
-                    
+                    StrokeDashArray=vGraphAppearance.StrokeDashArray
                };
 
                 if (vGraphAppearance.Fill != Brushes.Transparent)
@@ -236,12 +237,12 @@ namespace GeometryTool
         {
             //1.设置圆的外观
             vPath = new Path();
-            vPath.Stroke = vGraphAppearance.Stroke;
-            vPath.Fill = vGraphAppearance.Stroke;
+            vPath.Stroke = Brushes.Black;
+            vPath.Fill = Brushes.White;
             vPath.StrokeThickness = vGraphAppearance.StrokeThickness;
             EllipseGeometry ellipse = new EllipseGeometry();
-            ellipse.RadiusX = vGraphAppearance.StrokeThickness+0.2;
-            ellipse.RadiusY = vGraphAppearance.StrokeThickness +0.2;
+            ellipse.RadiusX = vGraphAppearance.StrokeThickness+0.1;
+            ellipse.RadiusY = vGraphAppearance.StrokeThickness +0.1;
             ellipse.Center  = vPoint;
             vPath.Data = ellipse;
 
@@ -262,12 +263,12 @@ namespace GeometryTool
         {
             //1.设置圆的外观
             vPath = new Path();
-            vPath.Stroke = vGraphAppearance.Stroke;
-            vPath.Fill = vGraphAppearance.Stroke;
+            vPath.Stroke = Brushes.Black;
+            vPath.Fill = Brushes.White;
             vPath.StrokeThickness = vGraphAppearance.StrokeThickness;
             EllipseGeometry ellipse = new EllipseGeometry();
-            ellipse.RadiusX = vGraphAppearance.StrokeThickness + 0.2;
-            ellipse.RadiusY = vGraphAppearance.StrokeThickness + 0.2;
+            ellipse.RadiusX = vGraphAppearance.StrokeThickness + 0.1;
+            ellipse.RadiusY = vGraphAppearance.StrokeThickness + 0.1;
             ellipse.Center = vPoint;
             vPath.Data = ellipse;
         }
@@ -287,7 +288,7 @@ namespace GeometryTool
             vPath = new Path()
             {
                 Stroke = vGraphAppearance.Stroke,
-                StrokeThickness = vGraphAppearance.StrokeThickness
+                StrokeThickness = vGraphAppearance.StrokeThickness,
             };
 
             if (vGraphAppearance.Fill != Brushes.Transparent)
@@ -355,7 +356,8 @@ namespace GeometryTool
             vPath = new Path()
             {
                 Stroke = vGraphAppearance.Stroke,
-                StrokeThickness = vGraphAppearance.StrokeThickness
+                StrokeThickness = vGraphAppearance.StrokeThickness,
+                StrokeDashArray=vGraphAppearance.StrokeDashArray
             };
 
             if (vGraphAppearance.Fill != Brushes.Transparent)
@@ -371,7 +373,6 @@ namespace GeometryTool
             vRootCanvas.Children.Add(borderWA);
             pathGeometry.Figures = new PathFigureCollection();
             PathFigure pathFigure = new PathFigure();
-            //pathFigure.IsClosed = true;
             pathGeometry.Figures.Add(pathFigure);
             PathSegmentCollection segmentCollection = new PathSegmentCollection();
             pathFigure.Segments = segmentCollection;
@@ -427,7 +428,7 @@ namespace GeometryTool
             vPath = new Path()
             {
                 Stroke = vGraphAppearance.Stroke,
-                StrokeThickness = vGraphAppearance.StrokeThickness
+                StrokeThickness = vGraphAppearance.StrokeThickness,
             };
 
             if (vGraphAppearance.Fill != Brushes.Transparent)

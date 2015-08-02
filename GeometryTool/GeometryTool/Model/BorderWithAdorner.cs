@@ -15,7 +15,7 @@ namespace GeometryTool
 {
     public class BorderWithAdorner : Border
     {
-        public MyAdorner GAdorner;
+        public GeometryAdorner GAdorner;
         public double MaxX;
         public double MinX;
         public double MaxY;
@@ -26,6 +26,12 @@ namespace GeometryTool
             this.MouseDown += Element_MouseDown;
             EllipseList = new List<Path>();
         }
+
+        /// <summary>
+        /// 当鼠标点击图形的的时候，产生边线
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void Element_MouseDown(object sender, MouseEventArgs e)
         {
             if (MainWindow.ActionMode == "Select")
@@ -64,15 +70,9 @@ namespace GeometryTool
                     if (GAdorner == null)
                     {
                         Path path1 = this.Child as Path;
-                        GAdorner = new MyAdorner(this);
+                        GAdorner = new GeometryAdorner(this);
                         layer.Add(this.GAdorner);
                     }
-                    //if (MainWindow.SelectedBorder != null)
-                    //{ 
-                    //    MainWindow.SelectedBorder.GAdorner.Visibility = Visibility.Hidden; 
-                    //}
-                    //GAdorner.Visibility = Visibility.Visible;
-                    //MainWindow.SelectedBorder=this;
                 }
             }
         }

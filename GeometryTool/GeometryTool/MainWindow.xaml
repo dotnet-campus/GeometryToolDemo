@@ -59,21 +59,23 @@
             <TabItem Header="操作">
                 <TextBlock Text="3"/>
             </TabItem>
-           
         </TabControl>
 
         <Border BorderBrush="Black" Grid.Row="1" Grid.Column="1" BorderThickness="1,0,0,1" >
-            <StackPanel Margin="0,30,0,0">
-                <TabControl>
+            <StackPanel  x:Name="GeometryOptions">
+                <Border Background="#999999" Width="100" Height="25" CornerRadius="2" Margin="0,20,0,10" >
+                    <Label x:Name="LBNowSelected" Content="画笔属性" HorizontalAlignment="Center" VerticalAlignment="Center"  />
+                </Border>
+                    <TabControl >
                     <TabItem Header="线条颜色">
-                        <Border BorderThickness="0" BorderBrush="DarkGray">
+                        <Border BorderThickness="0" BorderBrush="DarkGray" >
                             <Grid Background="#FFFFFFFF">
-                                <Border BorderThickness="1" BorderBrush="#999999" Background="White" Button.Click="Stroke_Click">
+                                <Border BorderThickness="1" BorderBrush="#999999" Background="White" >
                                     <StackPanel Orientation="Vertical" Background="#FFFFFFFF" Button.Click="StrokeColors_Click" >
-                                        <Border Width="196" Height="23" Background="#DDE7EE"  BorderThickness="0,0,0,2" BorderBrush="#BFBFBF">
+                                        <Border Width="196" Height="23" BorderThickness="0,0,0,2" BorderBrush="#BFBFBF">
                                             <DockPanel Width="196" >
-                                                <Label SnapsToDevicePixels="True" FontFamily="Arial" Foreground="DarkBlue" FontSize="11" FontWeight="Bold" VerticalContentAlignment="Center" VerticalAlignment="Center" Content="当前颜色"/>
-                                                <Label x:Name="StrokeCurrentColor" Margin="5,0,0,0"/>
+                                                <Label SnapsToDevicePixels="True" Background="#DDE7EE" FontFamily="Arial" Foreground="DarkBlue" FontSize="11" FontWeight="Bold" VerticalContentAlignment="Center" VerticalAlignment="Center" Content="当前颜色"/>
+                                                <Label x:Name="StrokeCurrentColor" Margin="5,0,0,0" Background="{Binding Path=Stroke,Mode=TwoWay}"/>
                                             </DockPanel>
                                         </Border>
                                         <StackPanel SnapsToDevicePixels="True" x:Name="FirstRow" Margin="2,0,0,0" Orientation="Horizontal">
@@ -171,14 +173,14 @@
                         </Border>
                     </TabItem>
                     <TabItem Header="填充颜色">
-                        <Border BorderThickness="0" BorderBrush="DarkGray" Button.Click="Fill_Click">
+                        <Border BorderThickness="0" BorderBrush="DarkGray" >
                             <Grid Background="#FFFFFFFF">
                                 <Border BorderThickness="1" BorderBrush="#999999" Background="White">
                                     <StackPanel Orientation="Vertical" Background="#FFFFFFFF" Button.Click="FillColors_Click" >
-                                        <Border Width="196" Height="23" Background="#DDE7EE"  BorderThickness="0,0,0,2" BorderBrush="#BFBFBF" Style="{x:Null}">
+                                        <Border Width="196" Height="23"   BorderThickness="0,0,0,2" BorderBrush="#BFBFBF" Style="{x:Null}">
                                             <DockPanel Width="196" >
-                                                <Label SnapsToDevicePixels="True" FontFamily="Arial" Foreground="DarkBlue" FontSize="11" FontWeight="Bold" VerticalContentAlignment="Center" VerticalAlignment="Center" Content="当前颜色"/>
-                                                <Label x:Name="FillCurrentColor" Margin="5,0,0,0"/>
+                                                <Label SnapsToDevicePixels="True" Background="#DDE7EE" FontFamily="Arial" Foreground="DarkBlue" FontSize="11" FontWeight="Bold" VerticalContentAlignment="Center" VerticalAlignment="Center" Content="当前颜色"/>
+                                                <Label x:Name="FillCurrentColor" Margin="5,0,0,0" Background="{Binding Path=Fill,Mode=TwoWay}"/>
                                             </DockPanel>
                                         </Border>
                                         <StackPanel SnapsToDevicePixels="True"  Margin="2,0,0,0" Orientation="Horizontal">
@@ -282,15 +284,20 @@
                             <Label SnapsToDevicePixels="True" FontFamily="Arial" Foreground="DarkBlue" FontSize="11" FontWeight="Bold" VerticalContentAlignment="Center" VerticalAlignment="Center" Content="线条粗细/虚实"/>
                         </DockPanel>
                     </Border>
-                    <Line x:Name="LineStyle"  X1="25" X2="175" Y1="0" Y2="0"  Stroke="{Binding ElementName=StrokeCurrentColor,Path=Background,Mode=TwoWay}"    Margin="0,20,0,10"  StrokeThickness="{Binding ElementName=SliderStyle,Path=Value,Converter={StaticResource sliderConverterToDouble}}"/>
+                    <Line x:Name="LineStyle"   X1="25" X2="175" Y1="0" Y2="0"  Stroke="Black" StrokeDashArray="{Binding StrokeDashArray,Mode=TwoWay}"    Margin="0,20,0,10"  StrokeThickness="{Binding StrokeThickness,Mode=TwoWay,Converter={StaticResource sliderConverterToDouble}}"/>
                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal">
                         <Slider x:Name="SliderStyle" HorizontalAlignment="Center"  Width="120" IsSnapToTickEnabled="True" VerticalAlignment="Center" Minimum="1" Maximum="10" ValueChanged="SliderStyle_ValueChanged"  />
                         <Label Content="{Binding ElementName=SliderStyle,Path=Value}"/>
                     </StackPanel>
-                    <Slider x:Name="StrokeDash1" HorizontalAlignment="Center"  Width="150" VerticalAlignment="Center" Minimum="1" Maximum="10"   Margin="0,10"/>
-                    <Slider x:Name="StrokeDash2" HorizontalAlignment="Center"  Width="150" VerticalAlignment="Center" Minimum="1" Maximum="10"  />
-
-                    <Border Width="196" Height="23" Background="#DDE7EE"  BorderThickness="0,0,0,2" BorderBrush="#BFBFBF" Margin="0,20,0,0">
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal">
+                        <Slider x:Name="StrokeDash1" HorizontalAlignment="Center"  Width="120" VerticalAlignment="Center" Minimum="1" Maximum="10" IsSnapToTickEnabled="True" ValueChanged="StrokeDash1_ValueChanged"   />
+                        <Label Content="{Binding ElementName=StrokeDash1,Path=Value}"/>
+                    </StackPanel>
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal">
+                        <Slider x:Name="StrokeDash2" HorizontalAlignment="Center"  Width="120" VerticalAlignment="Center" Minimum="0" Maximum="10" IsSnapToTickEnabled="True" ValueChanged="StrokeDash2_ValueChanged"  />
+                        <Label Content="{Binding ElementName=StrokeDash2,Path=Value}"/>
+                    </StackPanel>
+                <Border Width="196" Height="23" Background="#DDE7EE"  BorderThickness="0,0,0,2" BorderBrush="#BFBFBF" Margin="0,20,0,0">
                         <DockPanel Width="196" >
                             <Label SnapsToDevicePixels="True" FontFamily="Arial" Foreground="DarkBlue" FontSize="11" FontWeight="Bold" VerticalContentAlignment="Center" VerticalAlignment="Center" Content="杂项"/>
                         </DockPanel>

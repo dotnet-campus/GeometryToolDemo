@@ -65,10 +65,6 @@ namespace GeometryTool
             this.RootCanvas.Tag = "Select";
             MainWindow.ActionMode = "Select";
             this.WindowState = System.Windows.WindowState.Maximized;    //设置窗口最大化
-            Binding binding1 = new Binding("Value") { Source=this.StrokeDash1,ConverterParameter=this.StrokeDash2.Value,Converter=new DashArrayConverter1()};
-            Binding binding2 = new Binding("Value") { Source = this.StrokeDash2, ConverterParameter = this.StrokeDash1.Value, Converter = new DashArrayConverter2() };
-            BindingOperations.SetBinding(LineStyle, System.Windows.Shapes.Line.StrokeDashArrayProperty, binding1);
-            BindingOperations.SetBinding(LineStyle, System.Windows.Shapes.Line.StrokeDashArrayProperty, binding2);
             docCanvas_Loaded();
             StrokeCurrentColor.Background = graphAppearance.Stroke;
             FillCurrentColor.Background = graphAppearance.Fill;
@@ -77,7 +73,7 @@ namespace GeometryTool
             CanvasChange.Value = 20;
             graphAppearance.Fill = Brushes.Transparent;
             FileName = "";
-           
+            GeometryOptions.DataContext = graphAppearance;
         }
 
         /// <summary>
@@ -303,43 +299,58 @@ namespace GeometryTool
         /// <param name="e"></param>
         private void RootCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            if (SelectedBorder != null)       //隐藏之前点击的图形的选择框
+                SelectedBorder.GAdorner.Visibility = Visibility.Hidden;
             if (this.RootCanvas.Tag.ToString() == "Select" )
             {
-                if (SelectedBorder!=null)       //隐藏之前点击的图形的选择框
-                    SelectedBorder.GAdorner.Visibility = Visibility.Hidden;
                 System.Windows.Point p = Mouse.GetPosition(e.Source as FrameworkElement);
                 VisualTreeHelper.HitTest(RootCanvas, null,   //进行命中测试
                 new HitTestResultCallback(MyHitTestResult),
                 new PointHitTestParameters(p));
+                if (SelectedBorder!=null&&SelectedBorder.Child != null)
+                {
+                    GeometryOptions.DataContext = SelectedBorder.Child;
+                    LBNowSelected.Content = "图形属性";
+                }
+                else
+                {
+                    GeometryOptions.DataContext = graphAppearance;
+                    LBNowSelected.Content = "画笔属性";
+                }
             }
             else if (this.RootCanvas.Tag.ToString() == "AddTriangle")        //绘制三角形
             {
                 System.Windows.Point p = new AutoPoints().GetAutoAdsorbPoint(Mouse.GetPosition(e.Source as FrameworkElement));
                 graphAdd.AddGeometry(p, graphAppearance, this.RootCanvas, out trianglePath, 3, true);
+                GeometryOptions.DataContext = trianglePath;
                 canMove = true;
             }
             else if (this.RootCanvas.Tag.ToString() == "AddRectangular")//绘制矩形
             {
                 System.Windows.Point p = new AutoPoints().GetAutoAdsorbPoint(Mouse.GetPosition(e.Source as FrameworkElement));
                 graphAdd.AddGeometry(p, graphAppearance, this.RootCanvas, out rectanglePath, 4, true);
+                GeometryOptions.DataContext = rectanglePath;
                 canMove = true;
             }
             else if (this.RootCanvas.Tag.ToString() == "AddCircle")//绘制圆
             {
                 System.Windows.Point p = new AutoPoints().GetAutoAdsorbPoint(Mouse.GetPosition(e.Source as FrameworkElement));
                 graphAdd.AddGeometryOfCricle(p, graphAppearance, this.RootCanvas, out circlePath);
+                GeometryOptions.DataContext = circlePath;
                 canMove = true;
             }
             else if (this.RootCanvas.Tag.ToString() == "AddEllipse")//绘制椭圆
             {
                 System.Windows.Point p = new AutoPoints().GetAutoAdsorbPoint(Mouse.GetPosition(e.Source as FrameworkElement));
                 graphAdd.AddGeometryOfCricle(p, graphAppearance, this.RootCanvas, out ellipseGeometryPath);
+                GeometryOptions.DataContext = ellipseGeometryPath;
                 canMove = true;
             }
             else if (this.RootCanvas.Tag.ToString() == "AddCurve")//绘制曲线
             {
                 System.Windows.Point p = new AutoPoints().GetAutoAdsorbPoint(Mouse.GetPosition(e.Source as FrameworkElement));
                 graphAdd.AddCurve(p, graphAppearance, this.RootCanvas, out curvePath);
+                GeometryOptions.DataContext = curvePath;
                 canMove = true;
             }
             else if (this.RootCanvas.Tag.ToString() == "QBezier")//绘制二次方贝塞尔曲线
@@ -347,10 +358,16 @@ namespace GeometryTool
                 System.Windows.Point p = new AutoPoints().GetAutoAdsorbPoint(Mouse.GetPosition(e.Source as FrameworkElement));
                 graphAdd.AddPointWithNoBorder(p, graphAppearance, RootCanvas, out ellipsePath);
                 graphAdd.NewPathGeomotry(graphAppearance, RootCanvas, out QBezierPath, ellipsePath, false);
+                BorderWithAdorner borderWA = new BorderWithAdorner();
+                borderWA.Child = QBezierPath;
+                borderWA.EllipseList.Add(ellipsePath);
+                RootCanvas.Children.Add(borderWA);
 
                 System.Windows.Shapes.Path ellipsePath2, ellipsePath3;
                 graphAdd.AddPoint(p, graphAppearance, RootCanvas, out ellipsePath2);
+                borderWA.EllipseList.Add(ellipsePath2);
                 graphAdd.AddPoint(p, graphAppearance, RootCanvas, out ellipsePath3);
+                borderWA.EllipseList.Add(ellipsePath3);
 
                 PathGeometry path = QBezierPath.Data as PathGeometry;
 
@@ -358,7 +375,7 @@ namespace GeometryTool
                 BorderWithDrag border = new BorderWithDrag();
                 border.Child = ellipsePath;
                 this.RootCanvas.Children.Add(border);
-
+                GeometryOptions.DataContext = QBezierPath;
                 canMove = true;
             }
             else if (this.RootCanvas.Tag.ToString() == "Bezier")//绘制二次方贝塞尔曲线
@@ -366,17 +383,25 @@ namespace GeometryTool
                 System.Windows.Point p = new AutoPoints().GetAutoAdsorbPoint(Mouse.GetPosition(e.Source as FrameworkElement));
                 graphAdd.AddPointWithNoBorder(p, graphAppearance, RootCanvas, out ellipsePath);
                 graphAdd.NewPathGeomotry(graphAppearance, RootCanvas, out BezierPath, ellipsePath, false);
+                BorderWithAdorner borderWA = new BorderWithAdorner();
+                borderWA.Child = BezierPath;
+                borderWA.EllipseList.Add(ellipsePath);
+                RootCanvas.Children.Add(borderWA);
 
                 System.Windows.Shapes.Path ellipsePath2, ellipsePath3, ellipsePath4;
                 graphAdd.AddPoint(p, graphAppearance, RootCanvas, out ellipsePath2);
+                borderWA.EllipseList.Add(ellipsePath2);
                 graphAdd.AddPoint(p, graphAppearance, RootCanvas, out ellipsePath3);
+                borderWA.EllipseList.Add(ellipsePath3);
                 graphAdd.AddPoint(p, graphAppearance, RootCanvas, out ellipsePath4);
+                borderWA.EllipseList.Add(ellipsePath4);
                 PathGeometry path = BezierPath.Data as PathGeometry;
 
                 graphAdd.AddBezierSegment(path.Figures[0], ellipsePath4, ellipsePath3, ellipsePath2);
                 BorderWithDrag border = new BorderWithDrag();
                 border.Child = ellipsePath;
                 this.RootCanvas.Children.Add(border);
+                GeometryOptions.DataContext = BezierPath;
                 canMove = true;
             }
         }
@@ -512,37 +537,13 @@ namespace GeometryTool
        
 
         /// <summary>
-        /// 改变Stroke
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Stroke_Click(object sender, RoutedEventArgs e)
-        {
-            Button button = e.OriginalSource as Button;
-            if(button!=null)
-                graphAppearance.Stroke = button.Background;
-        }
-
-        /// <summary>
-        /// 改变Fill
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Fill_Click(object sender, RoutedEventArgs e)
-        {
-            Button button = e.OriginalSource as Button;
-            if (button != null)
-                graphAppearance.Fill = button.Background;
-        }
-
-        /// <summary>
         /// 拖动Slider改变StrokeThickness
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void SliderStyle_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            graphAppearance.StrokeThickness =e.NewValue/10;
+            LineStyle.StrokeThickness = e.NewValue ;
         }
 
         /// <summary>
@@ -610,13 +611,43 @@ namespace GeometryTool
             if (path != null)
             {
                 BorderWithAdorner borderWA = path.Parent as BorderWithAdorner;
-                borderWA.GAdorner.Visibility = Visibility.Visible;
-                SelectedBorder = borderWA;
+                if (borderWA != null)
+                {
+                    borderWA.GAdorner.Visibility = Visibility.Visible;
+                    SelectedBorder = borderWA;
+                }
                 return HitTestResultBehavior.Stop;
             }
+            SelectedBorder = null;
 
             return HitTestResultBehavior.Continue;
         }
+
+        private void StrokeDash1_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            
+            DoubleCollection oldStrokeDashArray =new DoubleCollection();
+            oldStrokeDashArray.Add( e.NewValue);
+            try
+            {
+                oldStrokeDashArray.Add(LineStyle.StrokeDashArray[1]);
+            }
+            catch { oldStrokeDashArray.Add(0); }
+            LineStyle.StrokeDashArray = oldStrokeDashArray;
+        }
+        private void StrokeDash2_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            DoubleCollection oldStrokeDashArray = new DoubleCollection();
+            try
+            {
+                oldStrokeDashArray.Add(LineStyle.StrokeDashArray[0]);
+            }
+            catch { oldStrokeDashArray.Add(1); }
+            oldStrokeDashArray.Add(e.NewValue);
+            LineStyle.StrokeDashArray = oldStrokeDashArray;
+        }
+
+        
     }
 
 }

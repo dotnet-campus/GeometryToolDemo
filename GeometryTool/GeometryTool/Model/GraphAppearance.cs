@@ -97,6 +97,9 @@ namespace GeometryTool
             Stroke = Brushes.Black;
             Fill = Brushes.Transparent;
             FillRule = FillRule.EvenOdd;
+            StrokeDashArray = new DoubleCollection();
+            StrokeDashArray.Add(1);
+            StrokeDashArray.Add(0);
         }
     }
 }

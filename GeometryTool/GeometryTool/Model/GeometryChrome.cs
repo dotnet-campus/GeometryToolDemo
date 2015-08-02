@@ -8,7 +8,7 @@ using System.Windows.Shapes;
 
 namespace GeometryTool
 {
-    public class MyChrome : ContentControl
+    public class GeometryChrome : ContentControl
     {
 
         public bool isLock;
@@ -51,13 +51,11 @@ namespace GeometryTool
             PathGeometry pg = (border.Child as Path).Data as PathGeometry;
             if (pg.Figures[0].Segments.Count>0)
             {
-            //if (pg.Figures[0].Segments[0].GetType() == typeof(ArcSegment))
-            //{
                 var geometry = pg.GetFlattenedPathGeometry();
                 var bound = geometry.Bounds;
-                this.Margin = new Thickness(border.ActualWidth - bound.Width - 0.5, border.ActualHeight - bound.Height - 0.5, 0, 0);
-            //}
-
+                this.Width = bound.Width + 1;
+                this.Height =bound.Height+1;
+                this.Margin = new Thickness(border.ActualWidth - bound.Width - 0.65, border.ActualHeight - bound.Height - 0.65, 0, 0);
             }
             else
             {

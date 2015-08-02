@@ -61,10 +61,8 @@
     <Compile Include="Converter\NDecimalConverter.cs" />
     <Compile Include="Action\XMLHelper.cs" />
     <Compile Include="Action\GeomortyConvertFromString.cs" />
-    <Compile Include="Model\DesignerItemDecorator.cs" />
-    <Compile Include="Model\MyAdorner.cs" />
-    <Compile Include="Model\MyChrome.cs" />
-    <Compile Include="Model\MySizeConvert.cs" />
+    <Compile Include="Model\GeometryAdorner.cs" />
+    <Compile Include="Model\GeometryChrome.cs" />
     <Compile Include="Converter\ImageVisibilityConverter.cs" />
     <Compile Include="Converter\IsEnbleBindingConverter.cs" />
     <Compile Include="Model\LockAdorner.cs" />
