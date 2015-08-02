@@ -61,9 +61,7 @@
     <Compile Include="Converter\NDecimalConverter.cs" />
     <Compile Include="Action\XMLHelper.cs" />
     <Compile Include="Action\GeomortyConvertFromString.cs" />
-    <Compile Include="DesignerItemDecorator.cs" />
-    <Compile Include="Model\GeometryAdorner.cs" />
-    <Compile Include="Model\GeometryChrome.cs" />
+    <Compile Include="Model\DesignerItemDecorator.cs" />
     <Compile Include="Model\MyAdorner.cs" />
     <Compile Include="Model\MyChrome.cs" />
     <Compile Include="Model\MySizeConvert.cs" />
@@ -75,12 +73,9 @@
     <Compile Include="Model\Points.cs" />
     <Compile Include="Converter\SizeConverter.cs" />
     <Compile Include="Converter\SliderConverterToDouble.cs" />
-    <Compile Include="MoveThumb.cs" />
-    <Compile Include="ResizeThumb.cs" />
-    <Compile Include="RotateThumb.cs" />
-    <Compile Include="Window1.xaml.cs">
-      <DependentUpon>Window1.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="Model\MoveThumb.cs" />
+    <Compile Include="Model\ResizeThumb.cs" />
+    <Compile Include="Model\RotateThumb.cs" />
     <Page Include="Resources\Canvas.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -128,13 +123,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Window1.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BorderWithAdorner.cs" />
+    <Compile Include="Model\BorderWithAdorner.cs" />
     <Compile Include="Model\ResizeRotateAdorner.cs" />
     <Compile Include="Model\ResizeRotateChrome.cs" />
     <Compile Include="Model\SizeAdorner.cs" />

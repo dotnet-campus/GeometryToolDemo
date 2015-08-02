@@ -116,8 +116,11 @@ namespace GeometryTool
                 Pt = _pt;
                 FrameworkElement _currEle = sender as FrameworkElement;
                 BorderWithDrag _borderWithDrag = _currEle as BorderWithDrag;
-                ((_borderWithDrag.Child as Path).Data as EllipseGeometry).Center = new Point() { X = _pt.X, Y = _pt.Y };
-                e.Handled = true;
+                Path _path = _borderWithDrag.Child as Path;
+                EllipseGeometry ellipse = _path.Data as EllipseGeometry;
+
+                    ellipse.Center = new Point() { X = _pt.X, Y = _pt.Y };
+              
             }
         }
 

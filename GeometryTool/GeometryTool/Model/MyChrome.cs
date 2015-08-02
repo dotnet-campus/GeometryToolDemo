@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 
 namespace GeometryTool
 {
@@ -24,11 +26,12 @@ namespace GeometryTool
         {
             BorderWithAdorner border = this.DataContext as BorderWithAdorner;
             border.MaxX =0;
-            border.MinX = border.EllipseList[0].Center.X;
+            border.MinX = (border.EllipseList[0].Data as EllipseGeometry).Center.X;
             border.MaxY = 0;
-            border.MinY = border.EllipseList[0].Center.Y;
-            foreach(EllipseGeometry item in border.EllipseList)
+            border.MinY = (border.EllipseList[0].Data as EllipseGeometry).Center.Y;
+            foreach(var path  in border.EllipseList)
             {
+                EllipseGeometry item = path.Data as EllipseGeometry;
                 Point p = item.Center;
                 if (border.MaxX < p.X)
                 {
@@ -47,11 +50,21 @@ namespace GeometryTool
                     border.MinY = p.Y;
                 }
            }
-        
 
-            this.Width = border.MaxX-border.MinX+1;
-            this.Height = border.MaxY - border.MinY+1;
-            this.Margin = new Thickness(border.MinX-0.5, border.MinY-0.5,0,0);
+            PathGeometry pg = (border.Child as Path).Data as PathGeometry;
+            if (pg.Figures[0].Segments[0].GetType() == typeof(ArcSegment))
+            {
+                var geometry = pg.GetFlattenedPathGeometry();
+                var bound = geometry.Bounds;
+                this.Margin = new Thickness(border.ActualWidth - bound.Width - 0.5, border.ActualHeight - bound.Height - 0.5, 0, 0);
+            }
+            else
+            { 
+                this.Width = border.MaxX-border.MinX+1;
+                this.Height = border.MaxY - border.MinY+1;
+
+                this.Margin = new Thickness(border.MinX-0.5, border.MinY-0.5,0,0);
+            }
             return base.ArrangeOverride(arrangeBounds);
         }
         }

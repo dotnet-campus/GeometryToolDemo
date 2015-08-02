@@ -237,7 +237,7 @@ namespace GeometryTool
                 else if (this.RootCanvas.Tag.ToString() == "AddCircle")                     //修改圆的位置
                 {
                     PathGeometry circel = circlePath.Data as PathGeometry;
-                    ArcSegment line1 = circel.Figures[0].Segments[0] as ArcSegment;
+                    ArcSegment line1 = circel.Figures[0].Segments[1] as ArcSegment;
                     line1.Point = new Point() { X = p.X, Y = p.Y };
                     e.Handled = true;
                 }
@@ -329,7 +329,7 @@ namespace GeometryTool
                 graphAdd.AddGeometryOfCricle(p, graphAppearance, this.RootCanvas, out ellipseGeometryPath);
                 canMove = true;
             }
-            else if (this.RootCanvas.Tag.ToString() == "AddCurve")//绘制椭圆
+            else if (this.RootCanvas.Tag.ToString() == "AddCurve")//绘制曲线
             {
                 System.Windows.Point p = new AutoPoints().GetAutoAdsorbPoint(Mouse.GetPosition(e.Source as FrameworkElement));
                 graphAdd.AddCurve(p, graphAppearance, this.RootCanvas, out curvePath);
@@ -383,6 +383,26 @@ namespace GeometryTool
         {
             if (canMove)        //图形更改为不能拖动
             {
+                BorderWithAdorner borderWA = null;
+                if (this.RootCanvas.Tag.ToString() == "AddCircle")//绘制圆
+                {
+                   borderWA = circlePath.Parent as BorderWithAdorner;
+                    
+                }
+                else if (this.RootCanvas.Tag.ToString() == "AddEllipse")//绘制椭圆
+                {
+                   borderWA = ellipseGeometryPath.Parent as BorderWithAdorner;
+                }
+                if (borderWA != null)
+                {
+                    BorderWithDrag borderWD = borderWA.EllipseList[0].Parent as BorderWithDrag;
+                    if (borderWD != null)
+                    {
+                        BorderLock borderLock = new BorderLock(borderWD);
+                        borderLock.Lock(((borderWD.Child as System.Windows.Shapes.Path).Data as EllipseGeometry).Center);
+                    }
+                }
+
                 canMove = false;
             }
         }

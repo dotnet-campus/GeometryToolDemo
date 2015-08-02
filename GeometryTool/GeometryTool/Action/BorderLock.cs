@@ -44,12 +44,12 @@ namespace GeometryTool
             {
                 if (Border.BrotherBorder == null)
                 {
-                    Border.BrotherBorder = Border;
+                    Border.BrotherBorder = Border.PointList[1];
                 }
                 if (Border.BrotherBorder.lockAdornor == null)  //只选择一个图层来显示Adorner
                 {
-                    Border.BrotherBorder.lockAdornor = new LockAdorner(Border);
-                    AdornerLayer layer = AdornerLayer.GetAdornerLayer(Border.Parent as Canvas);
+                    Border.BrotherBorder.lockAdornor = new LockAdorner(Border.BrotherBorder);
+                    AdornerLayer layer = AdornerLayer.GetAdornerLayer(Border.BrotherBorder.Parent as Canvas);
                     if (layer != null)
                     {
                         layer.Add(Border.BrotherBorder.lockAdornor);
@@ -59,11 +59,15 @@ namespace GeometryTool
                 Border.BrotherBorder.HasOtherPoint = true;     //显示锁
                 Border.BrotherBorder.lockAdornor.chrome.Source = new BitmapImage(new Uri("Image/lock.png", UriKind.Relative));
 
-                Border.BrotherBorder.PointList = Border.PointList;    //把所有的Border都绑定到显示Adorner的Border的Point上
-                foreach (BorderWithDrag border in Border.PointList)
+                if (Border != Border.BrotherBorder)
+                {
+                    Border.BrotherBorder.PointList = Border.PointList;
+                }
+                foreach (BorderWithDrag border in Border.BrotherBorder.PointList)
                 {
                     if (border != Border.BrotherBorder)
                     {
+                        BindingOperations.ClearBinding(((border.Child as Path).Data as EllipseGeometry), EllipseGeometry.CenterProperty);
                         Binding binding = new Binding("Center") { Source = ((Border.BrotherBorder.Child as Path).Data as EllipseGeometry) };
                         binding.Mode = BindingMode.TwoWay;
                         BindingOperations.SetBinding(((border.Child as Path).Data as EllipseGeometry), EllipseGeometry.CenterProperty, binding);
