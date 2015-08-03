@@ -14,6 +14,7 @@
             <local:BorderWidthHeightConverter x:Key="BorderWidthHeightConverter"/>
             <local:CanvasScaleTransformConverter x:Key="canvasScaleTransformConverter" />
             <local:ScaleCenterConverter x:Key="scaleCenterConverter"/>
+            <local:IntBoolConverter x:Key="intBoolConverter"/>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Canvas.xaml"/>
                 <ResourceDictionary Source="Resources/ExpanderStyles.xaml"/>
@@ -57,8 +58,38 @@
                     <RadioButton x:Name="Bezier"  Content="三次方贝塞尔曲线"  GroupName="MouseAction" ToolTip="Bezier" Click="Select_Click" />
                 </StackPanel>
             </TabItem>
-            <TabItem Header="操作">
-                <TextBlock Text="3"/>
+            <TabItem Header="曲线设置" x:Name="CurveOptions">
+                <StackPanel Orientation="Horizontal">
+                    <Border>
+                        <StackPanel Orientation="Vertical">
+                            <Label Content="椭圆半径"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="X"/>
+                                <TextBox x:Name="EllipseRadiusX" Width="10" Text="{Binding Path=RadiusX,Mode=TwoWay}" />
+                                <Label Content="Y"/>
+                                <TextBox x:Name="EllipseRadiusY" Width="10" Text="{Binding Path=RadiusY,Mode=TwoWay}"/>
+                            </StackPanel> 
+                        </StackPanel>
+                    </Border>
+                    <Border>
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox x:Name="EllipseisLargeArc" IsChecked="{Binding Path=isLargeArc,Converter={StaticResource intBoolConverter}}"/>
+                                <Label Content="IsLargeArc"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox x:Name="EllipseisClockwise" IsChecked="{Binding Path=isClockwise,Converter={StaticResource intBoolConverter}}"/>
+                                <Label Content="IsClockwise"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                    <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="旋转度数"/>
+                            <TextBox x:Name="EllipseDegree" Width="10" Text="{Binding Path=Degrees}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
             </TabItem>
         </TabControl>
 
@@ -289,21 +320,22 @@
                         <Line x:Name="LineStyle"   X1="25" X2="175" Y1="0" Y2="0"  Stroke="Black" StrokeDashArray="{Binding StrokeDashArray,Mode=TwoWay}"    Margin="0,20,0,10"  StrokeThickness="{Binding StrokeThickness,Mode=TwoWay,Converter={StaticResource sliderConverterToDouble}}"/>
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal">
                             <Slider x:Name="SliderStyle" HorizontalAlignment="Center"  Width="120" IsSnapToTickEnabled="True" VerticalAlignment="Center" Minimum="1" Maximum="10" ValueChanged="SliderStyle_ValueChanged"  />
-                            <Label Content="{Binding ElementName=SliderStyle,Path=Value}"/>
+                            <Label Content="{Binding ElementName=SliderStyle,Path=Value,Mode=TwoWay}"/>
                         </StackPanel>
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal">
                             <Slider x:Name="StrokeDash1" HorizontalAlignment="Center"  Width="120" VerticalAlignment="Center" Minimum="1" Maximum="10" IsSnapToTickEnabled="True" ValueChanged="StrokeDash1_ValueChanged"   />
-                            <Label Content="{Binding ElementName=StrokeDash1,Path=Value}"/>
+                            <Label Content="{Binding ElementName=StrokeDash1,Path=Value,Mode=TwoWay}"/>
                         </StackPanel>
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal">
                             <Slider x:Name="StrokeDash2" HorizontalAlignment="Center"  Width="120" VerticalAlignment="Center" Minimum="0" Maximum="10" IsSnapToTickEnabled="True" ValueChanged="StrokeDash2_ValueChanged"  />
-                            <Label Content="{Binding ElementName=StrokeDash2,Path=Value}"/>
+                            <Label Content="{Binding ElementName=StrokeDash2,Path=Value,Mode=TwoWay}"/>
                         </StackPanel>
                     
                     
                         
                 </StackPanel>
             </StackPanel>
+                
                 <StackPanel x:Name="GeometryOptions">
                     <Border Background="#999999" Width="100" Height="25" CornerRadius="2" Margin="0,20,0,10" >
                         <Label  Content="图形操作" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"  />
@@ -325,6 +357,7 @@
                         </TabItem>
                     </TabControl>
                 </StackPanel>
+                
                 <StackPanel >
                     <Border Background="#999999" Width="100" Height="25" CornerRadius="2" Margin="0,20,0,10" >
                         <Label  Content="画板属性" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"  />

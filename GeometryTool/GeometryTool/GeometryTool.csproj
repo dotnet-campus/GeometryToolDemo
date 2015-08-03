@@ -57,10 +57,12 @@
     <Compile Include="Converter\BorderWidthHeightConverter.cs" />
     <Compile Include="Converter\CanvasScaleTransformConverter.cs" />
     <Compile Include="Converter\DashArrayConverter.cs" />
+    <Compile Include="Converter\IntBoolConverter.cs" />
     <Compile Include="Converter\ScaleCenterConverter.cs" />
     <Compile Include="Converter\NDecimalConverter.cs" />
     <Compile Include="Action\XMLHelper.cs" />
-    <Compile Include="Action\GeomortyConvertFromString.cs" />
+    <Compile Include="Action\GeomortyStringConverter.cs" />
+    <Compile Include="Model\CurveAppearence.cs" />
     <Compile Include="Model\GeometryAdorner.cs" />
     <Compile Include="Model\GeometryChrome.cs" />
     <Compile Include="Converter\ImageVisibilityConverter.cs" />

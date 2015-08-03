@@ -349,7 +349,7 @@ namespace GeometryTool
         /// <param name="vRootCanvas"></param>
         /// <param name="vPath"></param>
         /// <param name="count"></param>
-        public void AddGeometryOfCricle(Point vPoint, GraphAppearance vGraphAppearance, Canvas vRootCanvas, out Path vPath)
+        public BorderWithAdorner AddGeometryOfCricle(Point vPoint, GraphAppearance vGraphAppearance, Canvas vRootCanvas, out Path vPath)
         {
 
             //设置直线的外观
@@ -412,7 +412,7 @@ namespace GeometryTool
 
             secondLineSe.Size = new Size() { Height = 0.1, Width = 0.1 };
             firstLineSe.Size = new Size() { Height = 0.1, Width = 0.1 };
-           
+            return borderWA;
         }
 
         /// <summary>

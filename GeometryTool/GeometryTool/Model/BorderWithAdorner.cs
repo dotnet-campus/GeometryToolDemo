@@ -37,16 +37,21 @@ namespace GeometryTool
         {
             if (MainWindow.ActionMode == "Select")
             {
-                AdornerLayer layer = AdornerLayer.GetAdornerLayer(this.Parent as Canvas);
-                if (layer != null)
+                ShowAdorner();
+            }
+        }
+
+        public void ShowAdorner()
+        {
+            AdornerLayer layer = AdornerLayer.GetAdornerLayer(this.Parent as Canvas);
+            if (layer != null)
+            {
+                GetFourPoint(this);
+                if (this.GAdorner == null)
                 {
-                    GetFourPoint(this);
-                    if (GAdorner == null)
-                    {
-                        Path path1 = this.Child as Path;
-                        GAdorner = new GeometryAdorner(this);
-                        layer.Add(this.GAdorner);
-                    }
+                    Path path1 = this.Child as Path;
+                    GAdorner = new GeometryAdorner(this);
+                    layer.Add(this.GAdorner);
                 }
             }
         }
@@ -101,7 +106,7 @@ namespace GeometryTool
                 StrokeDashArray = path.StrokeDashArray,
                 Fill = path.Fill
             };
-            GeomortyStringConverter gsc = new GeomortyStringConverter(MainWindow.myRootCanvas, graphAppearance);
+            GeomertyStringConverter gsc = new GeomertyStringConverter(MainWindow.myRootCanvas, graphAppearance);
             string MiniLanguage = gsc.StringFromGeometry(vBorderWA.Child as Path);  //把该图形转化成为Mini-Language
             BorderWithAdorner newBorderWA = gsc.GeomotryFromString(MiniLanguage);   //把Mini-Language转化成为图形，实现图形的深度复制
             Path newPath = newBorderWA.Child as Path;

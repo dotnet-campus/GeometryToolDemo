@@ -24,6 +24,22 @@ namespace GeometryTool
     /// </summary>
     public partial class MainWindow : Window
     {
+        // 依赖属性，用于控制是否启用粘贴功能
+        public static readonly DependencyProperty CanPasteProperty =
+          DependencyProperty.Register("CanPaste", typeof(bool), typeof(MainWindow),
+          new FrameworkPropertyMetadata(false, null));
+        public bool CanPaste
+        {
+            get
+            {
+                return (bool)this.GetValue(CanPasteProperty);
+            }
+            set
+            {
+                this.SetValue(CanPasteProperty, value);
+            }
+        }
+
         public static Canvas myRootCanvas;      //表示装着当前图形的Canvas
         public static BorderWithAdorner SelectedBorder; //表示当前和之前选择中的图形
         public static BorderWithAdorner CopyBorderWA;   //用于存储剪切或者复制的图形
@@ -35,6 +51,7 @@ namespace GeometryTool
         System.Windows.Shapes.Path ellipsePath; //表示绘制图形的时候，点所在Path
         GraphAdd graphAdd;                      //表示绘制动作的类
         GraphAppearance graphAppearance;        //表示图形的外观
+        CurveAppearence curveAppearence;        //表示曲线的外观
         PathFigure pathFigure;                  //表示绘制直线的时候，直线所在的PathFigure
         System.Windows.Shapes.Path circlePath;  //表示绘制圆的时候，圆所在的Path
         bool isClose;                           //表示图形是否是闭合的
@@ -57,6 +74,7 @@ namespace GeometryTool
         public MainWindow()
         {
             graphAppearance = new GraphAppearance();
+            curveAppearence = new CurveAppearence();
             graphAppearance.StrokeThickness = 0.1;
             InitializeComponent();
             graphAdd = new GraphAdd();
@@ -78,6 +96,7 @@ namespace GeometryTool
             FileName = "";
             PanProperty.DataContext = graphAppearance;
             MenuOptions.DataContext = this;
+            CurveOptions.DataContext = curveAppearence;
         }
 
         /// <summary>
@@ -98,7 +117,7 @@ namespace GeometryTool
             {
                 pathFigure.Segments.RemoveAt(pathFigure.Segments.Count - 1);
             }
-            if (this.RootCanvas.Tag.ToString() != "Point")          //移除划线功能
+            if (MainWindow.ActionMode != "Point")          //移除划线功能
             {
                 this.RootCanvas.RemoveHandler(UIElement.MouseMoveEvent, new MouseEventHandler(DrawLine));
                 EllipseList = new List<System.Windows.Shapes.Path>();
@@ -107,6 +126,17 @@ namespace GeometryTool
                     isStartPoint = 0;
                 }
             }
+            if (MainWindow.ActionMode != "Select")
+            {
+                LBNowSelected.Content = "画笔属性";
+                PanProperty.DataContext = graphAppearance;
+                StrokeDash1.Value = graphAppearance.StrokeDashArray[0];
+                StrokeDash2.Value = graphAppearance.StrokeDashArray[1];
+
+            }
+            if (MainWindow.SelectedBorder != null)       //隐藏之前点击的图形的选择框
+                MainWindow.SelectedBorder.GAdorner.Visibility = Visibility.Hidden;
+            MainWindow.SelectedBorder = null;
             e.Handled = true;
         }
 
@@ -119,7 +149,7 @@ namespace GeometryTool
         {
             System.Windows.Point p =(new AutoPoints()).GetAutoAdsorbPoint( Mouse.GetPosition(e.Source as FrameworkElement));   //获取鼠标当前位置
 
-            if (this.RootCanvas.Tag.ToString() == "Point") //判断是不是画线
+            if (MainWindow.ActionMode == "Point") //判断是不是画线
             {
                 isClose = false;
                 if (isStartPoint == 0)
@@ -137,8 +167,8 @@ namespace GeometryTool
                 }
                 EllipseList.Add(ellipsePath);
                 BorderWithDrag border = new BorderWithDrag(linePath, isStartPoint, EllipseList);
-                    border.Child = ellipsePath;
-                    this.RootCanvas.Children.Add(border);
+                border.Child = ellipsePath;
+                this.RootCanvas.Children.Add(border);
                 e.Handled = true;
 
             }
@@ -151,7 +181,7 @@ namespace GeometryTool
         /// <param name="e"></param>
         private void DrawLine(object sender, MouseEventArgs e)
         {
-            if (this.RootCanvas.Tag.ToString() == "Point")
+            if (MainWindow.ActionMode == "Point")
             {
                 //isStartPoint = 1;
                 System.Windows.Point p = Mouse.GetPosition(e.Source as FrameworkElement);   //获取鼠标当前位置
@@ -175,7 +205,7 @@ namespace GeometryTool
                 FileName += "\\" + DateTime.Now.ToLongDateString()+".xml";
             }
             StreamWriter sw = new StreamWriter(FileName);
-            GeomortyStringConverter GCXML = new GeomortyStringConverter(RootCanvas, graphAppearance);
+            GeomertyStringConverter GCXML = new GeomertyStringConverter(RootCanvas, graphAppearance);
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
             sb.AppendLine("<Canvase>");
@@ -208,7 +238,7 @@ namespace GeometryTool
             if (canMove)
             {
                 System.Windows.Point p = new AutoPoints().GetAutoAdsorbPoint( e.GetPosition(RootCanvas));     //获取当前鼠标的位置
-                if (this.RootCanvas.Tag.ToString() == "AddTriangle")                        //修改三角形的位置
+                if (MainWindow.ActionMode == "AddTriangle")                        //修改三角形的位置
                 {
                     if (trianglePath != null)
                     {
@@ -222,7 +252,7 @@ namespace GeometryTool
                         e.Handled = true;
                     }
                 }
-                else if (this.RootCanvas.Tag.ToString() == "AddRectangular")                //修改矩形的位置
+                else if (MainWindow.ActionMode == "AddRectangular")                //修改矩形的位置
                 {
                     PathGeometry triangle = rectanglePath.Data as PathGeometry;
                     Point oldPaint = triangle.Figures[0].StartPoint;
@@ -235,14 +265,14 @@ namespace GeometryTool
                     line3.Point = new Point() { X = p.X, Y = oldPaint.Y };
                     e.Handled = true;
                 }
-                else if (this.RootCanvas.Tag.ToString() == "AddCircle")                     //修改圆的位置
+                else if (MainWindow.ActionMode == "AddCircle")                     //修改圆的位置
                 {
                     PathGeometry circel = circlePath.Data as PathGeometry;
                     ArcSegment line1 = circel.Figures[0].Segments[1] as ArcSegment;
                     line1.Point = new Point() { X = p.X, Y = p.Y };
                     e.Handled = true;
                 }
-                else if (this.RootCanvas.Tag.ToString() == "AddEllipse")                    //修改椭圆的位置
+                else if (MainWindow.ActionMode == "AddEllipse")                    //修改椭圆的位置
                 {
                     PathGeometry circel = ellipseGeometryPath.Data as PathGeometry;
                     ArcSegment line1 = circel.Figures[0].Segments[0] as ArcSegment;
@@ -267,13 +297,13 @@ namespace GeometryTool
                     }
                     e.Handled = true;
                 }
-                else if (this.RootCanvas.Tag.ToString() == "AddCurve")  //修改曲线的位置
+                else if (MainWindow.ActionMode == "AddCurve")  //修改曲线的位置
                 {
                     PathGeometry circel = curvePath.Data as PathGeometry;
                     ArcSegment line1 = circel.Figures[0].Segments[0] as ArcSegment;
                     line1.Point = new Point() { X = p.X, Y = p.Y };
                 }
-                else if (this.RootCanvas.Tag.ToString() == "QBezier")   //修改二次方贝塞尔曲线的位置
+                else if (MainWindow.ActionMode == "QBezier")   //修改二次方贝塞尔曲线的位置
                 {
                     PathGeometry QBezier = QBezierPath.Data as PathGeometry;
                     QuadraticBezierSegment qbSegment = QBezier.Figures[0].Segments[0] as QuadraticBezierSegment;
@@ -282,7 +312,7 @@ namespace GeometryTool
                     qbSegment.Point1 = new Point() { X = (p.X + oldPoint.X) / 2.0, Y = p.Y };
                     qbSegment.Point2 = new Point() { X = p.X, Y = oldPoint2.Y };
                 }
-                else if (this.RootCanvas.Tag.ToString() == "Bezier")    //修改三次方贝塞尔曲线的位置
+                else if (MainWindow.ActionMode == "Bezier")    //修改三次方贝塞尔曲线的位置
                 {
                     PathGeometry Bezier = BezierPath.Data as PathGeometry;
                     BezierSegment bSegment = Bezier.Figures[0].Segments[0] as BezierSegment;
@@ -303,110 +333,105 @@ namespace GeometryTool
         /// <param name="e"></param>
         private void RootCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (SelectedBorder != null)       //隐藏之前点击的图形的选择框
-                SelectedBorder.GAdorner.Visibility = Visibility.Hidden;
-            if (this.RootCanvas.Tag.ToString() == "Select" )
+            GeomertyStringConverter gsc = new GeomertyStringConverter(RootCanvas, graphAppearance);
+
+            if (MainWindow.SelectedBorder != null)       //隐藏之前点击的图形的选择框
+                MainWindow.SelectedBorder.GAdorner.Visibility = Visibility.Hidden;
+            if (MainWindow.ActionMode == "Select" )
             {
                 System.Windows.Point p = Mouse.GetPosition(e.Source as FrameworkElement);
                 VisualTreeHelper.HitTest(RootCanvas, null,   //进行命中测试
                 new HitTestResultCallback(MyHitTestResult),
                 new PointHitTestParameters(p));
-                if (SelectedBorder!=null&&SelectedBorder.Child != null)
-                {
-                    PanProperty.DataContext = SelectedBorder.Child;
-                    LBNowSelected.Content = "图形属性";
-                }
-                else
-                {
-                    PanProperty.DataContext = graphAppearance;
-                    LBNowSelected.Content = "画笔属性";
-                }
             }
-            else if (this.RootCanvas.Tag.ToString() == "AddTriangle")        //绘制三角形
+            else if (MainWindow.ActionMode == "AddTriangle")        //绘制三角形
             {
                 System.Windows.Point p = new AutoPoints().GetAutoAdsorbPoint(Mouse.GetPosition(e.Source as FrameworkElement));
-                graphAdd.AddGeometry(p, graphAppearance, this.RootCanvas, out trianglePath, 3, true);
+                string MiniLanguage = "M " + p.X + "," + p.Y + " L " + p.X + "," + p.Y + " L " + p.X + "," + p.Y + " Z";
+
+                MainWindow.SelectedBorder = gsc.GeomotryFromString(MiniLanguage);
+                trianglePath = MainWindow.SelectedBorder.Child as System.Windows.Shapes.Path;
+                AddGeometryIntoCanvas(MainWindow.SelectedBorder, 0, 0);
                 PanProperty.DataContext = trianglePath;
                 canMove = true;
             }
-            else if (this.RootCanvas.Tag.ToString() == "AddRectangular")//绘制矩形
+            else if (MainWindow.ActionMode == "AddRectangular")//绘制矩形
             {
                 System.Windows.Point p = new AutoPoints().GetAutoAdsorbPoint(Mouse.GetPosition(e.Source as FrameworkElement));
-                graphAdd.AddGeometry(p, graphAppearance, this.RootCanvas, out rectanglePath, 4, true);
+                string MiniLanguage = "M " + p.X + "," + p.Y + " L " + p.X + "," + p.Y + " L " + p.X + "," + p.Y + " L " + p.X + "," + p.Y+" Z";
+               
+                MainWindow.SelectedBorder = gsc.GeomotryFromString(MiniLanguage);
+                rectanglePath = MainWindow.SelectedBorder.Child as System.Windows.Shapes.Path;
+                AddGeometryIntoCanvas(MainWindow.SelectedBorder, 0, 0);
                 PanProperty.DataContext = rectanglePath;
                 canMove = true;
             }
-            else if (this.RootCanvas.Tag.ToString() == "AddCircle")//绘制圆
+            else if (MainWindow.ActionMode == "AddCircle")//绘制圆
             {
                 System.Windows.Point p = new AutoPoints().GetAutoAdsorbPoint(Mouse.GetPosition(e.Source as FrameworkElement));
-                graphAdd.AddGeometryOfCricle(p, graphAppearance, this.RootCanvas, out circlePath);
+                MainWindow.SelectedBorder = graphAdd.AddGeometryOfCricle(p, graphAppearance, this.RootCanvas, out circlePath);
                 PanProperty.DataContext = circlePath;
                 canMove = true;
             }
-            else if (this.RootCanvas.Tag.ToString() == "AddEllipse")//绘制椭圆
+            else if (MainWindow.ActionMode == "AddEllipse")//绘制椭圆
             {
                 System.Windows.Point p = new AutoPoints().GetAutoAdsorbPoint(Mouse.GetPosition(e.Source as FrameworkElement));
-                graphAdd.AddGeometryOfCricle(p, graphAppearance, this.RootCanvas, out ellipseGeometryPath);
+                MainWindow.SelectedBorder = graphAdd.AddGeometryOfCricle(p, graphAppearance, this.RootCanvas, out ellipseGeometryPath);
                 PanProperty.DataContext = ellipseGeometryPath;
                 canMove = true;
             }
-            else if (this.RootCanvas.Tag.ToString() == "AddCurve")//绘制曲线
+            else if (MainWindow.ActionMode == "AddCurve")//绘制曲线
             {
                 System.Windows.Point p = new AutoPoints().GetAutoAdsorbPoint(Mouse.GetPosition(e.Source as FrameworkElement));
-                graphAdd.AddCurve(p, graphAppearance, this.RootCanvas, out curvePath);
+                string MiniLanguage = "M " + p.X + "," + p.Y + " A " + EllipseRadiusX.Text + "," + EllipseRadiusY.Text+" "
+                    + EllipseDegree.Text + " " + (EllipseisClockwise.IsChecked==true?0:1) + " " + EllipseDegree.Text + " " 
+                    + (EllipseisLargeArc.IsChecked==true?1 : 0)+" " +p.X+","+p.Y +"";
+
+                MainWindow.SelectedBorder = gsc.GeomotryFromString(MiniLanguage);
+                curvePath = MainWindow.SelectedBorder.Child as System.Windows.Shapes.Path;
+                AddGeometryIntoCanvas(MainWindow.SelectedBorder, 0, 0);
                 PanProperty.DataContext = curvePath;
+                CurveOptions.DataContext = curveAppearence;
                 canMove = true;
             }
-            else if (this.RootCanvas.Tag.ToString() == "QBezier")//绘制二次方贝塞尔曲线
+            else if (MainWindow.ActionMode == "QBezier")//绘制二次方贝塞尔曲线
             {
                 System.Windows.Point p = new AutoPoints().GetAutoAdsorbPoint(Mouse.GetPosition(e.Source as FrameworkElement));
-                graphAdd.AddPointWithNoBorder(p, graphAppearance, RootCanvas, out ellipsePath);
-                graphAdd.NewPathGeomotry(graphAppearance, RootCanvas, out QBezierPath, ellipsePath, false);
-                BorderWithAdorner borderWA = new BorderWithAdorner();
-                borderWA.Child = QBezierPath;
-                borderWA.EllipseList.Add(ellipsePath);
-                RootCanvas.Children.Add(borderWA);
-
-                System.Windows.Shapes.Path ellipsePath2, ellipsePath3;
-                graphAdd.AddPoint(p, graphAppearance, RootCanvas, out ellipsePath2);
-                borderWA.EllipseList.Add(ellipsePath2);
-                graphAdd.AddPoint(p, graphAppearance, RootCanvas, out ellipsePath3);
-                borderWA.EllipseList.Add(ellipsePath3);
-
-                PathGeometry path = QBezierPath.Data as PathGeometry;
-
-                graphAdd.AddQuadraticSegment(path.Figures[0], ellipsePath3, ellipsePath2);
-                BorderWithDrag border = new BorderWithDrag();
-                border.Child = ellipsePath;
-                this.RootCanvas.Children.Add(border);
+                string MiniLanguage = "M " + p.X + "," + p.Y + " Q " + p.X + "," + p.Y 
+                    + " "+ p.X + "," + p.Y;
+                MainWindow.SelectedBorder = gsc.GeomotryFromString(MiniLanguage);
+                QBezierPath = MainWindow.SelectedBorder.Child as System.Windows.Shapes.Path;
+                AddGeometryIntoCanvas(MainWindow.SelectedBorder, 0, 0);
                 PanProperty.DataContext = QBezierPath;
+                CurveOptions.DataContext = curveAppearence;
                 canMove = true;
             }
-            else if (this.RootCanvas.Tag.ToString() == "Bezier")//绘制二次方贝塞尔曲线
+            else if (MainWindow.ActionMode == "Bezier")//绘制三次方贝塞尔曲线
             {
                 System.Windows.Point p = new AutoPoints().GetAutoAdsorbPoint(Mouse.GetPosition(e.Source as FrameworkElement));
-                graphAdd.AddPointWithNoBorder(p, graphAppearance, RootCanvas, out ellipsePath);
-                graphAdd.NewPathGeomotry(graphAppearance, RootCanvas, out BezierPath, ellipsePath, false);
-                BorderWithAdorner borderWA = new BorderWithAdorner();
-                borderWA.Child = BezierPath;
-                borderWA.EllipseList.Add(ellipsePath);
-                RootCanvas.Children.Add(borderWA);
-
-                System.Windows.Shapes.Path ellipsePath2, ellipsePath3, ellipsePath4;
-                graphAdd.AddPoint(p, graphAppearance, RootCanvas, out ellipsePath2);
-                borderWA.EllipseList.Add(ellipsePath2);
-                graphAdd.AddPoint(p, graphAppearance, RootCanvas, out ellipsePath3);
-                borderWA.EllipseList.Add(ellipsePath3);
-                graphAdd.AddPoint(p, graphAppearance, RootCanvas, out ellipsePath4);
-                borderWA.EllipseList.Add(ellipsePath4);
-                PathGeometry path = BezierPath.Data as PathGeometry;
-
-                graphAdd.AddBezierSegment(path.Figures[0], ellipsePath4, ellipsePath3, ellipsePath2);
-                BorderWithDrag border = new BorderWithDrag();
-                border.Child = ellipsePath;
-                this.RootCanvas.Children.Add(border);
+                string MiniLanguage = "M " + p.X + "," + p.Y + " C " + p.X + "," + p.Y
+                    + " " + p.X + "," + p.Y + " " + p.X + "," + p.Y;
+                MainWindow.SelectedBorder = gsc.GeomotryFromString(MiniLanguage);
+                BezierPath = MainWindow.SelectedBorder.Child as System.Windows.Shapes.Path;
+                AddGeometryIntoCanvas(MainWindow.SelectedBorder, 0, 0);
                 PanProperty.DataContext = BezierPath;
+                CurveOptions.DataContext = curveAppearence;
                 canMove = true;
+            }
+            if (MainWindow.SelectedBorder != null && MainWindow.SelectedBorder.Child != null)
+            {
+                PanProperty.DataContext = MainWindow.SelectedBorder.Child;
+                LBNowSelected.Content = "图形属性";
+                StrokeDash1.Value = (MainWindow.SelectedBorder.Child as System.Windows.Shapes.Path).StrokeDashArray[0];
+                StrokeDash2.Value = (MainWindow.SelectedBorder.Child as System.Windows.Shapes.Path).StrokeDashArray[1];
+                Select.IsChecked = true;
+            }
+            else
+            {
+                PanProperty.DataContext = graphAppearance;
+                LBNowSelected.Content = "画笔属性";
+                StrokeDash1.Value = graphAppearance.StrokeDashArray[0];
+                StrokeDash2.Value = graphAppearance.StrokeDashArray[1];
             }
         }
 
@@ -420,12 +445,12 @@ namespace GeometryTool
             if (canMove)        //图形更改为不能拖动
             {
                 BorderWithAdorner borderWA = null;
-                if (this.RootCanvas.Tag.ToString() == "AddCircle")//绘制圆
+                if (MainWindow.ActionMode == "AddCircle")//绘制圆
                 {
                    borderWA = circlePath.Parent as BorderWithAdorner;
                     
                 }
-                else if (this.RootCanvas.Tag.ToString() == "AddEllipse")//绘制椭圆
+                else if (MainWindow.ActionMode == "AddEllipse")//绘制椭圆
                 {
                    borderWA = ellipseGeometryPath.Parent as BorderWithAdorner;
                 }
@@ -438,8 +463,11 @@ namespace GeometryTool
                         borderLock.Lock(((borderWD.Child as System.Windows.Shapes.Path).Data as EllipseGeometry).Center);
                     }
                 }
-
                 canMove = false;
+
+                MainWindow.SelectedBorder.ShowAdorner();
+                MainWindow.ActionMode = "Select";
+                this.RootCanvas.Tag = "Select";
             }
         }
 
@@ -458,7 +486,7 @@ namespace GeometryTool
                 if (!string.IsNullOrEmpty(openFileDlg.FileName))    //如果文件名不为空
                 {
                     XMLHelper xmlHelper = new XMLHelper();
-                    GeomortyStringConverter GSC = new GeomortyStringConverter(RootCanvas, graphAppearance);
+                    GeomertyStringConverter GSC = new GeomertyStringConverter(RootCanvas, graphAppearance);
                     Match _match = xmlHelper.ReadXml(openFileDlg.FileName);    //读取XML文件
                     MatchCollection MatchList = Regex.Matches(_match.Groups[0].ToString(), @"M[\.\,\s\+\-\dLACQZ]+");
                     foreach (Match item in MatchList)
@@ -469,6 +497,8 @@ namespace GeometryTool
                         {
                             BorderWithDrag borderWD = ellipse.Parent as BorderWithDrag;
                             RootCanvas.Children.Add(borderWD);
+                            BorderLock borderLock = new BorderLock(borderWD);
+                            borderLock.Lock(((borderWD.Child as System.Windows.Shapes.Path).Data as EllipseGeometry).Center);
                         }
 
                     }
@@ -525,8 +555,6 @@ namespace GeometryTool
             
         }
 
-     
-
         /// <summary>
         /// 用于绘制网格网格
         /// </summary>
@@ -544,8 +572,6 @@ namespace GeometryTool
             RootCanvas.Background = _gridBrush;
  
         }
-
-       
 
         /// <summary>
         /// 拖动Slider改变StrokeThickness
@@ -599,7 +625,7 @@ namespace GeometryTool
                 {
                     pathFigure.Segments.RemoveAt(pathFigure.Segments.Count - 1);
                 }
-                if (this.RootCanvas.Tag.ToString() != "Point")          //移除划线功能
+                if (MainWindow.ActionMode != "Point")          //移除划线功能
                 {
                     this.RootCanvas.RemoveHandler(UIElement.MouseMoveEvent, new MouseEventHandler(DrawLine));
                     if (isStartPoint != 0)
@@ -634,9 +660,13 @@ namespace GeometryTool
             return HitTestResultBehavior.Continue;
         }
 
+        /// <summary>
+        /// 改变画笔的每个实线的长度
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void StrokeDash1_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            
+        {            
             DoubleCollection oldStrokeDashArray =new DoubleCollection();
             oldStrokeDashArray.Add( e.NewValue);
             try
@@ -647,6 +677,11 @@ namespace GeometryTool
             LineStyle.StrokeDashArray = oldStrokeDashArray;
         }
         
+        /// <summary>
+        /// 该变画笔的每个虚线的长度
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void StrokeDash2_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             DoubleCollection oldStrokeDashArray = new DoubleCollection();
@@ -659,21 +694,11 @@ namespace GeometryTool
             LineStyle.StrokeDashArray = oldStrokeDashArray;
         }
 
-        public static readonly DependencyProperty CanPasteProperty =
-          DependencyProperty.Register("CanPaste", typeof(bool), typeof(MainWindow),
-          new FrameworkPropertyMetadata(false, null));
-        public bool CanPaste
-        {
-            get
-            {
-                return (bool)this.GetValue(CanPasteProperty);
-            }
-            set
-            {
-                this.SetValue(CanPasteProperty, value);
-            }
-        }
-
+        /// <summary>
+        /// 实现图形的复制功能
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void PasteItem_Click(object sender, RoutedEventArgs e)
         {
             BorderWithAdorner borderWA = new BorderWithAdorner();
@@ -785,7 +810,7 @@ namespace GeometryTool
             BorderWithAdorner borderWA = MainWindow.SelectedBorder;
             borderWA.GetFourPoint(borderWA);    //计算这个图形四个角落的位置
             double averageY = (borderWA.MinY + borderWA.MaxY) / 2.0;
-            foreach (var item in borderWA.EllipseList)           //修改图形的点的位置，并把他放进Canvas
+            foreach (var item in borderWA.EllipseList)           //修改图形的点的位置
             {
                 Point p = (item.Data as EllipseGeometry).Center;
                 (item.Data as EllipseGeometry).Center = new Point() { X = p.X, Y = p.Y - (p.Y - averageY) * 2 };
@@ -802,7 +827,7 @@ namespace GeometryTool
             BorderWithAdorner borderWA = MainWindow.SelectedBorder;
             borderWA.GetFourPoint(borderWA);    //计算这个图形四个角落的位置
             double averageX = (borderWA.MinX + borderWA.MaxX) / 2.0;
-            foreach (var item in borderWA.EllipseList)           //修改图形的点的位置，并把他放进Canvas
+            foreach (var item in borderWA.EllipseList)           //修改图形的点的位置
             {
                 Point p = (item.Data as EllipseGeometry).Center;
                 (item.Data as EllipseGeometry).Center = new Point() { X = p.X - (p.X - averageX) * 2, Y = p.Y };

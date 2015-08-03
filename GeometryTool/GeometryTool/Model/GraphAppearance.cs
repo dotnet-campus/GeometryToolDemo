@@ -90,10 +90,11 @@ namespace GeometryTool
                 }
             }
         }
-       
+
         public GraphAppearance()
         {
             StrokeThickness = 0.1;
+
             Stroke = Brushes.Black;
             Fill = Brushes.Transparent;
             FillRule = FillRule.EvenOdd;
