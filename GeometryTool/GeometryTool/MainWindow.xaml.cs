@@ -678,13 +678,7 @@ namespace GeometryTool
         {
             BorderWithAdorner borderWA = new BorderWithAdorner();
             BorderWithAdorner newBorderWA =  borderWA.CopyBorder(MainWindow.CopyBorderWA);  //获取要粘贴的图形的副本
-            this.RootCanvas.Children.Add(newBorderWA);
-            foreach (var item in newBorderWA.EllipseList)           //修改图形的点的位置，并把他放进Canvas
-            {
-                Point p = (item.Data as EllipseGeometry).Center;
-                (item.Data as EllipseGeometry).Center = new Point() { X = p.X + 2 * (MainWindow.PasteCount + 1), Y = p.Y + 2 * (MainWindow.PasteCount + 1) };
-                this.RootCanvas.Children.Add(item.Parent as BorderWithDrag);
-            }
+            AddGeometryIntoCanvas(newBorderWA, 2 * (MainWindow.PasteCount + 1), 2 * (MainWindow.PasteCount + 1));
             MainWindow.PasteCount++;
         }
 
@@ -735,7 +729,7 @@ namespace GeometryTool
         {
             BorderWithAdorner borderWA = MainWindow.SelectedBorder;
             borderWA.GetFourPoint(borderWA);    //计算这个图形四个角落的位置
-            BorderWithAdorner newBorderWA = borderWA.CopyBorder(borderWA);  //获取下镜像的图形的副本
+            BorderWithAdorner newBorderWA = borderWA.CopyBorder(borderWA);  //获取左镜像的图形的副本
             this.RootCanvas.Children.Add(newBorderWA);
             foreach (var item in newBorderWA.EllipseList)           //修改图形的点的位置，并把他放进Canvas
             {
@@ -754,7 +748,7 @@ namespace GeometryTool
         {
             BorderWithAdorner borderWA = MainWindow.SelectedBorder;
             borderWA.GetFourPoint(borderWA);    //计算这个图形四个角落的位置
-            BorderWithAdorner newBorderWA = borderWA.CopyBorder(borderWA);  //获取下镜像的图形的副本
+            BorderWithAdorner newBorderWA = borderWA.CopyBorder(borderWA);  //获取右镜像的图形的副本
             this.RootCanvas.Children.Add(newBorderWA);
             foreach (var item in newBorderWA.EllipseList)           //修改图形的点的位置，并把他放进Canvas
             {
@@ -764,6 +758,56 @@ namespace GeometryTool
             }
         }
 
+        /// <summary>
+        /// 把图形放进rootCanvas
+        /// </summary>
+        /// <param name="vBorderWA"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        void AddGeometryIntoCanvas(BorderWithAdorner vBorderWA,int x,int y)
+        {
+            this.RootCanvas.Children.Add(vBorderWA);
+            foreach (var item in vBorderWA.EllipseList)           //修改图形的点的位置，并把他放进Canvas
+            {
+                Point p = (item.Data as EllipseGeometry).Center;
+                (item.Data as EllipseGeometry).Center = new Point() { X = p.X + x, Y = p.Y + y };
+                this.RootCanvas.Children.Add(item.Parent as BorderWithDrag);
+            }
+        }
+
+        /// <summary>
+        /// 实现图形的垂直翻转
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void VerticalOverturn_Click(object sender, RoutedEventArgs e)
+        {
+            BorderWithAdorner borderWA = MainWindow.SelectedBorder;
+            borderWA.GetFourPoint(borderWA);    //计算这个图形四个角落的位置
+            double averageY = (borderWA.MinY + borderWA.MaxY) / 2.0;
+            foreach (var item in borderWA.EllipseList)           //修改图形的点的位置，并把他放进Canvas
+            {
+                Point p = (item.Data as EllipseGeometry).Center;
+                (item.Data as EllipseGeometry).Center = new Point() { X = p.X, Y = p.Y - (p.Y - averageY) * 2 };
+            }
+        }
+
+        /// <summary>
+        /// 实现图形的水平翻转
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void HorizontalOverturn_Click(object sender, RoutedEventArgs e)
+        {
+            BorderWithAdorner borderWA = MainWindow.SelectedBorder;
+            borderWA.GetFourPoint(borderWA);    //计算这个图形四个角落的位置
+            double averageX = (borderWA.MinX + borderWA.MaxX) / 2.0;
+            foreach (var item in borderWA.EllipseList)           //修改图形的点的位置，并把他放进Canvas
+            {
+                Point p = (item.Data as EllipseGeometry).Center;
+                (item.Data as EllipseGeometry).Center = new Point() { X = p.X - (p.X - averageX) * 2, Y = p.Y };
+            }
+        }
     }
 
 }

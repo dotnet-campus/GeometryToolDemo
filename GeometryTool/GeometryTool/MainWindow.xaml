@@ -319,8 +319,8 @@
                         </TabItem>
                         <TabItem Header="翻转">
                             <StackPanel Orientation="Horizontal">
-                                <Button Content="上下"/>
-                                <Button Content="左右"/>
+                                <Button x:Name="VerticalOverturn"  Content="上下" Click="VerticalOverturn_Click"/>
+                                <Button x:Name="HorizontalOverturn" Content="左右" Click="HorizontalOverturn_Click"/>
                             </StackPanel>
                         </TabItem>
                     </TabControl>
