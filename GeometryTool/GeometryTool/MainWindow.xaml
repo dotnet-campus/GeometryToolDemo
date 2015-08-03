@@ -338,6 +338,11 @@
                                         ScaleY="{Binding ElementName=CanvasChange,Path=Value,Converter={StaticResource canvasScaleTransformConverter}}"> 
                         </ScaleTransform>
                     </Canvas.RenderTransform>
+                        <Canvas.ContextMenu>
+                            <ContextMenu x:Name="MenuOptions">
+                                <MenuItem Header="粘贴 Ctrl+V" IsEnabled="{Binding Path=CanPaste}" Click="PasteItem_Click"></MenuItem>
+                            </ContextMenu>
+                        </Canvas.ContextMenu>
                 </Canvas>
             </Canvas>
         </Border>

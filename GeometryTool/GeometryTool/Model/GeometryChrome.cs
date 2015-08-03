@@ -13,6 +13,24 @@ namespace GeometryTool
 
         public bool isLock;
 
+        public GeometryChrome()
+        {
+            this.ContextMenu = new ContextMenu();
+            MenuItem CopyItem = new MenuItem();
+            CopyItem.Header = "复制";
+            CopyItem.Click += new RoutedEventHandler(CopyItem_Click);
+            this.ContextMenu.Items.Add(CopyItem);
+
+            MenuItem CutItem = new MenuItem();
+            CutItem.Header = "剪切";
+            CutItem.Click += new RoutedEventHandler(CutItem_Click);
+            this.ContextMenu.Items.Add(CutItem);
+
+            MenuItem DeleteItem = new MenuItem();
+            DeleteItem.Header = "删除";
+            DeleteItem.Click += new RoutedEventHandler(DeleteItem_Click);
+            this.ContextMenu.Items.Add(DeleteItem);
+        }
        
         /// <summary>
         /// 绘制这个锁
@@ -67,6 +85,73 @@ namespace GeometryTool
             return base.ArrangeOverride(arrangeBounds);
         }
 
-      
+        /// <summary>
+        /// 复制图形
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void CopyItem_Click(object sender, RoutedEventArgs e)
+        {
+            BorderWithAdorner BorderWA = this.DataContext as BorderWithAdorner;
+            MainWindow.CopyBorderWA = BorderWA; //记录要粘贴的图形
+            MainWindow.PasteCount = 0;          //把粘贴次数重置为0
+
+            Canvas rootCanvas = MainWindow.myRootCanvas as Canvas;
+            Canvas rootCanvasParent= rootCanvas.Parent as Canvas;
+            Border CanvasBorder = rootCanvasParent.Parent as Border;
+            ScrollViewer ScrollViewer = CanvasBorder.Parent as ScrollViewer;
+            Grid rootGrid = ScrollViewer.Parent as Grid;
+            MainWindow mainWindow = rootGrid.Parent as MainWindow;              //获取MainWindow实例，为了修改CanPaste属性
+            mainWindow.CanPaste = true;
+        }
+
+        /// <summary>
+        /// 剪切图形
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void CutItem_Click(object sender, RoutedEventArgs e)
+        {
+            BorderWithAdorner BorderWA = this.DataContext as BorderWithAdorner;
+            MainWindow.CopyBorderWA = BorderWA;     //记录要粘贴的图形
+            MainWindow.PasteCount = 0;              //把粘贴次数重置为0
+
+            Canvas rootCanvas = MainWindow.myRootCanvas as Canvas;
+            Canvas rootCanvasParent = rootCanvas.Parent as Canvas;
+            Border CanvasBorder = rootCanvasParent.Parent as Border;
+            ScrollViewer ScrollViewer = CanvasBorder.Parent as ScrollViewer;
+            Grid rootGrid = ScrollViewer.Parent as Grid;
+            MainWindow mainWindow = rootGrid.Parent as MainWindow;  //获取MainWindow实例，为了修改CanPaste属性
+            mainWindow.CanPaste = true;
+            rootCanvas.Children.Remove(BorderWA);
+            foreach (var item in BorderWA.EllipseList)
+            {
+                BorderWithDrag borderWD = item.Parent as BorderWithDrag;
+                rootCanvas.Children.Remove(borderWD);
+            }
+        }
+
+        /// <summary>
+        /// 删除图形
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void DeleteItem_Click(object sender, RoutedEventArgs e)
+        {
+            BorderWithAdorner BorderWA = this.DataContext as BorderWithAdorner;
+            Canvas rootCanvas = MainWindow.myRootCanvas as Canvas;
+            Canvas rootCanvasParent = rootCanvas.Parent as Canvas;
+            Border CanvasBorder = rootCanvasParent.Parent as Border;
+            ScrollViewer ScrollViewer = CanvasBorder.Parent as ScrollViewer;
+            Grid rootGrid = ScrollViewer.Parent as Grid;
+            MainWindow mainWindow = rootGrid.Parent as MainWindow;
+            mainWindow.CanPaste = true;
+            rootCanvas.Children.Remove(BorderWA);
+            foreach (var item in BorderWA.EllipseList)
+            {
+                BorderWithDrag borderWD = item.Parent as BorderWithDrag;
+                rootCanvas.Children.Remove(borderWD);
+            }
+        }
     }
 }

@@ -25,7 +25,9 @@ namespace GeometryTool
     public partial class MainWindow : Window
     {
         public static Canvas myRootCanvas;      //表示装着当前图形的Canvas
-        public static BorderWithAdorner SelectedBorder;//表示当前和之前选择中的图形
+        public static BorderWithAdorner SelectedBorder; //表示当前和之前选择中的图形
+        public static BorderWithAdorner CopyBorderWA;   //用于存储剪切或者复制的图形
+        public static int PasteCount;           //表示当前图形被复制了多少遍
         public static string ActionMode = "";   //表示当前鼠标的模式
         int GridSize = 0;                       //表示画板大小
         public int isStartPoint;                //绘制直线的时候，表示是否为第一个点
@@ -44,6 +46,7 @@ namespace GeometryTool
         System.Windows.Shapes.Path QBezierPath; //表示绘制二次方贝塞尔曲线时候，曲线所在的Path
         System.Windows.Shapes.Path BezierPath;  //表示绘制三次方贝塞尔曲线时候，曲线所在的Path
         List<System.Windows.Shapes.Path> EllipseList;
+
 
         public string FileName;
 
@@ -74,6 +77,7 @@ namespace GeometryTool
             graphAppearance.Fill = Brushes.Transparent;
             FileName = "";
             GeometryOptions.DataContext = graphAppearance;
+            MenuOptions.DataContext = this;
         }
 
         /// <summary>
@@ -459,7 +463,14 @@ namespace GeometryTool
                     MatchCollection MatchList = Regex.Matches(_match.Groups[0].ToString(), @"M[\.\,\s\+\-\dLACQZ]+");
                     foreach (Match item in MatchList)
                     {
-                        GSC.GeomotryFromString(item.Groups[0].ToString());                  //转化成为图形
+                        BorderWithAdorner borderWA = GSC.GeomotryFromString(item.Groups[0].ToString());                  //转化成为图形
+                        RootCanvas.Children.Add(borderWA);              //把图形添加到Canvas中
+                        foreach (var ellipse in borderWA.EllipseList)   //把点添加到Canvas中
+                        {
+                            BorderWithDrag borderWD = ellipse.Parent as BorderWithDrag;
+                            RootCanvas.Children.Add(borderWD);
+                        }
+
                     }
                 }
             }
@@ -635,6 +646,7 @@ namespace GeometryTool
             catch { oldStrokeDashArray.Add(0); }
             LineStyle.StrokeDashArray = oldStrokeDashArray;
         }
+        
         private void StrokeDash2_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             DoubleCollection oldStrokeDashArray = new DoubleCollection();
@@ -647,7 +659,33 @@ namespace GeometryTool
             LineStyle.StrokeDashArray = oldStrokeDashArray;
         }
 
-        
+        public static readonly DependencyProperty CanPasteProperty =
+          DependencyProperty.Register("CanPaste", typeof(bool), typeof(MainWindow),
+          new FrameworkPropertyMetadata(false, null));
+        public bool CanPaste
+        {
+            get
+            {
+                return (bool)this.GetValue(CanPasteProperty);
+            }
+            set
+            {
+                this.SetValue(CanPasteProperty, value);
+            }
+        }
+
+        private void PasteItem_Click(object sender, RoutedEventArgs e)
+        {
+            BorderWithAdorner borderWA = new BorderWithAdorner();
+            BorderWithAdorner newBorderWA =  borderWA.CopyBorder(MainWindow.CopyBorderWA);
+            this.RootCanvas.Children.Add(newBorderWA);
+            foreach (var item in newBorderWA.EllipseList)
+            {
+                Point p = (item.Data as EllipseGeometry).Center;
+                (item.Data as EllipseGeometry).Center = new Point() { X=p.X+2,Y=p.Y+2};
+                this.RootCanvas.Children.Add(item.Parent as BorderWithDrag);
+            }
+        }
     }
 
 }

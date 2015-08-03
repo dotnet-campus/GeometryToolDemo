@@ -39,7 +39,7 @@ namespace GeometryTool
         /// 从字符串中读取图形，并绘制出来
         /// </summary>
         /// <param name="vMiniLanguege"></param>
-        public void GeomotryFromString(string vMiniLanguege )
+        public BorderWithAdorner GeomotryFromString(string vMiniLanguege )
         {
             GraphAdd grapAdd = new GraphAdd();
             Path path = new Path()
@@ -55,7 +55,6 @@ namespace GeometryTool
             PathGeometry pathGeometry = new PathGeometry();
             BorderWithAdorner borderWA = new BorderWithAdorner();
             borderWA.Child = path;
-            vRootCanvas.Children.Add(borderWA);
             path.Data = pathGeometry;
             path.StrokeThickness = vGraphAppearance.StrokeThickness;
             pathGeometry.Figures = new PathFigureCollection();
@@ -76,7 +75,7 @@ namespace GeometryTool
                     if (match.Groups[1].ToString() != "M")  //起点包含M
                     {
                         mPathFigure.StartPoint = new Point() { X = 0, Y = 0 };
-                        grapAdd.AddPoint(EllipsePoint, vGraphAppearance, vRootCanvas, out EllipseStartPath);
+                        grapAdd.AddPointWithNoBorder(EllipsePoint, vGraphAppearance, vRootCanvas, out EllipseStartPath);
                         borderWA.EllipseList.Add(EllipseStartPath);
                         pathGeometry.Figures.Add(mPathFigure);
                     }
@@ -90,13 +89,11 @@ namespace GeometryTool
                             EllipseList.Add(EllipseStartPath);
                             border = new BorderWithDrag(path, 1, EllipseList);
                             border.Child = EllipseStartPath;
-                            vRootCanvas.Children.Add(border);
                         }
                         else
                         {
                             border = new BorderWithDrag();
                             border.Child = EllipseStartPath;
-                            vRootCanvas.Children.Add(border);
                         }
                         
                     }
@@ -131,7 +128,7 @@ namespace GeometryTool
                             EllipseList.Add(EllipsePath);
                             border = new BorderWithDrag(path, number, EllipseList);
                             border.Child = EllipsePath;
-                            vRootCanvas.Children.Add(border);
+                             
                             break;
                         }
 
@@ -145,7 +142,7 @@ namespace GeometryTool
                             EllipseList.Add(EllipsePath);
                             border = new BorderWithDrag(path, number, EllipseList);
                             border.Child = EllipsePath;
-                            vRootCanvas.Children.Add(border);
+                             
                             break;
                         }
 
@@ -159,7 +156,7 @@ namespace GeometryTool
                             EllipseList.Add(EllipsePath);
                             border = new BorderWithDrag(path, number, EllipseList);
                             border.Child = EllipsePath;
-                            vRootCanvas.Children.Add(border);
+                             
                             break;
                         }
 
@@ -193,7 +190,7 @@ namespace GeometryTool
                                 borderWA.EllipseList.Add(EllipsePath);
                                 border = new BorderWithDrag();
                                 border.Child = EllipsePath;
-                                vRootCanvas.Children.Add(border);
+                                 
                                 Point _point = ((border.Child as Path).Data as EllipseGeometry).Center;
                                 BorderLock _borderLock = new BorderLock(border);
                                 _borderLock.Lock(_point);
@@ -204,18 +201,23 @@ namespace GeometryTool
                         {
                             //创建PathFigure，并绑定StartPoint
                             Path EllipsePath2;
-                            GetEllipsePoint(match, out EllipsePath2, out EllipsePoint, @"([\+\-\d\.]*),([\+\-\d\.]*)");   //构造EllipsePoint
+                            GetEllipsePointWithNoBorder(match, out EllipsePath2, out EllipsePoint, @"([\+\-\d\.]*),([\+\-\d\.]*)");   //构造EllipsePoint
                             borderWA.EllipseList.Add(EllipsePath2);
-                            Path EllipsePath1;
-                            GetEllipsePoint(match, out EllipsePath1, out EllipsePoint, @"C\s+[\+\-\d\.]+,[\+\-\d\.]+\s*([\+\-\d\.]+),([\+\-\d\.]+)");   //构造EllipsePoint
+                            border = new BorderWithDrag();
+                            border.Child = EllipsePath2;
 
+                            Path EllipsePath1;
+                            GetEllipsePointWithNoBorder(match, out EllipsePath1, out EllipsePoint, @"C\s+[\+\-\d\.]+,[\+\-\d\.]+\s*([\+\-\d\.]+),([\+\-\d\.]+)");   //构造EllipsePoint
                             borderWA.EllipseList.Add(EllipsePath1);
+                            border = new BorderWithDrag();
+                            border.Child = EllipsePath1;
+
                             GetEllipsePointWithNoBorder(match, out EllipsePath, out EllipsePoint, @"([\+\-\d\.]+),([\+\-\d\.]+)\s*$");   //构造EllipsePoint
                             borderWA.EllipseList.Add(EllipsePath);
                             grapAdd.AddBezierSegment(mPathFigure, EllipsePath2, EllipsePath1, EllipsePath);
                             border = new BorderWithDrag();
                             border.Child = EllipsePath;
-                            vRootCanvas.Children.Add(border);
+                             
                             break;
                         }
 
@@ -223,21 +225,22 @@ namespace GeometryTool
                         {
                             //创建PathFigure，并绑定StartPoint
                             Path EllipsePath1;
-                            GetEllipsePoint(match, out EllipsePath1, out EllipsePoint, @"([\+\-\d\.]*),([\+\-\d\.]*)");   //构造EllipsePoint
+                            GetEllipsePointWithNoBorder(match, out EllipsePath1, out EllipsePoint, @"([\+\-\d\.]*),([\+\-\d\.]*)");   //构造EllipsePoint
                             borderWA.EllipseList.Add(EllipsePath1);
+                            border = new BorderWithDrag();
+                            border.Child = EllipsePath1;
+
                             GetEllipsePointWithNoBorder(match, out EllipsePath, out EllipsePoint, @"\d\s+([\+\-\d\.]*),([\+\-\d\.]*)");   //构造EllipsePoint
                             borderWA.EllipseList.Add(EllipsePath);
                             grapAdd.AddQuadraticSegment(mPathFigure, EllipsePath1, EllipsePath);
                             border = new BorderWithDrag();
                             border.Child = EllipsePath;
-                            vRootCanvas.Children.Add(border);
+                             
                             break;
-                        }
-
-                        
-            
+                        }                   
                 }               
             }
+            return borderWA;
             
         }
 

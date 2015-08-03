@@ -25,6 +25,7 @@ namespace GeometryTool
         {
             this.MouseDown += Element_MouseDown;
             EllipseList = new List<Path>();
+            
         }
 
         /// <summary>
@@ -39,34 +40,7 @@ namespace GeometryTool
                 AdornerLayer layer = AdornerLayer.GetAdornerLayer(this.Parent as Canvas);
                 if (layer != null)
                 {
-                    if (EllipseList.Count > 0)
-                    {
-                        MinX = (EllipseList[0].Data as EllipseGeometry).Center.X;
-                        MinY = (EllipseList[0].Data as EllipseGeometry).Center.Y;
-                        MaxX = 0;
-                        MaxY = 0;
-                    }
-                    foreach (var path in EllipseList)
-                    {
-                        EllipseGeometry item = path.Data as EllipseGeometry;
-                        Point point = item.Center;
-                        if (MaxX < point.X)
-                        {
-                            MaxX = point.X;
-                        }
-                        if (MaxY < point.Y)
-                        {
-                            MaxY = point.Y;
-                        }
-                        if (MinX > point.X)
-                        {
-                            MinX = point.X;
-                        }
-                        if (MinY > point.Y)
-                        {
-                            MinY = point.Y;
-                        }
-                    }
+                    GetFourPoint(this);
                     if (GAdorner == null)
                     {
                         Path path1 = this.Child as Path;
@@ -75,6 +49,61 @@ namespace GeometryTool
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// 获取图形四个边角的位置
+        /// </summary>
+        public void GetFourPoint(BorderWithAdorner vBorderWA)
+        {
+            if (vBorderWA.EllipseList.Count > 0)
+            {
+                vBorderWA.MinX = (EllipseList[0].Data as EllipseGeometry).Center.X;
+                vBorderWA.MinY = (EllipseList[0].Data as EllipseGeometry).Center.Y;
+                vBorderWA.MaxX = 0;
+                vBorderWA.MaxY = 0;
+            }
+            foreach (var path in vBorderWA.EllipseList)
+            {
+                EllipseGeometry item = path.Data as EllipseGeometry;
+                Point point = item.Center;
+                if (vBorderWA.MaxX < point.X)
+                {
+                    vBorderWA.MaxX = point.X;
+                }
+                if (vBorderWA.MaxY < point.Y)
+                {
+                    vBorderWA.MaxY = point.Y;
+                }
+                if (vBorderWA.MinX > point.X)
+                {
+                    vBorderWA.MinX = point.X;
+                }
+                if (vBorderWA.MinY > point.Y)
+                {
+                    vBorderWA.MinY = point.Y;
+                }
+            }
+        }
+       
+        /// <summary>
+        /// 用于复制Border，模仿深度复制
+        /// </summary>
+        /// <param name="vBorderWA"></param>
+        /// <returns></returns>
+        public BorderWithAdorner CopyBorder(BorderWithAdorner vBorderWA)
+        {
+            Path path = vBorderWA.Child as Path;
+            GraphAppearance graphAppearance = new GraphAppearance() 
+            {
+                Stroke = path.Stroke,
+                StrokeThickness = path.StrokeThickness,
+                StrokeDashArray = path.StrokeDashArray,
+                Fill = path.Fill
+            };
+            GeomortyStringConverter gsc = new GeomortyStringConverter(MainWindow.myRootCanvas, graphAppearance);
+            string MiniLanguage = gsc.StringFromGeometry(vBorderWA.Child as Path);  //把该图形转化成为Mini-Language
+            return gsc.GeomotryFromString(MiniLanguage);                            //把Mini-Language转化成为图形，实现图形的深度复制
         }
     }
 }
