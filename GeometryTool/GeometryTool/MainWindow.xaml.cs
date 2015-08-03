@@ -76,7 +76,7 @@ namespace GeometryTool
             CanvasChange.Value = 20;
             graphAppearance.Fill = Brushes.Transparent;
             FileName = "";
-            GeometryOptions.DataContext = graphAppearance;
+            PanProperty.DataContext = graphAppearance;
             MenuOptions.DataContext = this;
         }
 
@@ -313,12 +313,12 @@ namespace GeometryTool
                 new PointHitTestParameters(p));
                 if (SelectedBorder!=null&&SelectedBorder.Child != null)
                 {
-                    GeometryOptions.DataContext = SelectedBorder.Child;
+                    PanProperty.DataContext = SelectedBorder.Child;
                     LBNowSelected.Content = "图形属性";
                 }
                 else
                 {
-                    GeometryOptions.DataContext = graphAppearance;
+                    PanProperty.DataContext = graphAppearance;
                     LBNowSelected.Content = "画笔属性";
                 }
             }
@@ -326,35 +326,35 @@ namespace GeometryTool
             {
                 System.Windows.Point p = new AutoPoints().GetAutoAdsorbPoint(Mouse.GetPosition(e.Source as FrameworkElement));
                 graphAdd.AddGeometry(p, graphAppearance, this.RootCanvas, out trianglePath, 3, true);
-                GeometryOptions.DataContext = trianglePath;
+                PanProperty.DataContext = trianglePath;
                 canMove = true;
             }
             else if (this.RootCanvas.Tag.ToString() == "AddRectangular")//绘制矩形
             {
                 System.Windows.Point p = new AutoPoints().GetAutoAdsorbPoint(Mouse.GetPosition(e.Source as FrameworkElement));
                 graphAdd.AddGeometry(p, graphAppearance, this.RootCanvas, out rectanglePath, 4, true);
-                GeometryOptions.DataContext = rectanglePath;
+                PanProperty.DataContext = rectanglePath;
                 canMove = true;
             }
             else if (this.RootCanvas.Tag.ToString() == "AddCircle")//绘制圆
             {
                 System.Windows.Point p = new AutoPoints().GetAutoAdsorbPoint(Mouse.GetPosition(e.Source as FrameworkElement));
                 graphAdd.AddGeometryOfCricle(p, graphAppearance, this.RootCanvas, out circlePath);
-                GeometryOptions.DataContext = circlePath;
+                PanProperty.DataContext = circlePath;
                 canMove = true;
             }
             else if (this.RootCanvas.Tag.ToString() == "AddEllipse")//绘制椭圆
             {
                 System.Windows.Point p = new AutoPoints().GetAutoAdsorbPoint(Mouse.GetPosition(e.Source as FrameworkElement));
                 graphAdd.AddGeometryOfCricle(p, graphAppearance, this.RootCanvas, out ellipseGeometryPath);
-                GeometryOptions.DataContext = ellipseGeometryPath;
+                PanProperty.DataContext = ellipseGeometryPath;
                 canMove = true;
             }
             else if (this.RootCanvas.Tag.ToString() == "AddCurve")//绘制曲线
             {
                 System.Windows.Point p = new AutoPoints().GetAutoAdsorbPoint(Mouse.GetPosition(e.Source as FrameworkElement));
                 graphAdd.AddCurve(p, graphAppearance, this.RootCanvas, out curvePath);
-                GeometryOptions.DataContext = curvePath;
+                PanProperty.DataContext = curvePath;
                 canMove = true;
             }
             else if (this.RootCanvas.Tag.ToString() == "QBezier")//绘制二次方贝塞尔曲线
@@ -379,7 +379,7 @@ namespace GeometryTool
                 BorderWithDrag border = new BorderWithDrag();
                 border.Child = ellipsePath;
                 this.RootCanvas.Children.Add(border);
-                GeometryOptions.DataContext = QBezierPath;
+                PanProperty.DataContext = QBezierPath;
                 canMove = true;
             }
             else if (this.RootCanvas.Tag.ToString() == "Bezier")//绘制二次方贝塞尔曲线
@@ -405,7 +405,7 @@ namespace GeometryTool
                 BorderWithDrag border = new BorderWithDrag();
                 border.Child = ellipsePath;
                 this.RootCanvas.Children.Add(border);
-                GeometryOptions.DataContext = BezierPath;
+                PanProperty.DataContext = BezierPath;
                 canMove = true;
             }
         }
@@ -677,15 +677,93 @@ namespace GeometryTool
         private void PasteItem_Click(object sender, RoutedEventArgs e)
         {
             BorderWithAdorner borderWA = new BorderWithAdorner();
-            BorderWithAdorner newBorderWA =  borderWA.CopyBorder(MainWindow.CopyBorderWA);
+            BorderWithAdorner newBorderWA =  borderWA.CopyBorder(MainWindow.CopyBorderWA);  //获取要粘贴的图形的副本
             this.RootCanvas.Children.Add(newBorderWA);
-            foreach (var item in newBorderWA.EllipseList)
+            foreach (var item in newBorderWA.EllipseList)           //修改图形的点的位置，并把他放进Canvas
             {
                 Point p = (item.Data as EllipseGeometry).Center;
-                (item.Data as EllipseGeometry).Center = new Point() { X=p.X+2,Y=p.Y+2};
+                (item.Data as EllipseGeometry).Center = new Point() { X = p.X + 2 * (MainWindow.PasteCount + 1), Y = p.Y + 2 * (MainWindow.PasteCount + 1) };
+                this.RootCanvas.Children.Add(item.Parent as BorderWithDrag);
+            }
+            MainWindow.PasteCount++;
+        }
+
+        /// <summary>
+        /// 实现上镜像功能
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TopMirror_Click(object sender, RoutedEventArgs e)
+        {
+            BorderWithAdorner borderWA = MainWindow.SelectedBorder;
+            borderWA.GetFourPoint(borderWA);    //计算这个图形四个角落的位置
+            BorderWithAdorner newBorderWA = borderWA.CopyBorder(borderWA);  //获取上镜像的图形的副本
+            this.RootCanvas.Children.Add(newBorderWA);
+            foreach (var item in newBorderWA.EllipseList)           //修改图形的点的位置，并把他放进Canvas
+            {
+                Point p = (item.Data as EllipseGeometry).Center;
+                (item.Data as EllipseGeometry).Center = new Point() { X = p.X, Y = p.Y - (p.Y - borderWA.MinY) * 2 };
                 this.RootCanvas.Children.Add(item.Parent as BorderWithDrag);
             }
         }
+
+        /// <summary>
+        /// 实现下镜像功能
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BottomMirror_Click(object sender, RoutedEventArgs e)
+        {
+            BorderWithAdorner borderWA = MainWindow.SelectedBorder;
+            borderWA.GetFourPoint(borderWA);    //计算这个图形四个角落的位置
+            BorderWithAdorner newBorderWA = borderWA.CopyBorder(borderWA);  //获取下镜像的图形的副本
+            this.RootCanvas.Children.Add(newBorderWA);
+            foreach (var item in newBorderWA.EllipseList)           //修改图形的点的位置，并把他放进Canvas
+            {
+                Point p = (item.Data as EllipseGeometry).Center;
+                (item.Data as EllipseGeometry).Center = new Point() { X = p.X, Y = p.Y - (p.Y - borderWA.MaxY) * 2 };
+                this.RootCanvas.Children.Add(item.Parent as BorderWithDrag);
+            }
+        }
+
+        /// <summary>
+        /// 实现左镜像
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void LetfMirror_Click(object sender, RoutedEventArgs e)
+        {
+            BorderWithAdorner borderWA = MainWindow.SelectedBorder;
+            borderWA.GetFourPoint(borderWA);    //计算这个图形四个角落的位置
+            BorderWithAdorner newBorderWA = borderWA.CopyBorder(borderWA);  //获取下镜像的图形的副本
+            this.RootCanvas.Children.Add(newBorderWA);
+            foreach (var item in newBorderWA.EllipseList)           //修改图形的点的位置，并把他放进Canvas
+            {
+                Point p = (item.Data as EllipseGeometry).Center;
+                (item.Data as EllipseGeometry).Center = new Point() { X = p.X - (p.X - borderWA.MinX) * 2, Y = p.Y };
+                this.RootCanvas.Children.Add(item.Parent as BorderWithDrag);
+            }
+        }
+
+        /// <summary>
+        /// 实现右镜像
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void RightMirror_Click(object sender, RoutedEventArgs e)
+        {
+            BorderWithAdorner borderWA = MainWindow.SelectedBorder;
+            borderWA.GetFourPoint(borderWA);    //计算这个图形四个角落的位置
+            BorderWithAdorner newBorderWA = borderWA.CopyBorder(borderWA);  //获取下镜像的图形的副本
+            this.RootCanvas.Children.Add(newBorderWA);
+            foreach (var item in newBorderWA.EllipseList)           //修改图形的点的位置，并把他放进Canvas
+            {
+                Point p = (item.Data as EllipseGeometry).Center;
+                (item.Data as EllipseGeometry).Center = new Point() { X = p.X - (p.X - borderWA.MaxX) * 2, Y = p.Y };
+                this.RootCanvas.Children.Add(item.Parent as BorderWithDrag);
+            }
+        }
+
     }
 
 }

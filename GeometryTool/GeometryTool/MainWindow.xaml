@@ -3,8 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:GeometryTool"
         Icon="Image/icon.png"
-        Title="二维绘画小工具" MinWidth="700" MinHeight="800"
-        
+        Title="二维绘画小工具" 
+        MinWidth="1000" MinHeight="850"
+        Width="1000" Height="850"
         >
 
     <Window.Resources>
@@ -62,244 +63,275 @@
         </TabControl>
 
         <Border BorderBrush="Black" Grid.Row="1" Grid.Column="1" BorderThickness="1,0,0,1" >
-            <StackPanel  x:Name="GeometryOptions">
-                <Border Background="#999999" Width="100" Height="25" CornerRadius="2" Margin="0,20,0,10" >
-                    <Label x:Name="LBNowSelected" Content="画笔属性" HorizontalAlignment="Center" VerticalAlignment="Center"  />
-                </Border>
-                    <TabControl >
-                    <TabItem Header="线条颜色">
-                        <Border BorderThickness="0" BorderBrush="DarkGray" >
-                            <Grid Background="#FFFFFFFF">
-                                <Border BorderThickness="1" BorderBrush="#999999" Background="White" >
-                                    <StackPanel Orientation="Vertical" Background="#FFFFFFFF" Button.Click="StrokeColors_Click" >
-                                        <Border Width="196" Height="23" BorderThickness="0,0,0,2" BorderBrush="#BFBFBF">
-                                            <DockPanel Width="196" >
-                                                <Label SnapsToDevicePixels="True" Background="#DDE7EE" FontFamily="Arial" Foreground="DarkBlue" FontSize="11" FontWeight="Bold" VerticalContentAlignment="Center" VerticalAlignment="Center" Content="当前颜色"/>
-                                                <Label x:Name="StrokeCurrentColor" Margin="5,0,0,0" Background="{Binding Path=Stroke,Mode=TwoWay}"/>
-                                            </DockPanel>
-                                        </Border>
-                                        <StackPanel SnapsToDevicePixels="True" x:Name="FirstRow" Margin="2,0,0,0" Orientation="Horizontal">
-                                            <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#FFFFFF" Margin="3,4,3,4" />
-                                            <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#000000" Margin="3,4,3,4" />
-                                            <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#EEECE1" Margin="3,4,3,4" />
-                                            <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#1f497d" Margin="3,4,3,4" />
-                                            <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#4f81bd" Margin="3,4,3,4" />
-                                            <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#c0504d" Margin="3,4,3,4" />
-                                            <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#9bbb59" Margin="3,4,3,4" />
-                                            <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#8064a2" Margin="3,4,3,4" />
-                                            <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#4bacc6" Margin="3,4,3,4" />
-                                            <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#f79646" Margin="3,4,3,4" />
-                                        </StackPanel>
-                                        <StackPanel SnapsToDevicePixels="True" x:Name="SecondRow" Margin="2,2,0,0" Orientation="Horizontal">
-                                            <Button    Style="{StaticResource ColorButtonStyleSecondRow}" Background="#f2f2f2" Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyleSecondRow}" Background="#7f7f7f" Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyleSecondRow}" Background="#ddd9c3" Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyleSecondRow}" Background="#c6d9f0" Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyleSecondRow}" Background="#dbe5f1" Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyleSecondRow}" Background="#f2dcdb" Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyleSecondRow}" Background="#ebf1dd" Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyleSecondRow}" Background="#e5e0ec" Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyleSecondRow}" Background="#dbeef3" Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyleSecondRow}" Background="#fdeada" Margin="3,0,3,0" />
-                                        </StackPanel>
-                                        <StackPanel SnapsToDevicePixels="True" Margin="2,0,0,0" Orientation="Horizontal">
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#d8d8d8"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#595959"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#c4bd97"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#8db3e2"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#b8cce4"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#e5b9b7"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#d7e3bc"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#ccc1d9"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#b7dde8"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#fbd5b5"   Margin="3,0,3,0" />
-                                        </StackPanel>
-                                        <StackPanel SnapsToDevicePixels="True" Margin="2,0,0,0" Orientation="Horizontal">
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#bfbfbf"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#3f3f3f"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#938953"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#548dd4"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#95b3d7"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#d99694"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#c3d69b"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#b2a2c7"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#92cddc"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#fac08f"   Margin="3,0,3,0" />
-                                        </StackPanel>
-                                        <StackPanel SnapsToDevicePixels="True" Margin="2,0,0,0" Orientation="Horizontal">
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#a5a5a5"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#262626"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#494429"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#17365d"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#366092"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#953734"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#76923c"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#5f497a"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#31859b"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#e36c09"   Margin="3,0,3,0" />
-                                        </StackPanel>
-                                        <StackPanel SnapsToDevicePixels="True" x:Name="ThirdRow" Margin="2,0,0,3" Orientation="Horizontal">
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#7f7f7f"  Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#0c0c0c"  Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#1d1b10"  Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#0f243e"  Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#244061"  Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#632423"  Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#4f6128"  Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#3f3151"  Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#205867"  Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#974806"  Margin="3,0,3,0" />
-                                        </StackPanel>
-                                        <Border Width="196" Height="23" Background="#DDE7EE"  BorderThickness="0,0,0,2" BorderBrush="#BFBFBF">
-                                            <DockPanel Width="196" >
-                                                <Label SnapsToDevicePixels="True" FontFamily="Arial" Foreground="DarkBlue" FontSize="11" FontWeight="Bold" VerticalContentAlignment="Center" VerticalAlignment="Center" Content="标准颜色"/>
-                                            </DockPanel>
-                                        </Border>
-                                        <StackPanel SnapsToDevicePixels="True" x:Name="LastRow" Margin="2,1,0,2" Orientation="Horizontal">
-                                            <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#c00000"  Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#ff0000"  Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#ffc000"  Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#ffff00"  Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#92d050"  Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#00b050"  Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#00b0f0"  Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#0070c0"  Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#002060"  Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#7030a0"  Margin="3,0,3,0" />
-                                        </StackPanel>
-                                    </StackPanel>
-                                </Border>
-                            </Grid>
-                        </Border>
-                    </TabItem>
-                    <TabItem Header="填充颜色">
-                        <Border BorderThickness="0" BorderBrush="DarkGray" >
-                            <Grid Background="#FFFFFFFF">
-                                <Border BorderThickness="1" BorderBrush="#999999" Background="White">
-                                    <StackPanel Orientation="Vertical" Background="#FFFFFFFF" Button.Click="FillColors_Click" >
-                                        <Border Width="196" Height="23"   BorderThickness="0,0,0,2" BorderBrush="#BFBFBF" Style="{x:Null}">
-                                            <DockPanel Width="196" >
-                                                <Label SnapsToDevicePixels="True" Background="#DDE7EE" FontFamily="Arial" Foreground="DarkBlue" FontSize="11" FontWeight="Bold" VerticalContentAlignment="Center" VerticalAlignment="Center" Content="当前颜色"/>
-                                                <Label x:Name="FillCurrentColor" Margin="5,0,0,0" Background="{Binding Path=Fill,Mode=TwoWay}"/>
-                                            </DockPanel>
-                                        </Border>
-                                        <StackPanel SnapsToDevicePixels="True"  Margin="2,0,0,0" Orientation="Horizontal">
-                                            <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#FFFFFF" Margin="3,4,3,4" />
-                                            <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#000000" Margin="3,4,3,4" />
-                                            <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#EEECE1" Margin="3,4,3,4" />
-                                            <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#1f497d" Margin="3,4,3,4" />
-                                            <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#4f81bd" Margin="3,4,3,4" />
-                                            <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#c0504d" Margin="3,4,3,4" />
-                                            <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#9bbb59" Margin="3,4,3,4" />
-                                            <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#8064a2" Margin="3,4,3,4" />
-                                            <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#4bacc6" Margin="3,4,3,4" />
-                                            <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#f79646" Margin="3,4,3,4" />
-                                        </StackPanel>
-                                        <StackPanel SnapsToDevicePixels="True"  Margin="2,2,0,0" Orientation="Horizontal">
-                                            <Button    Style="{StaticResource ColorButtonStyleSecondRow}" Background="#f2f2f2" Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyleSecondRow}" Background="#7f7f7f" Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyleSecondRow}" Background="#ddd9c3" Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyleSecondRow}" Background="#c6d9f0" Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyleSecondRow}" Background="#dbe5f1" Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyleSecondRow}" Background="#f2dcdb" Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyleSecondRow}" Background="#ebf1dd" Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyleSecondRow}" Background="#e5e0ec" Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyleSecondRow}" Background="#dbeef3" Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyleSecondRow}" Background="#fdeada" Margin="3,0,3,0" />
-                                        </StackPanel>
-                                        <StackPanel SnapsToDevicePixels="True" Margin="2,0,0,0" Orientation="Horizontal">
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#d8d8d8"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#595959"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#c4bd97"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#8db3e2"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#b8cce4"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#e5b9b7"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#d7e3bc"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#ccc1d9"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#b7dde8"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#fbd5b5"   Margin="3,0,3,0" />
-                                        </StackPanel>
-                                        <StackPanel SnapsToDevicePixels="True" Margin="2,0,0,0" Orientation="Horizontal">
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#bfbfbf"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#3f3f3f"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#938953"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#548dd4"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#95b3d7"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#d99694"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#c3d69b"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#b2a2c7"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#92cddc"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#fac08f"   Margin="3,0,3,0" />
-                                        </StackPanel>
-                                        <StackPanel SnapsToDevicePixels="True" Margin="2,0,0,0" Orientation="Horizontal">
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#a5a5a5"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#262626"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#494429"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#17365d"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#366092"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#953734"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#76923c"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#5f497a"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#31859b"   Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#e36c09"   Margin="3,0,3,0" />
-                                        </StackPanel>
-                                        <StackPanel SnapsToDevicePixels="True"  Margin="2,0,0,3" Orientation="Horizontal">
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#7f7f7f"  Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#0c0c0c"  Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#1d1b10"  Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#0f243e"  Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#244061"  Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#632423"  Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#4f6128"  Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#3f3151"  Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#205867"  Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyle}" Background="#974806"  Margin="3,0,3,0" />
-                                        </StackPanel>
-                                        <Border Width="196" Height="23" Background="#DDE7EE"  BorderThickness="0,0,0,2" BorderBrush="#BFBFBF">
-                                            <DockPanel Width="196" >
-                                                <Label SnapsToDevicePixels="True" FontFamily="Arial" Foreground="DarkBlue" FontSize="11" FontWeight="Bold" VerticalContentAlignment="Center" VerticalAlignment="Center" Content="标准颜色"/>
-                                            </DockPanel>
-                                        </Border>
-                                        <StackPanel SnapsToDevicePixels="True"  Margin="2,1,0,2" Orientation="Horizontal">
-                                            <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#c00000"  Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#ff0000"  Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#ffc000"  Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#ffff00"  Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#92d050"  Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#00b050"  Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#00b0f0"  Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#0070c0"  Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#002060"  Margin="3,0,3,0" />
-                                            <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#7030a0"  Margin="3,0,3,0" />
-                                        </StackPanel>
-                                    </StackPanel>
-                                </Border>
-                            </Grid>
-                        </Border>
-                    </TabItem>
-                </TabControl>
-                <StackPanel Margin="0,10,0,0" Orientation="Vertical">
-                    <Border Width="196" Height="23" Background="#DDE7EE"  BorderThickness="0,0,0,2" BorderBrush="#BFBFBF">
-                        <DockPanel Width="196" >
-                            <Label SnapsToDevicePixels="True" FontFamily="Arial" Foreground="DarkBlue" FontSize="11" FontWeight="Bold" VerticalContentAlignment="Center" VerticalAlignment="Center" Content="线条粗细/虚实"/>
-                        </DockPanel>
+            <StackPanel >
+                <StackPanel  x:Name="PanProperty">
+                    <Border Background="#999999" Width="100" Height="25" CornerRadius="2" Margin="0,20,0,10" >
+                        <Label x:Name="LBNowSelected" Content="画笔属性" HorizontalAlignment="Center" VerticalAlignment="Center"  />
                     </Border>
-                    <Line x:Name="LineStyle"   X1="25" X2="175" Y1="0" Y2="0"  Stroke="Black" StrokeDashArray="{Binding StrokeDashArray,Mode=TwoWay}"    Margin="0,20,0,10"  StrokeThickness="{Binding StrokeThickness,Mode=TwoWay,Converter={StaticResource sliderConverterToDouble}}"/>
-                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal">
-                        <Slider x:Name="SliderStyle" HorizontalAlignment="Center"  Width="120" IsSnapToTickEnabled="True" VerticalAlignment="Center" Minimum="1" Maximum="10" ValueChanged="SliderStyle_ValueChanged"  />
-                        <Label Content="{Binding ElementName=SliderStyle,Path=Value}"/>
-                    </StackPanel>
-                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal">
-                        <Slider x:Name="StrokeDash1" HorizontalAlignment="Center"  Width="120" VerticalAlignment="Center" Minimum="1" Maximum="10" IsSnapToTickEnabled="True" ValueChanged="StrokeDash1_ValueChanged"   />
-                        <Label Content="{Binding ElementName=StrokeDash1,Path=Value}"/>
-                    </StackPanel>
-                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal">
-                        <Slider x:Name="StrokeDash2" HorizontalAlignment="Center"  Width="120" VerticalAlignment="Center" Minimum="0" Maximum="10" IsSnapToTickEnabled="True" ValueChanged="StrokeDash2_ValueChanged"  />
-                        <Label Content="{Binding ElementName=StrokeDash2,Path=Value}"/>
-                    </StackPanel>
-                <Border Width="196" Height="23" Background="#DDE7EE"  BorderThickness="0,0,0,2" BorderBrush="#BFBFBF" Margin="0,20,0,0">
+                    <TabControl >
+                        <TabItem Header="线条颜色">
+                            <Border BorderThickness="0" BorderBrush="DarkGray" >
+                                <Grid Background="#FFFFFFFF">
+                                    <Border BorderThickness="1" BorderBrush="#999999" Background="White" >
+                                        <StackPanel Orientation="Vertical" Background="#FFFFFFFF" Button.Click="StrokeColors_Click" >
+                                            <Border Width="196" Height="23" BorderThickness="0,0,0,2" BorderBrush="#BFBFBF">
+                                                <DockPanel Width="196" >
+                                                    <Label SnapsToDevicePixels="True" Background="#DDE7EE" FontFamily="Arial" Foreground="DarkBlue" FontSize="11" FontWeight="Bold" VerticalContentAlignment="Center" VerticalAlignment="Center" Content="当前颜色"/>
+                                                    <Label x:Name="StrokeCurrentColor" Margin="5,0,0,0" Background="{Binding Path=Stroke,Mode=TwoWay}"/>
+                                                </DockPanel>
+                                            </Border>
+                                            <StackPanel SnapsToDevicePixels="True" x:Name="FirstRow" Margin="2,0,0,0" Orientation="Horizontal">
+                                                <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#FFFFFF" Margin="3,4,3,4" />
+                                                <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#000000" Margin="3,4,3,4" />
+                                                <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#EEECE1" Margin="3,4,3,4" />
+                                                <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#1f497d" Margin="3,4,3,4" />
+                                                <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#4f81bd" Margin="3,4,3,4" />
+                                                <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#c0504d" Margin="3,4,3,4" />
+                                                <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#9bbb59" Margin="3,4,3,4" />
+                                                <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#8064a2" Margin="3,4,3,4" />
+                                                <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#4bacc6" Margin="3,4,3,4" />
+                                                <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#f79646" Margin="3,4,3,4" />
+                                            </StackPanel>
+                                            <StackPanel SnapsToDevicePixels="True" x:Name="SecondRow" Margin="2,2,0,0" Orientation="Horizontal">
+                                                <Button    Style="{StaticResource ColorButtonStyleSecondRow}" Background="#f2f2f2" Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyleSecondRow}" Background="#7f7f7f" Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyleSecondRow}" Background="#ddd9c3" Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyleSecondRow}" Background="#c6d9f0" Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyleSecondRow}" Background="#dbe5f1" Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyleSecondRow}" Background="#f2dcdb" Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyleSecondRow}" Background="#ebf1dd" Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyleSecondRow}" Background="#e5e0ec" Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyleSecondRow}" Background="#dbeef3" Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyleSecondRow}" Background="#fdeada" Margin="3,0,3,0" />
+                                            </StackPanel>
+                                            <StackPanel SnapsToDevicePixels="True" Margin="2,0,0,0" Orientation="Horizontal">
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#d8d8d8"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#595959"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#c4bd97"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#8db3e2"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#b8cce4"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#e5b9b7"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#d7e3bc"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#ccc1d9"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#b7dde8"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#fbd5b5"   Margin="3,0,3,0" />
+                                            </StackPanel>
+                                            <StackPanel SnapsToDevicePixels="True" Margin="2,0,0,0" Orientation="Horizontal">
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#bfbfbf"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#3f3f3f"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#938953"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#548dd4"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#95b3d7"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#d99694"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#c3d69b"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#b2a2c7"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#92cddc"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#fac08f"   Margin="3,0,3,0" />
+                                            </StackPanel>
+                                            <StackPanel SnapsToDevicePixels="True" Margin="2,0,0,0" Orientation="Horizontal">
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#a5a5a5"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#262626"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#494429"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#17365d"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#366092"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#953734"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#76923c"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#5f497a"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#31859b"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#e36c09"   Margin="3,0,3,0" />
+                                            </StackPanel>
+                                            <StackPanel SnapsToDevicePixels="True" x:Name="ThirdRow" Margin="2,0,0,3" Orientation="Horizontal">
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#7f7f7f"  Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#0c0c0c"  Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#1d1b10"  Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#0f243e"  Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#244061"  Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#632423"  Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#4f6128"  Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#3f3151"  Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#205867"  Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#974806"  Margin="3,0,3,0" />
+                                            </StackPanel>
+                                            <Border Width="196" Height="23" Background="#DDE7EE"  BorderThickness="0,0,0,2" BorderBrush="#BFBFBF">
+                                                <DockPanel Width="196" >
+                                                    <Label SnapsToDevicePixels="True" FontFamily="Arial" Foreground="DarkBlue" FontSize="11" FontWeight="Bold" VerticalContentAlignment="Center" VerticalAlignment="Center" Content="标准颜色"/>
+                                                </DockPanel>
+                                            </Border>
+                                            <StackPanel SnapsToDevicePixels="True" x:Name="LastRow" Margin="2,1,0,2" Orientation="Horizontal">
+                                                <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#c00000"  Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#ff0000"  Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#ffc000"  Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#ffff00"  Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#92d050"  Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#00b050"  Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#00b0f0"  Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#0070c0"  Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#002060"  Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#7030a0"  Margin="3,0,3,0" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Border>
+                                </Grid>
+                            </Border>
+                        </TabItem>
+                        <TabItem Header="填充颜色">
+                            <Border BorderThickness="0" BorderBrush="DarkGray" >
+                                <Grid Background="#FFFFFFFF">
+                                    <Border BorderThickness="1" BorderBrush="#999999" Background="White">
+                                        <StackPanel Orientation="Vertical" Background="#FFFFFFFF" Button.Click="FillColors_Click" >
+                                            <Border Width="196" Height="23"   BorderThickness="0,0,0,2" BorderBrush="#BFBFBF" Style="{x:Null}">
+                                                <DockPanel Width="196" >
+                                                    <Label SnapsToDevicePixels="True" Background="#DDE7EE" FontFamily="Arial" Foreground="DarkBlue" FontSize="11" FontWeight="Bold" VerticalContentAlignment="Center" VerticalAlignment="Center" Content="当前颜色"/>
+                                                    <Label x:Name="FillCurrentColor" Margin="5,0,0,0" Background="{Binding Path=Fill,Mode=TwoWay}"/>
+                                                </DockPanel>
+                                            </Border>
+                                            <StackPanel SnapsToDevicePixels="True"  Margin="2,0,0,0" Orientation="Horizontal">
+                                                <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#FFFFFF" Margin="3,4,3,4" />
+                                                <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#000000" Margin="3,4,3,4" />
+                                                <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#EEECE1" Margin="3,4,3,4" />
+                                                <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#1f497d" Margin="3,4,3,4" />
+                                                <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#4f81bd" Margin="3,4,3,4" />
+                                                <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#c0504d" Margin="3,4,3,4" />
+                                                <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#9bbb59" Margin="3,4,3,4" />
+                                                <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#8064a2" Margin="3,4,3,4" />
+                                                <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#4bacc6" Margin="3,4,3,4" />
+                                                <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#f79646" Margin="3,4,3,4" />
+                                            </StackPanel>
+                                            <StackPanel SnapsToDevicePixels="True"  Margin="2,2,0,0" Orientation="Horizontal">
+                                                <Button    Style="{StaticResource ColorButtonStyleSecondRow}" Background="#f2f2f2" Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyleSecondRow}" Background="#7f7f7f" Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyleSecondRow}" Background="#ddd9c3" Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyleSecondRow}" Background="#c6d9f0" Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyleSecondRow}" Background="#dbe5f1" Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyleSecondRow}" Background="#f2dcdb" Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyleSecondRow}" Background="#ebf1dd" Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyleSecondRow}" Background="#e5e0ec" Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyleSecondRow}" Background="#dbeef3" Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyleSecondRow}" Background="#fdeada" Margin="3,0,3,0" />
+                                            </StackPanel>
+                                            <StackPanel SnapsToDevicePixels="True" Margin="2,0,0,0" Orientation="Horizontal">
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#d8d8d8"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#595959"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#c4bd97"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#8db3e2"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#b8cce4"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#e5b9b7"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#d7e3bc"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#ccc1d9"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#b7dde8"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#fbd5b5"   Margin="3,0,3,0" />
+                                            </StackPanel>
+                                            <StackPanel SnapsToDevicePixels="True" Margin="2,0,0,0" Orientation="Horizontal">
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#bfbfbf"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#3f3f3f"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#938953"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#548dd4"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#95b3d7"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#d99694"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#c3d69b"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#b2a2c7"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#92cddc"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#fac08f"   Margin="3,0,3,0" />
+                                            </StackPanel>
+                                            <StackPanel SnapsToDevicePixels="True" Margin="2,0,0,0" Orientation="Horizontal">
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#a5a5a5"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#262626"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#494429"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#17365d"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#366092"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#953734"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#76923c"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#5f497a"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#31859b"   Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#e36c09"   Margin="3,0,3,0" />
+                                            </StackPanel>
+                                            <StackPanel SnapsToDevicePixels="True"  Margin="2,0,0,3" Orientation="Horizontal">
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#7f7f7f"  Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#0c0c0c"  Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#1d1b10"  Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#0f243e"  Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#244061"  Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#632423"  Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#4f6128"  Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#3f3151"  Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#205867"  Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyle}" Background="#974806"  Margin="3,0,3,0" />
+                                            </StackPanel>
+                                            <Border Width="196" Height="23" Background="#DDE7EE"  BorderThickness="0,0,0,2" BorderBrush="#BFBFBF">
+                                                <DockPanel Width="196" >
+                                                    <Label SnapsToDevicePixels="True" FontFamily="Arial" Foreground="DarkBlue" FontSize="11" FontWeight="Bold" VerticalContentAlignment="Center" VerticalAlignment="Center" Content="标准颜色"/>
+                                                </DockPanel>
+                                            </Border>
+                                            <StackPanel SnapsToDevicePixels="True"  Margin="2,1,0,2" Orientation="Horizontal">
+                                                <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#c00000"  Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#ff0000"  Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#ffc000"  Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#ffff00"  Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#92d050"  Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#00b050"  Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#00b0f0"  Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#0070c0"  Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#002060"  Margin="3,0,3,0" />
+                                                <Button    Style="{StaticResource ColorButtonStyleFirstRow}" Background="#7030a0"  Margin="3,0,3,0" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Border>
+                                </Grid>
+                            </Border>
+                        </TabItem>
+                    </TabControl>
+                    <StackPanel Margin="0,10,0,0" Orientation="Vertical">
+                        <Border Width="196" Height="23" Background="#DDE7EE"  BorderThickness="0,0,0,2" BorderBrush="#BFBFBF">
+                            <DockPanel Width="196" >
+                                <Label SnapsToDevicePixels="True" FontFamily="Arial" Foreground="DarkBlue" FontSize="11" FontWeight="Bold" VerticalContentAlignment="Center" VerticalAlignment="Center" Content="线条粗细/虚实"/>
+                            </DockPanel>
+                        </Border>
+                        <Line x:Name="LineStyle"   X1="25" X2="175" Y1="0" Y2="0"  Stroke="Black" StrokeDashArray="{Binding StrokeDashArray,Mode=TwoWay}"    Margin="0,20,0,10"  StrokeThickness="{Binding StrokeThickness,Mode=TwoWay,Converter={StaticResource sliderConverterToDouble}}"/>
+                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal">
+                            <Slider x:Name="SliderStyle" HorizontalAlignment="Center"  Width="120" IsSnapToTickEnabled="True" VerticalAlignment="Center" Minimum="1" Maximum="10" ValueChanged="SliderStyle_ValueChanged"  />
+                            <Label Content="{Binding ElementName=SliderStyle,Path=Value}"/>
+                        </StackPanel>
+                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal">
+                            <Slider x:Name="StrokeDash1" HorizontalAlignment="Center"  Width="120" VerticalAlignment="Center" Minimum="1" Maximum="10" IsSnapToTickEnabled="True" ValueChanged="StrokeDash1_ValueChanged"   />
+                            <Label Content="{Binding ElementName=StrokeDash1,Path=Value}"/>
+                        </StackPanel>
+                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal">
+                            <Slider x:Name="StrokeDash2" HorizontalAlignment="Center"  Width="120" VerticalAlignment="Center" Minimum="0" Maximum="10" IsSnapToTickEnabled="True" ValueChanged="StrokeDash2_ValueChanged"  />
+                            <Label Content="{Binding ElementName=StrokeDash2,Path=Value}"/>
+                        </StackPanel>
+                    
+                    
+                        
+                </StackPanel>
+            </StackPanel>
+                <StackPanel x:Name="GeometryOptions">
+                    <Border Background="#999999" Width="100" Height="25" CornerRadius="2" Margin="0,20,0,10" >
+                        <Label  Content="图形操作" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"  />
+                    </Border>
+                    <TabControl >
+                        <TabItem Header="镜像">
+                            <StackPanel Orientation="Horizontal">
+                                <Button x:Name="TopMirror" Content="上" Click="TopMirror_Click"/>
+                                <Button x:Name="BottomMirror" Content="下" Click="BottomMirror_Click"/>
+                                <Button x:Name="LetfMirror" Content="左" Click="LetfMirror_Click"/>
+                                <Button x:Name="RightMirror" Content="右" Click="RightMirror_Click"/>
+                            </StackPanel>
+                        </TabItem>
+                        <TabItem Header="翻转">
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="上下"/>
+                                <Button Content="左右"/>
+                            </StackPanel>
+                        </TabItem>
+                    </TabControl>
+                </StackPanel>
+                <StackPanel >
+                    <Border Background="#999999" Width="100" Height="25" CornerRadius="2" Margin="0,20,0,10" >
+                        <Label  Content="画板属性" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"  />
+                    </Border>
+                    <Border Width="196" Height="23" Background="#DDE7EE"  BorderThickness="0,0,0,2" BorderBrush="#BFBFBF" Margin="0,20,0,0">
                         <DockPanel Width="196" >
-                            <Label SnapsToDevicePixels="True" FontFamily="Arial" Foreground="DarkBlue" FontSize="11" FontWeight="Bold" VerticalContentAlignment="Center" VerticalAlignment="Center" Content="杂项"/>
+                            <Label SnapsToDevicePixels="True" FontFamily="Arial" Foreground="DarkBlue" FontSize="11" FontWeight="Bold" VerticalContentAlignment="Center" VerticalAlignment="Center" Content="大小"/>
                         </DockPanel>
                     </Border>
                     <ComboBox SelectionChanged="ComboBox_SelectionChanged" x:Name="CBGridSize">
@@ -314,11 +346,11 @@
 
                     <Border Width="196" Height="23" Background="#DDE7EE"  BorderThickness="0,0,0,2" BorderBrush="#BFBFBF" Margin="0,20,0,0">
                         <DockPanel Width="196" >
-                            <Label SnapsToDevicePixels="True" FontFamily="Arial" Foreground="DarkBlue" FontSize="11" FontWeight="Bold" VerticalContentAlignment="Center" VerticalAlignment="Center" Content="画板缩放"/>
+                            <Label SnapsToDevicePixels="True" FontFamily="Arial" Foreground="DarkBlue" FontSize="11" FontWeight="Bold" VerticalContentAlignment="Center" VerticalAlignment="Center" Content="缩放"/>
                         </DockPanel>
                     </Border>
                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal">
-                    <Slider x:Name="CanvasChange"  IsSnapToTickEnabled="True"   Width="120"  Minimum="1"  Maximum="50" ValueChanged="CanvasChange_ValueChanged"  />
+                        <Slider x:Name="CanvasChange"  IsSnapToTickEnabled="True"   Width="120"  Minimum="1"  Maximum="50" ValueChanged="CanvasChange_ValueChanged"  />
                         <Label Content="{Binding ElementName=CanvasChange,Path=Value}"/>
                     </StackPanel>
                 </StackPanel>

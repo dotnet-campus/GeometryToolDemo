@@ -103,7 +103,13 @@ namespace GeometryTool
             };
             GeomortyStringConverter gsc = new GeomortyStringConverter(MainWindow.myRootCanvas, graphAppearance);
             string MiniLanguage = gsc.StringFromGeometry(vBorderWA.Child as Path);  //把该图形转化成为Mini-Language
-            return gsc.GeomotryFromString(MiniLanguage);                            //把Mini-Language转化成为图形，实现图形的深度复制
+            BorderWithAdorner newBorderWA = gsc.GeomotryFromString(MiniLanguage);   //把Mini-Language转化成为图形，实现图形的深度复制
+            Path newPath = newBorderWA.Child as Path;
+            newPath.Stroke = path.Stroke;
+            newPath.StrokeThickness = path.StrokeThickness;
+            newPath.StrokeDashArray = path.StrokeDashArray;
+            newPath.Fill = path.Fill;
+            return newBorderWA;
         }
     }
 }
