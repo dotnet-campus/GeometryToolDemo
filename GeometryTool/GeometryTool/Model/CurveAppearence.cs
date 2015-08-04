@@ -41,16 +41,16 @@ namespace GeometryTool
             }
         }
 
-        private int degrees;
-        public int Degrees
+        private int rotationAngle;
+        public int RotationAngle
         {
-            get { return degrees; }
+            get { return rotationAngle; }
             set
             {
-                degrees = value;
+                rotationAngle = value;
                 if (this.PropertyChanged != null)
                 {
-                    this.PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Degrees"));
+                    this.PropertyChanged.Invoke(this, new PropertyChangedEventArgs("RotationAngle"));
                 }
             }
         }
@@ -69,16 +69,16 @@ namespace GeometryTool
             }
         }
 
-        private int isClockwise;
-        public int IsClockwise
+        private int sweepDirection;
+        public int SweepDirection
         {
-            get { return isClockwise; }
+            get { return sweepDirection; }
             set
             {
-                isClockwise = value;
+                sweepDirection = value;
                 if (this.PropertyChanged != null)
                 {
-                    this.PropertyChanged.Invoke(this, new PropertyChangedEventArgs("IsClockwise"));
+                    this.PropertyChanged.Invoke(this, new PropertyChangedEventArgs("SweepDirection"));
                 }
             }
         }
@@ -87,9 +87,9 @@ namespace GeometryTool
         {
             this.RadiusX = 2;
             this.RadiusY = 1;
-            this.degrees = 0;
+            this.RotationAngle = 0;
             this.isLargeArc = 0;
-            this.IsClockwise = 0;
+            this.SweepDirection = 0;
         }
     
     }

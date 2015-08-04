@@ -83,7 +83,6 @@ namespace GeometryTool
             pathFigure = new PathFigure();
             isStartPoint = 0;
             linePath = new System.Windows.Shapes.Path();
-            this.RootCanvas.Tag = "Select";
             MainWindow.ActionMode = "Select";
             this.WindowState = System.Windows.WindowState.Maximized;    //设置窗口最大化
             docCanvas_Loaded();
@@ -110,7 +109,6 @@ namespace GeometryTool
             RadioButton radioButton = sender as RadioButton;
             if (radioButton != null)
             {
-                this.RootCanvas.Tag = radioButton.ToolTip;
                 ActionMode = radioButton.ToolTip.ToString();
             }
             if (isStartPoint != 0 && pathFigure.Segments.Count > 0) //移除额外的线
@@ -129,6 +127,7 @@ namespace GeometryTool
             if (MainWindow.ActionMode != "Select")
             {
                 LBNowSelected.Content = "画笔属性";
+                CurveOptions.DataContext = curveAppearence;
                 PanProperty.DataContext = graphAppearance;
                 StrokeDash1.Value = graphAppearance.StrokeDashArray[0];
                 StrokeDash2.Value = graphAppearance.StrokeDashArray[1];
@@ -171,6 +170,30 @@ namespace GeometryTool
                 this.RootCanvas.Children.Add(border);
                 e.Handled = true;
 
+            }
+            if (MainWindow.SelectedBorder != null)
+            {
+                BorderWithAdorner borderWA = SelectedBorder;
+                System.Windows.Shapes.Path path = borderWA.Child as System.Windows.Shapes.Path;
+                PathGeometry pg = path.Data as PathGeometry;
+                ArcSegment arcSegment = pg.Figures[0].Segments[0] as ArcSegment;
+                bool isClockwise = arcSegment.SweepDirection == SweepDirection.Clockwise ? true : false;
+                bool isLargeArc = arcSegment.IsLargeArc ;
+                double RotationAngle=arcSegment.RotationAngle;
+                if (arcSegment != null)
+                {
+                    Size size = arcSegment.Size;
+                    CurveOptions.DataContext = arcSegment;
+                    EllipseRadiusX.Text = size.Width.ToString();
+                    EllipseRadiusY.Text = size.Height.ToString();
+                    EllipseisClockwise.IsChecked = isClockwise;
+                    EllipseisLargeArc.IsChecked = isLargeArc;
+                    EllipseDegree.Text = RotationAngle.ToString();
+                }
+                else
+                {
+                    CurveOptions.DataContext = curveAppearence;
+                }
             }
         }
 
@@ -335,7 +358,7 @@ namespace GeometryTool
         {
             GeomertyStringConverter gsc = new GeomertyStringConverter(RootCanvas, graphAppearance);
 
-            if (MainWindow.SelectedBorder != null)       //隐藏之前点击的图形的选择框
+            if (MainWindow.SelectedBorder != null && MainWindow.SelectedBorder.GAdorner!=null)       //隐藏之前点击的图形的选择框
                 MainWindow.SelectedBorder.GAdorner.Visibility = Visibility.Hidden;
             if (MainWindow.ActionMode == "Select" )
             {
@@ -384,14 +407,23 @@ namespace GeometryTool
             {
                 System.Windows.Point p = new AutoPoints().GetAutoAdsorbPoint(Mouse.GetPosition(e.Source as FrameworkElement));
                 string MiniLanguage = "M " + p.X + "," + p.Y + " A " + EllipseRadiusX.Text + "," + EllipseRadiusY.Text+" "
-                    + EllipseDegree.Text + " " + (EllipseisClockwise.IsChecked==true?0:1) + " " + EllipseDegree.Text + " " 
+                    + EllipseDegree.Text + " " + (EllipseisClockwise.IsChecked==true?1:0) + " " + EllipseDegree.Text + " " 
                     + (EllipseisLargeArc.IsChecked==true?1 : 0)+" " +p.X+","+p.Y +"";
 
                 MainWindow.SelectedBorder = gsc.GeomotryFromString(MiniLanguage);
                 curvePath = MainWindow.SelectedBorder.Child as System.Windows.Shapes.Path;
                 AddGeometryIntoCanvas(MainWindow.SelectedBorder, 0, 0);
                 PanProperty.DataContext = curvePath;
-                CurveOptions.DataContext = curveAppearence;
+                ArcSegment arcSegment = (curvePath.Data as PathGeometry).Figures[0].Segments[0] as ArcSegment;
+                bool isClockwise = arcSegment.SweepDirection == SweepDirection.Clockwise ? true : false;
+                bool isLargeArc = arcSegment.IsLargeArc;
+                double RotationAngle = arcSegment.RotationAngle;
+                Size size = arcSegment.Size;
+                CurveOptions.DataContext = arcSegment;
+                EllipseRadiusX.Text = size.Width.ToString();
+                EllipseRadiusY.Text = size.Height.ToString();
+                EllipseisClockwise.IsChecked = isClockwise;
+                EllipseisLargeArc.IsChecked = isLargeArc;
                 canMove = true;
             }
             else if (MainWindow.ActionMode == "QBezier")//绘制二次方贝塞尔曲线
@@ -403,7 +435,6 @@ namespace GeometryTool
                 QBezierPath = MainWindow.SelectedBorder.Child as System.Windows.Shapes.Path;
                 AddGeometryIntoCanvas(MainWindow.SelectedBorder, 0, 0);
                 PanProperty.DataContext = QBezierPath;
-                CurveOptions.DataContext = curveAppearence;
                 canMove = true;
             }
             else if (MainWindow.ActionMode == "Bezier")//绘制三次方贝塞尔曲线
@@ -415,24 +446,9 @@ namespace GeometryTool
                 BezierPath = MainWindow.SelectedBorder.Child as System.Windows.Shapes.Path;
                 AddGeometryIntoCanvas(MainWindow.SelectedBorder, 0, 0);
                 PanProperty.DataContext = BezierPath;
-                CurveOptions.DataContext = curveAppearence;
                 canMove = true;
             }
-            if (MainWindow.SelectedBorder != null && MainWindow.SelectedBorder.Child != null)
-            {
-                PanProperty.DataContext = MainWindow.SelectedBorder.Child;
-                LBNowSelected.Content = "图形属性";
-                StrokeDash1.Value = (MainWindow.SelectedBorder.Child as System.Windows.Shapes.Path).StrokeDashArray[0];
-                StrokeDash2.Value = (MainWindow.SelectedBorder.Child as System.Windows.Shapes.Path).StrokeDashArray[1];
-                Select.IsChecked = true;
-            }
-            else
-            {
-                PanProperty.DataContext = graphAppearance;
-                LBNowSelected.Content = "画笔属性";
-                StrokeDash1.Value = graphAppearance.StrokeDashArray[0];
-                StrokeDash2.Value = graphAppearance.StrokeDashArray[1];
-            }
+            
         }
 
         /// <summary>
@@ -463,11 +479,27 @@ namespace GeometryTool
                         borderLock.Lock(((borderWD.Child as System.Windows.Shapes.Path).Data as EllipseGeometry).Center);
                     }
                 }
-                canMove = false;
-
+                
+                
                 MainWindow.SelectedBorder.ShowAdorner();
                 MainWindow.ActionMode = "Select";
-                this.RootCanvas.Tag = "Select";
+                canMove = false;
+            }
+            if (MainWindow.SelectedBorder != null && MainWindow.SelectedBorder.Child != null)
+            {
+                PanProperty.DataContext = MainWindow.SelectedBorder.Child;
+                LBNowSelected.Content = "图形属性";
+                StrokeDash1.Value = (MainWindow.SelectedBorder.Child as System.Windows.Shapes.Path).StrokeDashArray[0];
+                StrokeDash2.Value = (MainWindow.SelectedBorder.Child as System.Windows.Shapes.Path).StrokeDashArray[1];
+                Select.IsChecked = true;
+            }
+            else
+            {
+                PanProperty.DataContext = graphAppearance;
+                LBNowSelected.Content = "画笔属性";
+                CurveOptions.DataContext = curveAppearence;
+                StrokeDash1.Value = graphAppearance.StrokeDashArray[0];
+                StrokeDash2.Value = graphAppearance.StrokeDashArray[1];
             }
         }
 
@@ -618,7 +650,6 @@ namespace GeometryTool
             if (MainWindow.ActionMode != "Select")
             {
                 Select.IsChecked = true;            //更正鼠标模式为选择模式
-                this.RootCanvas.Tag = "Select";
                 EllipseList = new List<System.Windows.Shapes.Path>();
                 ActionMode = "Select";
                 if (isStartPoint != 0 && pathFigure.Segments.Count > 0) //移除额外的线
@@ -652,6 +683,7 @@ namespace GeometryTool
                 {
                     borderWA.GAdorner.Visibility = Visibility.Visible;
                     SelectedBorder = borderWA;
+                    return HitTestResultBehavior.Stop;
                 }
                 return HitTestResultBehavior.Stop;
             }
@@ -831,6 +863,130 @@ namespace GeometryTool
             {
                 Point p = (item.Data as EllipseGeometry).Center;
                 (item.Data as EllipseGeometry).Center = new Point() { X = p.X - (p.X - averageX) * 2, Y = p.Y };
+            }
+        }
+
+        private void EllipseRadiusX_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+            double RadiuX = 0;
+            try
+            {
+                RadiuX = Convert.ToDouble(tb.Text);
+                if (MainWindow.SelectedBorder != null)
+                {
+                    BorderWithAdorner borderWA = SelectedBorder;
+                    System.Windows.Shapes.Path path = borderWA.Child as System.Windows.Shapes.Path;
+                    PathGeometry pg = path.Data as PathGeometry;
+                    ArcSegment arcSegment = pg.Figures[0].Segments[0] as ArcSegment;
+                    if (arcSegment != null)
+                    {
+                        Size size = arcSegment.Size;
+                        arcSegment.Size = new Size() { Width = RadiuX, Height = size.Height };
+                    }
+                }
+            }
+            catch 
+            {
+                tb.Text = "0";
+            }
+            
+        }
+
+        private void EllipseRadiusY_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+            double RadiuY = 0;
+            try
+            {
+                RadiuY = Convert.ToDouble(tb.Text);
+                if (MainWindow.SelectedBorder != null)
+                {
+                    BorderWithAdorner borderWA = SelectedBorder;
+                    System.Windows.Shapes.Path path = borderWA.Child as System.Windows.Shapes.Path;
+                    PathGeometry pg = path.Data as PathGeometry;
+                    ArcSegment arcSegment = pg.Figures[0].Segments[0] as ArcSegment;
+                    if (arcSegment != null)
+                    {
+                        Size size = arcSegment.Size;
+                        arcSegment.Size = new Size() { Width = size.Width, Height = RadiuY };
+                    }
+                }
+            }
+            catch
+            {
+                tb.Text = "0";
+            }
+        }
+
+        private void EllipseisClockwise_Click(object sender, RoutedEventArgs e)
+        {
+            CheckBox cb = sender as CheckBox;
+            try
+            {
+                if (MainWindow.SelectedBorder != null)
+                {
+                    BorderWithAdorner borderWA = SelectedBorder;
+                    System.Windows.Shapes.Path path = borderWA.Child as System.Windows.Shapes.Path;
+                    PathGeometry pg = path.Data as PathGeometry;
+                    ArcSegment arcSegment = pg.Figures[0].Segments[0] as ArcSegment;
+                    if (arcSegment != null)
+                    {
+                        arcSegment.SweepDirection = cb.IsChecked == true ? SweepDirection.Clockwise : SweepDirection.Counterclockwise;
+                    }
+                }
+            }
+            catch
+            {
+                
+            }
+        }
+
+        private void EllipseisLargeArc_Click(object sender, RoutedEventArgs e)
+        {
+            CheckBox cb = sender as CheckBox;
+            try
+            {
+                if (MainWindow.SelectedBorder != null)
+                {
+                    BorderWithAdorner borderWA = SelectedBorder;
+                    System.Windows.Shapes.Path path = borderWA.Child as System.Windows.Shapes.Path;
+                    PathGeometry pg = path.Data as PathGeometry;
+                    ArcSegment arcSegment = pg.Figures[0].Segments[0] as ArcSegment;
+                    if (arcSegment != null)
+                    {
+                        arcSegment.IsLargeArc = cb.IsChecked == true ? true : false;
+                    }
+                }
+            }
+            catch
+            {
+
+            }
+        }
+
+        private void EllipseDegree_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+            double RotationAngle = 0;
+            try
+            {
+                RotationAngle = Convert.ToDouble(tb.Text);
+                if (MainWindow.SelectedBorder != null)
+                {
+                    BorderWithAdorner borderWA = SelectedBorder;
+                    System.Windows.Shapes.Path path = borderWA.Child as System.Windows.Shapes.Path;
+                    PathGeometry pg = path.Data as PathGeometry;
+                    ArcSegment arcSegment = pg.Figures[0].Segments[0] as ArcSegment;
+                    if (arcSegment != null)
+                    {
+                        arcSegment.RotationAngle = RotationAngle;
+                    }
+                }
+            }
+            catch
+            {
+                tb.Text = "0";
             }
         }
     }

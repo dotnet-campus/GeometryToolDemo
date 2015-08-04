@@ -65,20 +65,20 @@
                             <Label Content="椭圆半径"/>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="X"/>
-                                <TextBox x:Name="EllipseRadiusX" Width="10" Text="{Binding Path=RadiusX,Mode=TwoWay}" />
+                                <TextBox x:Name="EllipseRadiusX" Width="30" Text="{Binding Path=RadiusX,Mode=TwoWay}" TextChanged="EllipseRadiusX_TextChanged" />
                                 <Label Content="Y"/>
-                                <TextBox x:Name="EllipseRadiusY" Width="10" Text="{Binding Path=RadiusY,Mode=TwoWay}"/>
+                                <TextBox x:Name="EllipseRadiusY" Width="30" Text="{Binding Path=RadiusY,Mode=TwoWay}" TextChanged="EllipseRadiusY_TextChanged"/>
                             </StackPanel> 
                         </StackPanel>
                     </Border>
                     <Border>
                         <StackPanel Orientation="Vertical">
                             <StackPanel Orientation="Horizontal">
-                                <CheckBox x:Name="EllipseisLargeArc" IsChecked="{Binding Path=isLargeArc,Converter={StaticResource intBoolConverter}}"/>
+                                <CheckBox x:Name="EllipseisLargeArc" IsChecked="{Binding Path=IsLargeArc,Converter={StaticResource intBoolConverter},Mode=TwoWay}" Click="EllipseisLargeArc_Click"/>
                                 <Label Content="IsLargeArc"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <CheckBox x:Name="EllipseisClockwise" IsChecked="{Binding Path=isClockwise,Converter={StaticResource intBoolConverter}}"/>
+                                <CheckBox x:Name="EllipseisClockwise" IsChecked="{Binding Path=SweepDirection,Converter={StaticResource intBoolConverter},Mode=TwoWay}" Click="EllipseisClockwise_Click" />
                                 <Label Content="IsClockwise"/>
                             </StackPanel>
                         </StackPanel>
@@ -86,7 +86,7 @@
                     <StackPanel Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">
                             <Label Content="旋转度数"/>
-                            <TextBox x:Name="EllipseDegree" Width="10" Text="{Binding Path=Degrees}"/>
+                            <TextBox x:Name="EllipseDegree" Width="30" Text="{Binding Path=RotationAngle,Mode=TwoWay}" TextChanged="EllipseDegree_TextChanged" />
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>

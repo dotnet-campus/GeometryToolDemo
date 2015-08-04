@@ -14,26 +14,56 @@ namespace GeometryTool
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if (value != null)//判断是否为空
+            try
             {
-                if ((int)value ==0)      
-                    return false;
-                else
-                    return true;
+                if (value != null)//判断是否为空
+                {
+                    
+                        if ((int)value == 0)
+                            return false;
+                        else
+                            return true;
+                }
+                return false;
             }
-            return false;
+            catch
+            {
+                if (value != null)//判断是否为空
+                {
+                    if ((bool)value == true)
+                        return 1;
+                    else
+                        return 0;
+                }
+                return 0;
+            }
+            
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if (value != null)//判断是否为空
+            try
             {
-                if ((int)value == 0)
-                    return false;
-                else
-                    return true;
+                if (value != null)//判断是否为空
+                {
+                    if ((int)value == 0)
+                        return false;
+                    else
+                        return true;
+                }
+                return false;
             }
-            return false;
+            catch
+            {
+                if (value != null)//判断是否为空
+                {
+                    if ((bool)value == true)
+                        return 1;
+                    else
+                        return 0;
+                }
+                return 0;
+            }
         }
     }
 }
