@@ -45,10 +45,10 @@ namespace GeometryTool
             Path path = new Path()
             {
                 Stroke = vGraphAppearance.Stroke,
-                StrokeThickness = vGraphAppearance.StrokeThickness
+                StrokeThickness = vGraphAppearance.StrokeThickness,
+                StrokeDashArray=vGraphAppearance.StrokeDashArray
             };
 
-            path.StrokeDashArray = vGraphAppearance.StrokeDashArray;
             if (vGraphAppearance.Fill != null)
             {
                 path.Fill = vGraphAppearance.Fill;
@@ -61,7 +61,6 @@ namespace GeometryTool
             BorderWithAdorner borderWA = new BorderWithAdorner();
             borderWA.Child = path;
             path.Data = pathGeometry;
-            path.StrokeThickness = vGraphAppearance.StrokeThickness;
             pathGeometry.Figures = new PathFigureCollection();
             PathFigure mPathFigure = new PathFigure(); ;
             Point EllipsePoint = new Point();

@@ -75,7 +75,7 @@ namespace GeometryTool
             if (pg.Figures[0].Segments.Count>0)
             {
                 var geometry = pg.GetFlattenedPathGeometry();
-                var bound = geometry.Bounds;
+                var bound = geometry.GetRenderBounds(new Pen(null, (border.Child as Path).StrokeThickness));
                 this.Width = bound.Width + 1;
                 this.Height =bound.Height+1;
                 this.Margin = new Thickness(border.ActualWidth - bound.Width - 0.65, border.ActualHeight - bound.Height - 0.65, 0, 0);
