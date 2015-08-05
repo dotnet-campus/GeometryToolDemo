@@ -18,12 +18,12 @@ namespace GeometryTool
             }
         }
 
-        public ResizeRotateAdorner(ContentControl designerItem)
-            : base(designerItem)
+        public ResizeRotateAdorner(ContentControl borderWA)
+            : base(borderWA)
         {
             SnapsToDevicePixels = true;
             this.chrome = new ResizeRotateChrome();
-            this.chrome.DataContext = designerItem;
+            this.chrome.DataContext = borderWA;
             this.visuals = new VisualCollection(this);
             this.visuals.Add(this.chrome);
         }

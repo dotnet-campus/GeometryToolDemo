@@ -9,7 +9,7 @@ namespace GeometryTool
     {
         private SizeChrome chrome;
         private VisualCollection visuals;
-        private BorderWithAdorner designerItem;
+        private BorderWithAdorner borderWA;
 
         protected override int VisualChildrenCount
         {
@@ -19,13 +19,13 @@ namespace GeometryTool
             }
         }
 
-        public SizeAdorner(BorderWithAdorner designerItem)
-            : base(designerItem)
+        public SizeAdorner(BorderWithAdorner borderWA)
+            : base(borderWA)
         {
             this.SnapsToDevicePixels = true;
-            this.designerItem = designerItem;
+            this.borderWA = borderWA;
             this.chrome = new SizeChrome();
-            this.chrome.DataContext = designerItem;
+            this.chrome.DataContext = borderWA;
             this.visuals = new VisualCollection(this);
             this.visuals.Add(this.chrome);
         }

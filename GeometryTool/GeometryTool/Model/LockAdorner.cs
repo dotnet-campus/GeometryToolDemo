@@ -26,12 +26,12 @@ namespace GeometryTool
             }
         }
 
-        public LockAdorner(UIElement designerItem)
-            : base(designerItem)
+        public LockAdorner(UIElement borderWA)
+            : base(borderWA)
         {
             SnapsToDevicePixels = true;
             this.chrome = new LockChrome();
-            this.chrome.DataContext = designerItem;
+            this.chrome.DataContext = borderWA;
             this.visuals = new VisualCollection(this);
             this.visuals.Add(this.chrome);
         }

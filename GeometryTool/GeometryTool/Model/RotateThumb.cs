@@ -9,64 +9,87 @@ namespace GeometryTool
 {
     public class RotateThumb : Thumb
     {
-        private double initialAngle;
-        private RotateTransform rotateTransform;
-        private Vector startVector;
-        private Point centerPoint;
-        private ContentControl designerItem;
-        private Canvas canvas;
+        private Vector startVector;     //开始的坐标向量
+        private Point centerPoint;      //图形的重点
+        private BorderWithAdorner borderWA; //图形的Border
+        private Canvas canvas;          //图形所在的画布
 
         public RotateThumb()
         {
-            DragDelta += new DragDeltaEventHandler(this.RotateThumb_DragDelta);
-            DragStarted += new DragStartedEventHandler(this.RotateThumb_DragStarted);
+            DragDelta += this.RotateThumb_DragDelta;
+            DragStarted += this.RotateThumb_DragStarted;
+            DragCompleted+=RotateThumb_DragCompleted;
         }
 
+
+        /// <summary>
+        /// 开始旋转
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void RotateThumb_DragStarted(object sender, DragStartedEventArgs e)
         {
-            this.designerItem = DataContext as ContentControl;
+            this.borderWA = DataContext as BorderWithAdorner;
 
-            if (this.designerItem != null)
+            if (this.borderWA != null)
             {
-                this.canvas = VisualTreeHelper.GetParent(this.designerItem) as Canvas;
+
+                this.canvas = VisualTreeHelper.GetParent(this.borderWA) as Canvas;
 
                 if (this.canvas != null)
                 {
-                    this.centerPoint = this.designerItem.TranslatePoint(
-                        new Point(this.designerItem.Width * this.designerItem.RenderTransformOrigin.X,
-                                  this.designerItem.Height * this.designerItem.RenderTransformOrigin.Y),
+                    this.centerPoint = this.borderWA.TranslatePoint(
+                        new Point() { X = (borderWA.MaxX + borderWA.MinX) / 2.0, Y = (borderWA.MaxY + borderWA.MinY) / 2.0 },
                                   this.canvas);
 
                     Point startPoint = Mouse.GetPosition(this.canvas);
                     this.startVector = Point.Subtract(startPoint, this.centerPoint);
 
-                    this.rotateTransform = this.designerItem.RenderTransform as RotateTransform;
-                    if (this.rotateTransform == null)
-                    {
-                        this.designerItem.RenderTransform = new RotateTransform(0);
-                        this.initialAngle = 0;
-                    }
-                    else
-                    {
-                        this.initialAngle = this.rotateTransform.Angle;
-                    }
                 }
             }
         }
 
+        /// <summary>
+        /// 结束旋转
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void RotateThumb_DragDelta(object sender, DragDeltaEventArgs e)
         {
-            if (this.designerItem != null && this.canvas != null)
+            if (this.borderWA != null && this.canvas != null)
             {
                 Point currentPoint = Mouse.GetPosition(this.canvas);
                 Vector deltaVector = Point.Subtract(currentPoint, this.centerPoint);
 
-                double angle = Vector.AngleBetween(this.startVector, deltaVector);
+                double angle = Vector.AngleBetween(this.startVector, deltaVector)/360*2*Math.PI;
 
-                RotateTransform rotateTransform = this.designerItem.RenderTransform as RotateTransform;
-                rotateTransform.Angle = this.initialAngle + Math.Round(angle, 0);
-                this.designerItem.InvalidateMeasure();
+                double centerX = (borderWA.MaxX + borderWA.MinX) / 2.0;
+                double centerY = (borderWA.MaxY + borderWA.MinY) / 2.0;
+
+                foreach (var item in borderWA.EllipseList)
+                {
+                    EllipseGeometry ellipse = item.Data as EllipseGeometry;
+                    Point oldPoint = ellipse.Center;
+                    double newX = (oldPoint.X - centerX) * Math.Cos(angle) - (oldPoint.Y - centerY) * Math.Sin(angle) + centerX;
+                    double newY = (oldPoint.X - centerX) * Math.Sin(angle) + (oldPoint.Y - centerY) * Math.Cos(angle) + centerY;
+                    ellipse.Center = new Point() { X=newX,Y=newY};
+                }
+                Point startPoint = currentPoint;
+                this.startVector = Point.Subtract(startPoint, this.centerPoint);
             }
         }
+
+
+        private void RotateThumb_DragCompleted(object sender, DragCompletedEventArgs e)
+        {
+            foreach (var item in borderWA.EllipseList)
+            {
+                EllipseGeometry ellipse = item.Data as EllipseGeometry;
+                Point oldPoint = ellipse.Center;
+                Point p = new AutoPoints().GetAutoAdsorbPoint(oldPoint);
+                ellipse.Center = new Point() { X=p.X,Y=p.Y };
+            }
+        }
+        
     }
 }

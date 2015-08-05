@@ -45,7 +45,7 @@ namespace GeometryTool
         public static BorderWithAdorner CopyBorderWA;   //用于存储剪切或者复制的图形
         public static int PasteCount;           //表示当前图形被复制了多少遍
         public static string ActionMode = "";   //表示当前鼠标的模式
-        int GridSize = 0;                       //表示画板大小
+        public static int GridSize = 0;                       //表示画板大小
         public int isStartPoint;                //绘制直线的时候，表示是否为第一个点
         System.Windows.Shapes.Path linePath;    //表示绘制直线的时候，直线的Path
         System.Windows.Shapes.Path ellipsePath; //表示绘制图形的时候，点所在Path
@@ -63,8 +63,8 @@ namespace GeometryTool
         System.Windows.Shapes.Path QBezierPath; //表示绘制二次方贝塞尔曲线时候，曲线所在的Path
         System.Windows.Shapes.Path BezierPath;  //表示绘制三次方贝塞尔曲线时候，曲线所在的Path
         List<System.Windows.Shapes.Path> EllipseList;
-
-
+        BitmapImage BackgroundImage;
+        bool isSava;
         public string FileName;
 
         private DrawingBrush _gridBrush;        //绘制网格时所使用的Brush
@@ -75,14 +75,16 @@ namespace GeometryTool
         {
             graphAppearance = new GraphAppearance();
             curveAppearence = new CurveAppearence();
-            graphAppearance.StrokeThickness = 0.1;
-            InitializeComponent();
             graphAdd = new GraphAdd();
             EllipseList = new List<System.Windows.Shapes.Path>();
             ellipsePath = new System.Windows.Shapes.Path();
             pathFigure = new PathFigure();
             isStartPoint = 0;
             linePath = new System.Windows.Shapes.Path();
+            graphAppearance.StrokeThickness = 0.1;
+            InitializeComponent();
+            
+            
             MainWindow.ActionMode = "Select";
             this.WindowState = System.Windows.WindowState.Maximized;    //设置窗口最大化
             docCanvas_Loaded();
@@ -93,9 +95,28 @@ namespace GeometryTool
             CanvasChange.Value = 20;
             graphAppearance.Fill = Brushes.Transparent;
             FileName = "";
+            RootCanvasBackGround.SelectedIndex = 0;
             PanProperty.DataContext = graphAppearance;
             MenuOptions.DataContext = this;
             CurveOptions.DataContext = curveAppearence;
+            AddCommand();
+        }
+
+        void AddCommand()
+        {
+            this.CommandBindings.Add(new CommandBinding(
+                RoutedCommands.PasteCommand,
+                (sender, e) =>
+                {
+                    PasteItem_Click(sender, e);
+                },
+                (sender, e) =>
+                {
+                    if (CanPaste)
+                        e.CanExecute = true;
+                    else
+                        e.CanExecute = false;
+                }));
         }
 
         /// <summary>
@@ -171,17 +192,23 @@ namespace GeometryTool
                 e.Handled = true;
 
             }
-            if (MainWindow.SelectedBorder != null)
+            if (MainWindow.SelectedBorder != null)      //设置右侧画板属性
             {
+                PanProperty.DataContext = MainWindow.SelectedBorder.Child;
+                LBNowSelected.Content = "图形属性";
+                StrokeDash1.Value = (MainWindow.SelectedBorder.Child as System.Windows.Shapes.Path).StrokeDashArray[0];
+                StrokeDash2.Value = (MainWindow.SelectedBorder.Child as System.Windows.Shapes.Path).StrokeDashArray[1];
+                Select.IsChecked = true;
                 BorderWithAdorner borderWA = SelectedBorder;
                 System.Windows.Shapes.Path path = borderWA.Child as System.Windows.Shapes.Path;
                 PathGeometry pg = path.Data as PathGeometry;
                 ArcSegment arcSegment = pg.Figures[0].Segments[0] as ArcSegment;
-                bool isClockwise = arcSegment.SweepDirection == SweepDirection.Clockwise ? true : false;
-                bool isLargeArc = arcSegment.IsLargeArc ;
-                double RotationAngle=arcSegment.RotationAngle;
-                if (arcSegment != null)
+                
+                if (arcSegment != null)             //设置曲线属性
                 {
+                    bool isClockwise = arcSegment.SweepDirection == SweepDirection.Clockwise ? true : false;
+                    bool isLargeArc = arcSegment.IsLargeArc;
+                    double RotationAngle = arcSegment.RotationAngle;
                     Size size = arcSegment.Size;
                     CurveOptions.DataContext = arcSegment;
                     EllipseRadiusX.Text = size.Width.ToString();
@@ -225,7 +252,7 @@ namespace GeometryTool
                 fbd.ShowDialog();
                 if (fbd.SelectedPath != string.Empty)
                     FileName = fbd.SelectedPath;
-                FileName += "\\" + DateTime.Now.ToLongDateString()+".xml";
+                FileName += "\\" + DateTime.Now.ToLongDateString()+new Random().Next(10000)+".xml";
             }
             StreamWriter sw = new StreamWriter(FileName);
             GeomertyStringConverter GCXML = new GeomertyStringConverter(RootCanvas, graphAppearance);
@@ -579,9 +606,21 @@ namespace GeometryTool
                 double width = GridSize * (int)this.CanvasChange.Value+100;
                 this.CanvasBorder.Height = height >= CanvasBorder.ActualHeight ? height : RootGrid.ActualHeight - 115;  //修改Border的大小，使得其能显示放大后的画布
                 this.CanvasBorder.Width = width >= CanvasBorder.ActualWidth ? width : RootGrid.ActualWidth - 215;
-                docCanvas_Loaded();
-
-                //Console.WriteLine("Height:{0} Width:{1} CB.Height{2} CB.Width{2} this.H：{3} this.W{4}", height, width, CanvasBorder.Height, CanvasBorder.Width, this.RootGrid.ActualHeight, this.RootGrid.ActualWidth);
+                if (this.RootCanvasBackGround.SelectedIndex == 0)
+                {
+                    docCanvas_Loaded();
+                }
+                else if (this.RootCanvasBackGround.SelectedIndex == 1)
+                {
+                    if (BackgroundImage == null)
+                        RootCanvas.Background = Brushes.White;
+                    else
+                        RootCanvas.Background = new ImageBrush(BackgroundImage); ;
+                }
+                else
+                {
+                    RootCanvas.Background = Brushes.White;
+                }
             }
             catch { }
             
@@ -594,9 +633,9 @@ namespace GeometryTool
         {
 
             _gridBrush = new DrawingBrush(new GeometryDrawing(
-                new SolidColorBrush(Colors.White),
+                new SolidColorBrush(Colors.Transparent),
                         new Pen(new SolidColorBrush(Colors.LightGray), 0.1),  //网格粗细为1
-                            new RectangleGeometry(new Rect(0, 0, 1, 1))));   //绘制网格的右边和下边
+                            new RectangleGeometry(new Rect(0, 0, 1, 1))));    //绘制网格的右边和下边
             _gridBrush.Stretch = Stretch.None;
             _gridBrush.TileMode = TileMode.Tile;
             _gridBrush.Viewport = new Rect(0.0, 0.0, 1, 1);
@@ -866,6 +905,11 @@ namespace GeometryTool
             }
         }
 
+        /// <summary>
+        /// 修改曲线的RadiuX
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void EllipseRadiusX_TextChanged(object sender, TextChangedEventArgs e)
         {
             TextBox tb = sender as TextBox;
@@ -893,6 +937,11 @@ namespace GeometryTool
             
         }
 
+        /// <summary>
+        /// 修改曲线的RadiuY
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void EllipseRadiusY_TextChanged(object sender, TextChangedEventArgs e)
         {
             TextBox tb = sender as TextBox;
@@ -919,6 +968,11 @@ namespace GeometryTool
             }
         }
 
+        /// <summary>
+        /// 修改曲线的SweepDirection
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void EllipseisClockwise_Click(object sender, RoutedEventArgs e)
         {
             CheckBox cb = sender as CheckBox;
@@ -942,6 +996,11 @@ namespace GeometryTool
             }
         }
 
+        /// <summary>
+        /// 修改曲线的IsLargeArc
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void EllipseisLargeArc_Click(object sender, RoutedEventArgs e)
         {
             CheckBox cb = sender as CheckBox;
@@ -965,6 +1024,11 @@ namespace GeometryTool
             }
         }
 
+        /// <summary>
+        /// 修改曲线的RotationAngle
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void EllipseDegree_TextChanged(object sender, TextChangedEventArgs e)
         {
             TextBox tb = sender as TextBox;
@@ -989,6 +1053,152 @@ namespace GeometryTool
                 tb.Text = "0";
             }
         }
+
+        /// <summary>
+        /// 把图形存储为PNG文件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            string pngFileName = "";
+            RootCanvas.Background = null;               //清空背景
+            foreach (var item in RootCanvas.Children)   //隐藏点
+            {
+                BorderWithDrag borderWD = item as BorderWithDrag;
+                if (borderWD != null)
+                    borderWD.Visibility = Visibility.Hidden;
+            }
+            System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog();  //选择保存的路径
+            fbd.ShowDialog();
+            if (fbd.SelectedPath != string.Empty)
+                pngFileName = fbd.SelectedPath;
+            pngFileName += "\\" + DateTime.Now.ToLongDateString() + new Random().Next(10000) + ".png";      //保存点
+
+            FileStream fs = new FileStream(pngFileName, FileMode.Create);
+            int oldMutiple=Convert.ToInt32( CanvasChange.Value);
+            CanvasChange.Value = 1;
+            RenderTargetBitmap bmp = new RenderTargetBitmap((int)RootCanvas.ActualWidth, (int)RootCanvas.ActualHeight, 96, 96, PixelFormats.Pbgra32);
+            bmp.Render(RootCanvas);
+            BitmapEncoder encoder = new PngBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(bmp));
+            encoder.Save(fs);
+            fs.Close();
+            fs.Dispose();
+
+            CanvasChange.Value = oldMutiple;            //显示点
+            foreach (var item in RootCanvas.Children)
+            {
+                BorderWithDrag borderWD = item as BorderWithDrag;
+                if (borderWD != null)
+                    borderWD.Visibility = Visibility.Visible;
+            }
+        }
+
+        /// <summary>
+        /// 将图形保存为XML文件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SaveXML_Click(object sender, RoutedEventArgs e)
+        {
+
+            System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog();
+            fbd.ShowDialog();
+            if (fbd.SelectedPath != string.Empty)
+                FileName = fbd.SelectedPath;
+            FileName += "\\" + DateTime.Now.ToLongDateString() + new Random().Next(10000) + ".xml";
+            StreamWriter sw = new StreamWriter(FileName);
+            GeomertyStringConverter GCXML = new GeomertyStringConverter(RootCanvas, graphAppearance);
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
+            sb.AppendLine("<Canvase>");
+            sb.AppendLine(" <Geometry>");
+            sb.Append("     <Figures>");
+            foreach (UIElement item in this.RootCanvas.Children)
+            {
+                BorderWithAdorner borderWA = item as BorderWithAdorner;  //点是有BorderWithDrag包含着的，图形是Path
+                if (borderWA != null)
+                {
+                    sb.Append(GCXML.StringFromGeometry(borderWA.Child as System.Windows.Shapes.Path));            //构造Mini-Language
+
+                }
+            }
+            sb.AppendLine("</Figures>");
+            sb.AppendLine(" </Geometry>");
+            sb.AppendLine("</Canvase>");
+            sw.Write(sb.ToString());
+            sw.Close();
+        }
+       
+        /// <summary>
+        /// 使用PNG图片作为背景
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OpenPNG_Click(object sender, RoutedEventArgs e) 
+        {
+            OpenFileDialog opf = new OpenFileDialog();
+            opf.DefaultExt = ".png";
+            opf.Filter = "(*.jpg,*.gif,*.bmp;*.png;)|*.jpg;*.gif;*.bmp;*.png";      //只选择.xml文件
+            opf.ShowDialog();
+            if (!string.IsNullOrEmpty(opf.SafeFileName))
+            {
+                string pngFileName = opf.FileName;
+                Uri uri = new Uri(pngFileName, UriKind.Absolute);
+                BackgroundImage = new BitmapImage(uri);
+                if (BackgroundImage == null)
+                    RootCanvas.Background = Brushes.White;
+                else
+                RootCanvas.Background = new ImageBrush(BackgroundImage);
+                this.RootCanvasBackGround.SelectedIndex = 1;
+            }
+        }
+
+        /// <summary>
+        /// 选择画板
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void RootCanvasBackGround_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (this.RootCanvasBackGround.SelectedIndex == 0)
+            {
+                docCanvas_Loaded();
+            }
+            else if (this.RootCanvasBackGround.SelectedIndex == 1)
+            {
+                if (BackgroundImage == null)
+                    RootCanvas.Background = Brushes.White;
+                else
+                    RootCanvas.Background = new ImageBrush(BackgroundImage); ;
+            }
+            else 
+            {
+                RootCanvas.Background=Brushes.White;
+            }
+        }
+
+        /// <summary>
+        /// 创建一个新的画板
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CreateNewCanvas_Click(object sender, RoutedEventArgs e)
+        {
+            if (isSava == false)
+            {
+                MessageBoxResult mbr = MessageBox.Show("                                     亲\r\n                         是否要保存当前文件", "", MessageBoxButton.YesNoCancel);
+                if (mbr == MessageBoxResult.Yes)
+                {
+                    SaveXML_Click(null,null);
+                    RootCanvas.Children.Clear();
+                }
+                else if(mbr==MessageBoxResult.No)
+                    RootCanvas.Children.Clear();
+            }
+        }
     }
+
 
 }

@@ -38,11 +38,12 @@
         <TabControl Grid.Row="0" Grid.ColumnSpan="2">
             <TabItem Header="文件" >
                 <StackPanel Orientation="Horizontal">
-                    <Button Content="插入" />
-                    <Button Content="新建" />
+                    <Button Content="导入" Click="OpenPNG_Click" />
+                    <Button Content="新建" x:Name="CreateNewCanvas" Click="CreateNewCanvas_Click" />
                     <Button Content="打开" ToolTip="打开文件" Click="Open_Click" />
                     <Button Content="保存" ToolTip="保存文件" Click="Save_Click"/>
-                    <Button Content="另存为" />
+                    <Button Content="另存为XML" Click="SaveXML_Click" />
+                    <Button Content="另存为PNG" Click="Button_Click" />
                 </StackPanel>
             </TabItem>
             <TabItem Header="图形" IsSelected="True" >
@@ -379,6 +380,17 @@
 
                     <Border Width="196" Height="23" Background="#DDE7EE"  BorderThickness="0,0,0,2" BorderBrush="#BFBFBF" Margin="0,20,0,0">
                         <DockPanel Width="196" >
+                            <Label SnapsToDevicePixels="True" FontFamily="Arial" Foreground="DarkBlue" FontSize="11" FontWeight="Bold" VerticalContentAlignment="Center" VerticalAlignment="Center" Content="背景"/>
+                        </DockPanel>
+                    </Border>
+                    <ComboBox SelectionChanged="RootCanvasBackGround_SelectionChanged"  x:Name="RootCanvasBackGround">
+                        <ComboBoxItem Tag="网格" >网格</ComboBoxItem>
+                        <ComboBoxItem Tag="PGN图片">PGN图片</ComboBoxItem>
+                        <ComboBoxItem Tag="无">无</ComboBoxItem>
+                    </ComboBox>
+
+                    <Border Width="196" Height="23" Background="#DDE7EE"  BorderThickness="0,0,0,2" BorderBrush="#BFBFBF" Margin="0,20,0,0">
+                        <DockPanel Width="196" >
                             <Label SnapsToDevicePixels="True" FontFamily="Arial" Foreground="DarkBlue" FontSize="11" FontWeight="Bold" VerticalContentAlignment="Center" VerticalAlignment="Center" Content="缩放"/>
                         </DockPanel>
                     </Border>
@@ -395,7 +407,7 @@
         <Border Grid.Row="1" x:Name="CanvasBorder" HorizontalAlignment="Center" VerticalAlignment="Center"  
                      Width="{Binding ElementName=RootGrid,Path=ActualWidth,Converter={StaticResource BorderWidthHeightConverter},ConverterParameter=215}"
                     Height="{Binding ElementName=RootGrid,Path=ActualHeight,Converter={StaticResource BorderWidthHeightConverter},ConverterParameter=115}">
-                <Canvas VerticalAlignment="Top" HorizontalAlignment="Center">
+                <Canvas VerticalAlignment="Top" HorizontalAlignment="Center" x:Name="BackGroundCanvas">
                     <Canvas x:Name="RootCanvas" MouseDown="RootCanvas_MouseDown" MouseLeftButtonUp="RootCanvas_MouseLeftButtonUp"  MouseLeftButtonDown="RootCanvas_MouseLeftButtonDown"  MouseMove="RootCanvas_MouseMove"
                         Width="64" Height="64" HorizontalAlignment="Center" VerticalAlignment="Center" MouseRightButtonDown="RootCanvas_MouseRightButtonDown">
                         <Canvas.RenderTransform>
@@ -405,7 +417,7 @@
                     </Canvas.RenderTransform>
                         <Canvas.ContextMenu>
                             <ContextMenu x:Name="MenuOptions">
-                                <MenuItem Header="粘贴 Ctrl+V" IsEnabled="{Binding Path=CanPaste}" Click="PasteItem_Click"></MenuItem>
+                                <MenuItem Header="粘贴" IsEnabled="{Binding Path=CanPaste}" Command="local:RoutedCommands.PasteCommand"></MenuItem>
                             </ContextMenu>
                         </Canvas.ContextMenu>
                 </Canvas>
