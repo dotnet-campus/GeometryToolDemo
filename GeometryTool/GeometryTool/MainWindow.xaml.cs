@@ -203,8 +203,8 @@ namespace GeometryTool
                 System.Windows.Shapes.Path path = borderWA.Child as System.Windows.Shapes.Path;
                 PathGeometry pg = path.Data as PathGeometry;
                 ArcSegment arcSegment = pg.Figures[0].Segments[0] as ArcSegment;
-                
-                if (arcSegment != null)             //设置曲线属性
+
+                if (arcSegment != null && pg.Figures[0].Segments.Count==1)             //设置曲线属性
                 {
                     bool isClockwise = arcSegment.SweepDirection == SweepDirection.Clockwise ? true : false;
                     bool isLargeArc = arcSegment.IsLargeArc;
