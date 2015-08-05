@@ -58,17 +58,6 @@ namespace GeometryTool
             this.MouseLeftButtonDown += Element_MouseLeftButtonDown;
             this.MouseMove += Element_MouseMove;
             this.MouseLeftButtonUp += Element_MouseLeftButtonUp;
-
-            this.ContextMenu = new ContextMenu();
-            MenuItem LockItem = new MenuItem();
-            LockItem.Header = "组合";
-            LockItem.Click += new RoutedEventHandler(LockItem_Click);
-            this.ContextMenu.Items.Add(LockItem);
-
-            MenuItem unLockItem = new MenuItem();
-            unLockItem.Header = "取消组合";
-            unLockItem.Click += new RoutedEventHandler(unLockItem_Click);
-            this.ContextMenu.Items.Add(unLockItem);
         }
 
         public BorderWithDrag(Path path, int Number, List<Path> EllipseList)
@@ -81,20 +70,6 @@ namespace GeometryTool
             this.EllipseList = EllipseList;
 
             this.ContextMenu = new ContextMenu();
-            MenuItem LockItem = new MenuItem();
-            Binding _isEnabledLockBinding = new Binding("HasOtherPoint") { Source = this,Converter=new IsEnbleBindingConverter() };
-            LockItem.SetBinding(MenuItem.IsEnabledProperty, _isEnabledLockBinding);
-            LockItem.Header = "组合";
-            LockItem.Click += new RoutedEventHandler(LockItem_Click);
-            this.ContextMenu.Items.Add(LockItem);
-
-            MenuItem unLockItem = new MenuItem();
-            Binding _isEnabledunLockBinding=new Binding("HasOtherPoint"){Source=this};
-            unLockItem.SetBinding(MenuItem.IsEnabledProperty, _isEnabledunLockBinding);
-            unLockItem.Header = "取消组合";
-            unLockItem.Click += new RoutedEventHandler(unLockItem_Click);
-            this.ContextMenu.Items.Add(unLockItem);
-
             MenuItem DeleteItem = new MenuItem();
             DeleteItem.Header = "删除";
             DeleteItem.Click += new RoutedEventHandler(DeletedItem_Click);

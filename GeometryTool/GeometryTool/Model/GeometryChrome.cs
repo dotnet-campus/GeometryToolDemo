@@ -9,6 +9,9 @@ using System.Windows.Shapes;
 
 namespace GeometryTool
 {
+    /// <summary>
+    /// 图形的外层拖动的Adorner
+    /// </summary>
     public class GeometryChrome : ContentControl
     {
 
