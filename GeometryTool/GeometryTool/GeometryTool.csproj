@@ -70,7 +70,7 @@
     <Compile Include="Model\LockAdorner.cs" />
     <Compile Include="Model\LockChrome.cs" />
     <Compile Include="Model\BorderWithDrag.cs" />
-    <Compile Include="Model\Points.cs" />
+    <Compile Include="Model\AutoPoints.cs" />
     <Compile Include="Converter\SizeConverter.cs" />
     <Compile Include="Converter\SliderConverterToDouble.cs" />
     <Compile Include="Model\MoveThumb.cs" />
