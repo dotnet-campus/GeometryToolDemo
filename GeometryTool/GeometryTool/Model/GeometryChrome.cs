@@ -39,7 +39,12 @@ namespace GeometryTool
             this.ContextMenu.Items.Add(DeleteItem);
 
         }
-       
+
+        public static void Arrange(GeometryChrome vGC)
+        {
+            BorderWithAdorner border = vGC.DataContext as BorderWithAdorner;
+            vGC.ArrangeOverride(new Size() { Width = border.MaxX, Height = border.MaxY });
+        }
         /// <summary>
         /// 绘制这个锁
         /// </summary>

@@ -150,6 +150,7 @@ namespace GeometryTool
                 LBNowSelected.Content = "画笔属性";
                 CurveOptions.DataContext = curveAppearence;
                 PanProperty.DataContext = graphAppearance;
+                SliderStyle.Value = graphAppearance.StrokeThickness * 10;
                 StrokeDash1.Value = graphAppearance.StrokeDashArray[0];
                 StrokeDash2.Value = graphAppearance.StrokeDashArray[1];
 
@@ -196,6 +197,7 @@ namespace GeometryTool
             {
                 PanProperty.DataContext = MainWindow.SelectedBorder.Child;
                 LBNowSelected.Content = "图形属性";
+                SliderStyle.Value = (MainWindow.SelectedBorder.Child as System.Windows.Shapes.Path).StrokeThickness * 10;
                 StrokeDash1.Value = (MainWindow.SelectedBorder.Child as System.Windows.Shapes.Path).StrokeDashArray[0];
                 StrokeDash2.Value = (MainWindow.SelectedBorder.Child as System.Windows.Shapes.Path).StrokeDashArray[1];
                 Select.IsChecked = true;
@@ -246,36 +248,40 @@ namespace GeometryTool
         /// <param name="e"></param>
         private void Save_Click(object sender, RoutedEventArgs e)
         {
+            bool canSave = true;
             if(string.IsNullOrEmpty(FileName))
             {
-                System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog();
-                fbd.ShowDialog();
-                if (fbd.SelectedPath != string.Empty)
-                    FileName = fbd.SelectedPath;
-                FileName += "\\" + DateTime.Now.ToLongDateString()+new Random().Next(10000)+".xml";
+                Microsoft.Win32.SaveFileDialog save = new Microsoft.Win32.SaveFileDialog();
+                save.Filter = "XML Files |*.xml";
+                if ((bool)save.ShowDialog())
+                    FileName = save.FileName;
+                else
+                    canSave = false;
             }
-            StreamWriter sw = new StreamWriter(FileName);
-            GeomertyStringConverter GCXML = new GeomertyStringConverter(RootCanvas, graphAppearance);
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
-            sb.AppendLine("<Canvase>");
-            sb.AppendLine(" <Geometry>");
-            sb.Append("     <Figures>");
-            foreach (UIElement item in this.RootCanvas.Children)
+            if (canSave)
             {
-                BorderWithAdorner borderWA = item as BorderWithAdorner;  //点是有BorderWithDrag包含着的，图形是Path
-                if (borderWA != null)
+                StreamWriter sw = new StreamWriter(FileName);
+                GeomertyStringConverter GCXML = new GeomertyStringConverter(RootCanvas, graphAppearance);
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
+                sb.AppendLine("<Canvase>");
+                sb.AppendLine(" <Geometry>");
+                sb.Append("     <Figures>");
+                foreach (UIElement item in this.RootCanvas.Children)
                 {
-                    sb.Append(GCXML.StringFromGeometry(borderWA.Child as System.Windows.Shapes.Path));            //构造Mini-Language
-                   
+                    BorderWithAdorner borderWA = item as BorderWithAdorner;  //点是有BorderWithDrag包含着的，图形是Path
+                    if (borderWA != null)
+                    {
+                        sb.Append(GCXML.StringFromGeometry(borderWA.Child as System.Windows.Shapes.Path));            //构造Mini-Language
+
+                    }
                 }
+                sb.AppendLine("</Figures>");
+                sb.AppendLine(" </Geometry>");
+                sb.AppendLine("</Canvase>");
+                sw.Write(sb.ToString());
+                sw.Close();
             }
-            sb.AppendLine("</Figures>");
-            sb.AppendLine(" </Geometry>");
-            sb.AppendLine("</Canvase>");
-            sw.Write(sb.ToString());
-            sw.Close();
-            MessageBox.Show(@"已保存到 "+FileName);
         }
 
         /// <summary>
@@ -516,6 +522,7 @@ namespace GeometryTool
             {
                 PanProperty.DataContext = MainWindow.SelectedBorder.Child;
                 LBNowSelected.Content = "图形属性";
+                SliderStyle.Value = (MainWindow.SelectedBorder.Child as System.Windows.Shapes.Path).StrokeThickness * 10;
                 StrokeDash1.Value = (MainWindow.SelectedBorder.Child as System.Windows.Shapes.Path).StrokeDashArray[0];
                 StrokeDash2.Value = (MainWindow.SelectedBorder.Child as System.Windows.Shapes.Path).StrokeDashArray[1];
                 Select.IsChecked = true;
@@ -524,6 +531,7 @@ namespace GeometryTool
             {
                 PanProperty.DataContext = graphAppearance;
                 LBNowSelected.Content = "画笔属性";
+                SliderStyle.Value = graphAppearance.StrokeThickness * 10;
                 CurveOptions.DataContext = curveAppearence;
                 StrokeDash1.Value = graphAppearance.StrokeDashArray[0];
                 StrokeDash2.Value = graphAppearance.StrokeDashArray[1];
@@ -1095,38 +1103,42 @@ namespace GeometryTool
         /// <param name="e"></param>
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            string pngFileName = "";
+            int oldMutiple = Convert.ToInt32(CanvasChange.Value);
+            Microsoft.Win32.SaveFileDialog save = new Microsoft.Win32.SaveFileDialog();
+            save.Filter = "png Files |*.png";
             RootCanvas.Background = null;               //清空背景
-            foreach (var item in RootCanvas.Children)   //隐藏点
+            if ((bool)save.ShowDialog())            //选择要保存的文件名
             {
-                BorderWithDrag borderWD = item as BorderWithDrag;
-                if (borderWD != null)
-                    borderWD.Visibility = Visibility.Hidden;
+                string pngFileName = save.FileName;
+               
+                foreach (var item in RootCanvas.Children)   //隐藏点
+                {
+                    BorderWithDrag borderWD = item as BorderWithDrag;
+                    if (borderWD != null)
+                        borderWD.Visibility = Visibility.Hidden;
+                }
+                
+
+                FileStream fs = new FileStream(pngFileName, FileMode.Create);
+                
+                CanvasChange.Value = 1;
+                RenderTargetBitmap bmp = new RenderTargetBitmap((int)RootCanvas.ActualWidth, (int)RootCanvas.ActualHeight, 96, 96, PixelFormats.Pbgra32);
+                bmp.Render(RootCanvas);
+                BitmapEncoder encoder = new PngBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(bmp));
+                encoder.Save(fs);
+                fs.Close();
+                fs.Dispose();
+
+               
+                foreach (var item in RootCanvas.Children)
+                {
+                    BorderWithDrag borderWD = item as BorderWithDrag;
+                    if (borderWD != null)
+                        borderWD.Visibility = Visibility.Visible;
+                }
             }
-            System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog();  //选择保存的路径
-            fbd.ShowDialog();
-            if (fbd.SelectedPath != string.Empty)
-                pngFileName = fbd.SelectedPath;
-            pngFileName += "\\" + DateTime.Now.ToLongDateString() + new Random().Next(10000) + ".png";      //保存点
-
-            FileStream fs = new FileStream(pngFileName, FileMode.Create);
-            int oldMutiple=Convert.ToInt32( CanvasChange.Value);
-            CanvasChange.Value = 1;
-            RenderTargetBitmap bmp = new RenderTargetBitmap((int)RootCanvas.ActualWidth, (int)RootCanvas.ActualHeight, 96, 96, PixelFormats.Pbgra32);
-            bmp.Render(RootCanvas);
-            BitmapEncoder encoder = new PngBitmapEncoder();
-            encoder.Frames.Add(BitmapFrame.Create(bmp));
-            encoder.Save(fs);
-            fs.Close();
-            fs.Dispose();
-
             CanvasChange.Value = oldMutiple;            //显示点
-            foreach (var item in RootCanvas.Children)
-            {
-                BorderWithDrag borderWD = item as BorderWithDrag;
-                if (borderWD != null)
-                    borderWD.Visibility = Visibility.Visible;
-            }
         }
 
         /// <summary>
@@ -1136,33 +1148,34 @@ namespace GeometryTool
         /// <param name="e"></param>
         private void SaveXML_Click(object sender, RoutedEventArgs e)
         {
-
-            System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog();
-            fbd.ShowDialog();
-            if (fbd.SelectedPath != string.Empty)
-                FileName = fbd.SelectedPath;
-            FileName += "\\" + DateTime.Now.ToLongDateString() + new Random().Next(10000) + ".xml";
-            StreamWriter sw = new StreamWriter(FileName);
-            GeomertyStringConverter GCXML = new GeomertyStringConverter(RootCanvas, graphAppearance);
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
-            sb.AppendLine("<Canvase>");
-            sb.AppendLine(" <Geometry>");
-            sb.Append("     <Figures>");
-            foreach (UIElement item in this.RootCanvas.Children)
+            Microsoft.Win32.SaveFileDialog save = new Microsoft.Win32.SaveFileDialog();
+            save.Filter = "XML Files |*.xml";
+            if ((bool)save.ShowDialog())            //选择要保存的文件名
             {
-                BorderWithAdorner borderWA = item as BorderWithAdorner;  //点是有BorderWithDrag包含着的，图形是Path
-                if (borderWA != null)
-                {
-                    sb.Append(GCXML.StringFromGeometry(borderWA.Child as System.Windows.Shapes.Path));            //构造Mini-Language
+                FileName = save.FileName;
 
+                StreamWriter sw = new StreamWriter(FileName);
+                GeomertyStringConverter GCXML = new GeomertyStringConverter(RootCanvas, graphAppearance);
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
+                sb.AppendLine("<Canvase>");
+                sb.AppendLine(" <Geometry>");
+                sb.Append("     <Figures>");
+                foreach (UIElement item in this.RootCanvas.Children)
+                {
+                    BorderWithAdorner borderWA = item as BorderWithAdorner;  //点是有BorderWithDrag包含着的，图形是Path
+                    if (borderWA != null)
+                    {
+                        sb.Append(GCXML.StringFromGeometry(borderWA.Child as System.Windows.Shapes.Path));            //构造Mini-Language
+
+                    }
                 }
+                sb.AppendLine("</Figures>");
+                sb.AppendLine(" </Geometry>");
+                sb.AppendLine("</Canvase>");
+                sw.Write(sb.ToString());
+                sw.Close();
             }
-            sb.AppendLine("</Figures>");
-            sb.AppendLine(" </Geometry>");
-            sb.AppendLine("</Canvase>");
-            sw.Write(sb.ToString());
-            sw.Close();
         }
        
         /// <summary>
@@ -1232,6 +1245,12 @@ namespace GeometryTool
                     RootCanvas.Children.Clear();
             }
         }
+
+     
+
+        
+
+        
     }
 
 

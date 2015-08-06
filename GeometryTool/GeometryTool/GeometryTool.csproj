@@ -107,6 +107,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Resources\FontStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\GeometryAdorner.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -114,6 +118,14 @@
     <Page Include="Resources\GreyButton.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\PulseButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\RadioButtonStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\ResizeRotateChrome.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -163,6 +175,53 @@
   <ItemGroup>
     <Resource Include="Image\unlock.png" />
     <Resource Include="Image\lock.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\Bezier.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\Circle.png" />
+    <Resource Include="Image\Curve.png" />
+    <Resource Include="Image\Ellipse.png" />
+    <Resource Include="Image\Line.png" />
+    <Resource Include="Image\QBezier.png" />
+    <Resource Include="Image\Rectangular.png" />
+    <Resource Include="Image\Triangle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\point.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\Pan.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\cuxi.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\Color.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\TurnOver.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\myCanvas.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\Up.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\Right.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\Down.png" />
+    <Resource Include="Image\Left.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\DowntoUp.png" />
+    <Resource Include="Image\UptoDown.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\RighttoLeft.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
