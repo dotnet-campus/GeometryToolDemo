@@ -85,11 +85,6 @@
                             <Image Width="35" Height="35" Margin="0,5" Source="Image/Rectangular.png"/>
                         </StackPanel>
                     </RadioButton>
-                    <RadioButton x:Name="Curve"     Style="{DynamicResource RDOButton}"     GroupName="MouseAction" ToolTip="AddCurve" Click="Select_Click" >
-                        <StackPanel HorizontalAlignment="Center">
-                            <Image Width="35" Height="35" Margin="0,5" Source="Image/Curve.png"/>
-                        </StackPanel>
-                    </RadioButton>
                     <RadioButton x:Name="Circle"    Style="{DynamicResource RDOButton}"     GroupName="MouseAction" ToolTip="AddCircle" Click="Select_Click" >
                         <StackPanel HorizontalAlignment="Center">
                             <Image Width="35" Height="35" Margin="0,5" Source="Image/Circle.png"/>
@@ -110,41 +105,6 @@
                             <Image Width="35" Height="35" Margin="0,5" Source="Image/Bezier.png"/>
                         </StackPanel>
                     </RadioButton>
-                </StackPanel>
-            </TabItem>
-            <TabItem Header="曲线设置" x:Name="CurveOptions" Margin="1,0,-5,-2">
-                <StackPanel Orientation="Horizontal">
-                    <Border BorderBrush="Gray" BorderThickness="0,0,1,0" Padding="10">
-                        <StackPanel Orientation="Vertical">
-                            <Label Content="椭圆半径"/>
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="X"/>
-                                <TextBox x:Name="EllipseRadiusX" Width="30" Height="20" Text="{Binding Path=RadiusX,Mode=TwoWay}" TextChanged="EllipseRadiusX_TextChanged" LostFocus="EllipseRadiusX_LostFocus" />
-                                <Label Content="Y"/>
-                                <TextBox x:Name="EllipseRadiusY" Width="30" Height="20" Text="{Binding Path=RadiusY,Mode=TwoWay}" TextChanged="EllipseRadiusY_TextChanged"/>
-                            </StackPanel> 
-                        </StackPanel>
-                    </Border>
-                    <Border BorderBrush="Gray" BorderThickness="0,0,1,0" Padding="10">
-                        <StackPanel Orientation="Vertical">
-                            <StackPanel Orientation="Horizontal">
-                                <CheckBox x:Name="EllipseisLargeArc" Height="16" IsChecked="{Binding Path=IsLargeArc,Converter={StaticResource intBoolConverter},Mode=TwoWay}" Click="EllipseisLargeArc_Click"/>
-                                <Label Content="大曲线"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <CheckBox x:Name="EllipseisClockwise" Height="16" IsChecked="{Binding Path=SweepDirection,Converter={StaticResource intBoolConverter},Mode=TwoWay}" Click="EllipseisClockwise_Click" />
-                                <Label Content="顺时针"/>
-                            </StackPanel>
-                        </StackPanel>
-                    </Border>
-                    <Border BorderBrush="Gray" BorderThickness="0,0,0,0" Padding="10">
-                    <StackPanel Orientation="Vertical">
-                        <StackPanel Orientation="Horizontal">
-                            <Label Content="旋转度数"/>
-                                <TextBox x:Name="EllipseDegree" Width="30" Height="20" Text="{Binding Path=RotationAngle,Mode=TwoWay}" TextChanged="EllipseDegree_TextChanged" />
-                        </StackPanel>
-                    </StackPanel>
-                    </Border>
                 </StackPanel>
             </TabItem>
         </TabControl>

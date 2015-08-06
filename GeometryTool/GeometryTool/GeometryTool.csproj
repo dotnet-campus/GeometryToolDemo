@@ -57,24 +57,20 @@
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
     <Compile Include="Action\BorderLock.cs" />
+    <Compile Include="Action\SizeConverter.cs" />
     <Compile Include="Converter\BorderWidthHeightConverter.cs" />
     <Compile Include="Converter\CanvasScaleTransformConverter.cs" />
-    <Compile Include="Converter\DashArrayConverter.cs" />
     <Compile Include="Converter\IntBoolConverter.cs" />
     <Compile Include="Converter\ScaleCenterConverter.cs" />
-    <Compile Include="Converter\NDecimalConverter.cs" />
     <Compile Include="Action\XMLHelper.cs" />
     <Compile Include="Action\GeomortyStringConverter.cs" />
-    <Compile Include="Model\CurveAppearence.cs" />
     <Compile Include="Model\GeometryAdorner.cs" />
     <Compile Include="Model\GeometryChrome.cs" />
     <Compile Include="Converter\ImageVisibilityConverter.cs" />
-    <Compile Include="Converter\IsEnbleBindingConverter.cs" />
     <Compile Include="Model\LockAdorner.cs" />
     <Compile Include="Model\LockChrome.cs" />
     <Compile Include="Model\BorderWithDrag.cs" />
     <Compile Include="Model\AutoPoints.cs" />
-    <Compile Include="Converter\SizeConverter.cs" />
     <Compile Include="Converter\SliderConverterToDouble.cs" />
     <Compile Include="Model\MoveThumb.cs" />
     <Compile Include="Model\ResizeThumb.cs" />

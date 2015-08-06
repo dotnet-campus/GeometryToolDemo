@@ -12,10 +12,10 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Text.RegularExpressions;
 using System.Windows.Controls.Primitives;
 using Microsoft.Win32;
+using GeometryPath = System.Windows.Shapes;
 
 namespace GeometryTool
 {
@@ -51,7 +51,6 @@ namespace GeometryTool
         System.Windows.Shapes.Path ellipsePath; //表示绘制图形的时候，点所在Path
         GraphAdd graphAdd;                      //表示绘制动作的类
         GraphAppearance graphAppearance;        //表示图形的外观
-        CurveAppearence curveAppearence;        //表示曲线的外观
         PathFigure pathFigure;                  //表示绘制直线的时候，直线所在的PathFigure
         System.Windows.Shapes.Path circlePath;  //表示绘制圆的时候，圆所在的Path
         bool isClose;                           //表示图形是否是闭合的
@@ -74,7 +73,6 @@ namespace GeometryTool
         public MainWindow()
         {
             graphAppearance = new GraphAppearance();
-            curveAppearence = new CurveAppearence();
             graphAdd = new GraphAdd();
             EllipseList = new List<System.Windows.Shapes.Path>();
             ellipsePath = new System.Windows.Shapes.Path();
@@ -98,7 +96,6 @@ namespace GeometryTool
             RootCanvasBackGround.SelectedIndex = 0;
             PanProperty.DataContext = graphAppearance;
             MenuOptions.DataContext = this;
-            CurveOptions.DataContext = curveAppearence;
             AddCommand();
         }
 
@@ -230,7 +227,6 @@ namespace GeometryTool
             if (MainWindow.ActionMode != "Select")
             {
                 LBNowSelected.Content = "画笔属性";
-                CurveOptions.DataContext = curveAppearence;
                 PanProperty.DataContext = graphAppearance;
                 SliderStyle.Value = graphAppearance.StrokeThickness * 10;
                 StrokeDash1.Value = graphAppearance.StrokeDashArray[0];
@@ -295,16 +291,6 @@ namespace GeometryTool
                     bool isLargeArc = arcSegment.IsLargeArc;
                     double RotationAngle = arcSegment.RotationAngle;
                     Size size = arcSegment.Size;
-                    CurveOptions.DataContext = arcSegment;
-                    EllipseRadiusX.Text = size.Width.ToString();
-                    EllipseRadiusY.Text = size.Height.ToString();
-                    EllipseisClockwise.IsChecked = isClockwise;
-                    EllipseisLargeArc.IsChecked = isLargeArc;
-                    EllipseDegree.Text = RotationAngle.ToString();
-                }
-                else
-                {
-                    CurveOptions.DataContext = curveAppearence;
                 }
             }
         }
@@ -519,29 +505,6 @@ namespace GeometryTool
                 PanProperty.DataContext = ellipseGeometryPath;
                 canMove = true;
             }
-            else if (MainWindow.ActionMode == "AddCurve")//绘制曲线
-            {
-                System.Windows.Point p = new AutoPoints().GetAutoAdsorbPoint(Mouse.GetPosition(e.Source as FrameworkElement));
-                string MiniLanguage = "M " + p.X + "," + p.Y + " A " + EllipseRadiusX.Text + "," + EllipseRadiusY.Text+" "
-                    + EllipseDegree.Text + " " + (EllipseisClockwise.IsChecked==true?1:0) + " " + EllipseDegree.Text + " " 
-                    + (EllipseisLargeArc.IsChecked==true?1 : 0)+" " +p.X+","+p.Y +"";
-
-                MainWindow.SelectedBorder = gsc.GeomotryFromString(MiniLanguage);
-                curvePath = MainWindow.SelectedBorder.Child as System.Windows.Shapes.Path;
-                AddGeometryIntoCanvas(MainWindow.SelectedBorder, 0, 0);
-                PanProperty.DataContext = curvePath;
-                ArcSegment arcSegment = (curvePath.Data as PathGeometry).Figures[0].Segments[0] as ArcSegment;
-                bool isClockwise = arcSegment.SweepDirection == SweepDirection.Clockwise ? true : false;
-                bool isLargeArc = arcSegment.IsLargeArc;
-                double RotationAngle = arcSegment.RotationAngle;
-                Size size = arcSegment.Size;
-                CurveOptions.DataContext = arcSegment;
-                EllipseRadiusX.Text = size.Width.ToString();
-                EllipseRadiusY.Text = size.Height.ToString();
-                EllipseisClockwise.IsChecked = isClockwise;
-                EllipseisLargeArc.IsChecked = isLargeArc;
-                canMove = true;
-            }
             else if (MainWindow.ActionMode == "QBezier")//绘制二次方贝塞尔曲线
             {
                 System.Windows.Point p = new AutoPoints().GetAutoAdsorbPoint(Mouse.GetPosition(e.Source as FrameworkElement));
@@ -616,7 +579,6 @@ namespace GeometryTool
                 PanProperty.DataContext = graphAppearance;
                 LBNowSelected.Content = "画笔属性";
                 SliderStyle.Value = graphAppearance.StrokeThickness * 10;
-                CurveOptions.DataContext = curveAppearence;
                 StrokeDash1.Value = graphAppearance.StrokeDashArray[0];
                 StrokeDash2.Value = graphAppearance.StrokeDashArray[1];
             }
