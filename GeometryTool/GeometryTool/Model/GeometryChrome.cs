@@ -22,20 +22,20 @@ namespace GeometryTool
             this.ContextMenu = new ContextMenu();
             MenuItem CopyItem = new MenuItem();
             CopyItem.Header = "复制";
-            //CopyItem.Command = RoutedCommands.CopyCommand;
-            CopyItem.Click+=CopyItem_Click;
+            CopyItem.Command = RoutedCommands.CopyCommand;
+            //CopyItem.Click+=CopyItem_Click;
             this.ContextMenu.Items.Add(CopyItem);
 
             MenuItem CutItem = new MenuItem();
             CutItem.Header = "剪切";
-            //CutItem.Command = RoutedCommands.CutCommand;
-            CutItem.Click+=CutItem_Click;
+            CutItem.Command = RoutedCommands.CutCommand;
+            //CutItem.Click+=CutItem_Click;
             this.ContextMenu.Items.Add(CutItem);
 
             MenuItem DeleteItem = new MenuItem();
             DeleteItem.Header = "删除";
-            DeleteItem.Click+=DeleteItem_Click;
-            //DeleteItem.Command = RoutedCommands.DeleteCommand;
+            //DeleteItem.Click+=DeleteItem_Click;
+            DeleteItem.Command = RoutedCommands.DeleteCommand;
             this.ContextMenu.Items.Add(DeleteItem);
 
         }
@@ -170,59 +170,6 @@ namespace GeometryTool
         /// <summary>
         /// 添加删除/复制/剪切的路由事件
         /// </summary>
-        void AddCommand()
-        {
-
-            this.CommandBindings.Add(new CommandBinding(
-                RoutedCommands.CopyCommand,
-                (sender, e) =>
-                {
-                    CopyItem_Click(sender, e);
-                },
-                (sender, e) =>
-                {
-                    BorderWithAdorner borderWA = this.DataContext as BorderWithAdorner;
-                    if (borderWA != null)
-                    {
-                        if (borderWA == MainWindow.SelectedBorder)
-                            e.CanExecute = true;
-                    }
-                        e.CanExecute = false;
-                }));
-
-            this.CommandBindings.Add(new CommandBinding(
-                RoutedCommands.CutCommand,
-                (sender, e) =>
-                {
-                    CutItem_Click(sender, e);
-                },
-                (sender, e) =>
-                {
-                    BorderWithAdorner borderWA = this.DataContext as BorderWithAdorner;
-                    if (borderWA != null)
-                    {
-                        if (borderWA == MainWindow.SelectedBorder)
-                            e.CanExecute = true;
-                    }
-                    e.CanExecute = true;
-                }));
-
-            this.CommandBindings.Add(new CommandBinding(
-                RoutedCommands.DeleteCommand,
-                (sender, e) =>
-                {
-                    DeleteItem_Click(sender, e);
-                },
-                (sender, e) =>
-                {
-                    BorderWithAdorner borderWA = this.DataContext as BorderWithAdorner;
-                    if (borderWA != null)
-                    {
-                        if (borderWA == MainWindow.SelectedBorder)
-                            e.CanExecute = true;
-                    }
-                    e.CanExecute = true;
-                }));
-        }
+   
     }
 }

@@ -40,7 +40,7 @@ namespace GeometryTool
                     copyCommand = new RoutedUICommand(
                         "Copy",
                         "Copy",
-                        typeof(GeometryChrome),
+                        typeof(MainWindow),
                         new InputGestureCollection { new KeyGesture(Key.C, ModifierKeys.Control) });
                 }
 
@@ -66,7 +66,7 @@ namespace GeometryTool
             }
         }
 
-        private static RoutedUICommand deleteCommand;     //剪切的路由事件
+        private static RoutedUICommand deleteCommand;     //删除的路由事件
         public static RoutedUICommand DeleteCommand
         {
             get
@@ -77,10 +77,64 @@ namespace GeometryTool
                         "Delete",
                         "Delete",
                         typeof(MainWindow),
-                        new InputGestureCollection { new KeyGesture(Key.X, ModifierKeys.Control) });
+                        new InputGestureCollection { new KeyGesture(Key.Delete) });
                 }
 
                 return deleteCommand;
+            }
+        }
+
+        private static RoutedUICommand saveCommand;     //保存的路由事件
+        public static RoutedUICommand SaveCommand
+        {
+            get
+            {
+                if (saveCommand == null)
+                {
+                    saveCommand = new RoutedUICommand(
+                        "Save",
+                        "Save",
+                        typeof(MainWindow),
+                        new InputGestureCollection { new KeyGesture(Key.S, ModifierKeys.Control) });
+                }
+
+                return saveCommand;
+            }
+        }
+
+        private static RoutedUICommand newCommand;     //新建的路由事件
+        public static RoutedUICommand NewCommand
+        {
+            get
+            {
+                if (newCommand == null)
+                {
+                    newCommand = new RoutedUICommand(
+                        "New",
+                        "New",
+                        typeof(MainWindow),
+                        new InputGestureCollection { new KeyGesture(Key.N, ModifierKeys.Control) });
+                }
+
+                return newCommand;
+            }
+        }
+
+        private static RoutedUICommand openCommand;     //打开的路由事件
+        public static RoutedUICommand OpenCommand
+        {
+            get
+            {
+                if (openCommand == null)
+                {
+                    openCommand = new RoutedUICommand(
+                        "open",
+                        "open",
+                        typeof(MainWindow),
+                        new InputGestureCollection { new KeyGesture(Key.O, ModifierKeys.Control) });
+                }
+
+                return openCommand;
             }
         }
     }

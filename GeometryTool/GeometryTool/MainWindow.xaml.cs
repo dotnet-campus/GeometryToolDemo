@@ -102,6 +102,9 @@ namespace GeometryTool
             AddCommand();
         }
 
+        /// <summary>
+        /// 绑定路由事件
+        /// </summary>
         void AddCommand()
         {
             this.CommandBindings.Add(new CommandBinding(
@@ -117,6 +120,85 @@ namespace GeometryTool
                     else
                         e.CanExecute = false;
                 }));
+            this.CommandBindings.Add(new CommandBinding(
+                RoutedCommands.SaveCommand,
+                (sender, e) =>
+                {
+                    Save_Click(sender, e);
+                },
+                (sender, e) =>
+                {
+                    e.CanExecute = true;
+                }));
+            this.CommandBindings.Add(new CommandBinding(
+                RoutedCommands.NewCommand,
+                (sender, e) =>
+                {
+                    CreateNewCanvas_Click(sender,e);
+                },
+                (sender, e) =>
+                {
+                    e.CanExecute = true;
+                }));
+            this.CommandBindings.Add(new CommandBinding(
+               RoutedCommands.OpenCommand,
+               (sender, e) =>
+               {
+                   Open_Click(sender,e);
+               },
+               (sender, e) =>
+               {
+                   e.CanExecute = true;
+               }));
+
+            this.CommandBindings.Add(new CommandBinding(
+               RoutedCommands.CopyCommand,
+               (sender, e) =>
+               {
+                   if (SelectedBorder != null && SelectedBorder.GAdorner!=null)
+                   {
+                       SelectedBorder.GAdorner.chrome.CopyItem_Click(sender,e);
+                   }
+               },
+               (sender, e) =>
+               {
+                   if (SelectedBorder != null && SelectedBorder.GAdorner != null)
+                   {
+                       e.CanExecute = true;
+                   }
+               }));
+            this.CommandBindings.Add(new CommandBinding(
+               RoutedCommands.CutCommand,
+               (sender, e) =>
+               {
+                   if (SelectedBorder != null && SelectedBorder.GAdorner != null)
+                   {
+                       SelectedBorder.GAdorner.chrome.CutItem_Click(sender,e);
+                   }
+               },
+               (sender, e) =>
+               {
+                   if (SelectedBorder != null && SelectedBorder.GAdorner != null)
+                   {
+                       e.CanExecute = true;
+                   }
+               }));
+            this.CommandBindings.Add(new CommandBinding(
+               RoutedCommands.DeleteCommand,
+               (sender, e) =>
+               {
+                   if (SelectedBorder != null && SelectedBorder.GAdorner != null)
+                   {
+                       SelectedBorder.GAdorner.chrome.DeleteItem_Click(sender,e);
+                   }
+               },
+               (sender, e) =>
+               {
+                   if (SelectedBorder != null && SelectedBorder.GAdorner != null)
+                   {
+                       e.CanExecute = true;
+                   }
+               }));
         }
 
         /// <summary>
