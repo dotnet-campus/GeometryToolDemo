@@ -190,6 +190,7 @@ namespace GeometryTool
                 BorderWithDrag border = new BorderWithDrag(linePath, isStartPoint, EllipseList);
                 border.Child = ellipsePath;
                 this.RootCanvas.Children.Add(border);
+                isSava = false;
                 e.Handled = true;
 
             }
@@ -481,6 +482,7 @@ namespace GeometryTool
                 PanProperty.DataContext = BezierPath;
                 canMove = true;
             }
+            isSava = false;
             
         }
 
@@ -683,6 +685,7 @@ namespace GeometryTool
                     this.CanvasBorder.Width = width >= CanvasBorder.ActualWidth ? width : RootGrid.ActualWidth - 215;
                     docCanvas_Loaded();
                 }
+                isSava = true;
             }
             catch { }
         }
@@ -751,6 +754,10 @@ namespace GeometryTool
             try
             {
                 oldStrokeDashArray.Add(LineStyle.StrokeDashArray[1]);
+                if (SelectedBorder != null)
+                {
+                    isSava = false;
+                }
             }
             catch { oldStrokeDashArray.Add(0); }
             LineStyle.StrokeDashArray = oldStrokeDashArray;
@@ -767,6 +774,10 @@ namespace GeometryTool
             try
             {
                 oldStrokeDashArray.Add(LineStyle.StrokeDashArray[0]);
+                if (SelectedBorder != null)
+                {
+                    isSava = false;
+                }
             }
             catch { oldStrokeDashArray.Add(1); }
             oldStrokeDashArray.Add(e.NewValue);
@@ -784,6 +795,7 @@ namespace GeometryTool
             BorderWithAdorner newBorderWA =  borderWA.CopyBorder(MainWindow.CopyBorderWA);  //获取要粘贴的图形的副本
             AddGeometryIntoCanvas(newBorderWA, 2 * (MainWindow.PasteCount + 1), 2 * (MainWindow.PasteCount + 1));
             MainWindow.PasteCount++;
+            isSava = false;
         }
 
         /// <summary>
@@ -805,6 +817,7 @@ namespace GeometryTool
                     (item.Data as EllipseGeometry).Center = new Point() { X = p.X, Y = p.Y - (p.Y - borderWA.MinY) * 2 };
                     this.RootCanvas.Children.Add(item.Parent as BorderWithDrag);
                 }
+                isSava = false;
             }
             e.Handled = true;
         }
@@ -828,6 +841,7 @@ namespace GeometryTool
                     (item.Data as EllipseGeometry).Center = new Point() { X = p.X, Y = p.Y - (p.Y - borderWA.MaxY) * 2 };
                     this.RootCanvas.Children.Add(item.Parent as BorderWithDrag);
                 }
+                isSava = false;
             }
             e.Handled = true;
         }
@@ -851,6 +865,7 @@ namespace GeometryTool
                     (item.Data as EllipseGeometry).Center = new Point() { X = p.X - (p.X - borderWA.MinX) * 2, Y = p.Y };
                     this.RootCanvas.Children.Add(item.Parent as BorderWithDrag);
                 }
+                isSava = false;
             }
             e.Handled = true;
         }
@@ -874,6 +889,7 @@ namespace GeometryTool
                     (item.Data as EllipseGeometry).Center = new Point() { X = p.X - (p.X - borderWA.MaxX) * 2, Y = p.Y };
                     this.RootCanvas.Children.Add(item.Parent as BorderWithDrag);
                 }
+                isSava = false;
             }
             e.Handled = true;
         }
@@ -917,6 +933,7 @@ namespace GeometryTool
                     Point p = (item.Data as EllipseGeometry).Center;
                     (item.Data as EllipseGeometry).Center = new Point() { X = p.X, Y = p.Y - (p.Y - averageY) * 2 };
                 }
+                isSava = false;
             }
             e.Handled = true;
         }
@@ -943,6 +960,7 @@ namespace GeometryTool
                     Point p = (item.Data as EllipseGeometry).Center;
                     (item.Data as EllipseGeometry).Center = new Point() { X = p.X - (p.X - averageX) * 2, Y = p.Y };
                 }
+                isSava = false;
             }
             e.Handled = true;
         }
@@ -972,7 +990,7 @@ namespace GeometryTool
                     }
                 }
             }
-            catch 
+            catch
             {
                 tb.Text = "0";
             }
@@ -1104,6 +1122,7 @@ namespace GeometryTool
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             int oldMutiple = Convert.ToInt32(CanvasChange.Value);
+            CanvasChange.Value = 1;
             Microsoft.Win32.SaveFileDialog save = new Microsoft.Win32.SaveFileDialog();
             save.Filter = "png Files |*.png";
             RootCanvas.Background = null;               //清空背景
@@ -1121,7 +1140,7 @@ namespace GeometryTool
 
                 FileStream fs = new FileStream(pngFileName, FileMode.Create);
                 
-                CanvasChange.Value = 1;
+                
                 RenderTargetBitmap bmp = new RenderTargetBitmap((int)RootCanvas.ActualWidth, (int)RootCanvas.ActualHeight, 96, 96, PixelFormats.Pbgra32);
                 bmp.Render(RootCanvas);
                 BitmapEncoder encoder = new PngBitmapEncoder();
@@ -1137,6 +1156,7 @@ namespace GeometryTool
                     if (borderWD != null)
                         borderWD.Visibility = Visibility.Visible;
                 }
+                isSava = true;
             }
             CanvasChange.Value = oldMutiple;            //显示点
         }
@@ -1175,6 +1195,7 @@ namespace GeometryTool
                 sb.AppendLine("</Canvase>");
                 sw.Write(sb.ToString());
                 sw.Close();
+                isSava = true;
             }
         }
        
@@ -1199,6 +1220,7 @@ namespace GeometryTool
                 else
                 RootCanvas.Background = new ImageBrush(BackgroundImage);
                 this.RootCanvasBackGround.SelectedIndex = 1;
+                isSava = false;
             }
         }
 
@@ -1240,9 +1262,40 @@ namespace GeometryTool
                 {
                     SaveXML_Click(null,null);
                     RootCanvas.Children.Clear();
+                    isSava = true;
                 }
                 else if(mbr==MessageBoxResult.No)
+                {
                     RootCanvas.Children.Clear();
+                    isSava = true;
+                }
+                    
+            }
+        }
+
+        private void EllipseRadiusX_LostFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+            double RadiuX = 0;
+            try
+            {
+                RadiuX = Convert.ToDouble(tb.Text);
+                if (MainWindow.SelectedBorder != null)
+                {
+                    BorderWithAdorner borderWA = SelectedBorder;
+                    System.Windows.Shapes.Path path = borderWA.Child as System.Windows.Shapes.Path;
+                    PathGeometry pg = path.Data as PathGeometry;
+                    ArcSegment arcSegment = pg.Figures[0].Segments[0] as ArcSegment;
+                    if (arcSegment != null)
+                    {
+                        Size size = arcSegment.Size;
+                        arcSegment.Size = new Size() { Width = RadiuX, Height = size.Height };
+                    }
+                }
+            }
+            catch
+            {
+                tb.Text = "0";
             }
         }
 

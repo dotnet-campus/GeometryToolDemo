@@ -27,7 +27,7 @@
         </ResourceDictionary>
         
     </Window.Resources>
-    <Grid x:Name="RootGrid" Background="#F1F1F1">
+    <Grid x:Name="RootGrid" Background="#E3E7EA" >
         <Grid.RowDefinitions>
             <RowDefinition  Height="100px" />
             <RowDefinition  Height="*"/>
@@ -37,19 +37,31 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition  Width="230"/>
         </Grid.ColumnDefinitions>
-        
-        <TabControl Grid.Row="0" Grid.ColumnSpan="2">
-            <TabItem Header="文件" >
+
+        <TabControl Grid.Row="0" Grid.ColumnSpan="2" Background="#F1F1F1">
+            <TabItem Header="  文件  " >
                 <StackPanel Orientation="Horizontal">
-                    <Button Content="导入" Click="OpenPNG_Click" />
-                    <Button Content="新建" x:Name="CreateNewCanvas" Click="CreateNewCanvas_Click" />
-                    <Button Content="打开" ToolTip="打开文件" Click="Open_Click" />
-                    <Button Content="保存" ToolTip="保存文件" Click="Save_Click"/>
-                    <Button Content="另存为XML" Click="SaveXML_Click" />
-                    <Button Content="另存为PNG" Click="Button_Click" />
+                    <Button  Click="OpenPNG_Click" Style="{StaticResource PulseButton}" >
+                        <TextBlock FontSize="20" Text="导入"/>
+                    </Button>
+                    <Button  x:Name="CreateNewCanvas" Click="CreateNewCanvas_Click" Style="{StaticResource PulseButton}"  >
+                        <TextBlock FontSize="20" Text="新建"/>
+                    </Button>
+                    <Button  ToolTip="打开文件" Click="Open_Click" Style="{StaticResource PulseButton}"  >
+                        <TextBlock FontSize="20" Text="打开"/>
+                    </Button>
+                    <Button  ToolTip="保存文件" Click="Save_Click" Style="{StaticResource PulseButton}" >
+                        <TextBlock FontSize="20" Text="保存"/>
+                    </Button>
+                    <Button  Click="SaveXML_Click" Style="{StaticResource PulseButton}" >
+                        <TextBlock FontSize="20" Text="另存为XML"/>
+                    </Button>
+                    <Button  Click="Button_Click" Style="{StaticResource PulseButton}" >
+                        <TextBlock FontSize="20" Text="另存为PNG"/>
+                    </Button>
                 </StackPanel>
             </TabItem>
-            <TabItem Header="图形" IsSelected="True" >
+            <TabItem Header="  图形  " IsSelected="True" >
                 <StackPanel  Orientation="Horizontal">
 
                     <RadioButton x:Name="Select"    Style="{DynamicResource RDOButton}"    GroupName="MouseAction"  ToolTip="Select" Click="Select_Click" >
@@ -99,42 +111,44 @@
                     </RadioButton>
                 </StackPanel>
             </TabItem>
-            <TabItem Header="曲线设置" x:Name="CurveOptions">
+            <TabItem Header="曲线设置" x:Name="CurveOptions" Margin="1,0,-5,-2">
                 <StackPanel Orientation="Horizontal">
-                    <Border>
+                    <Border BorderBrush="Gray" BorderThickness="0,0,1,0" Padding="10">
                         <StackPanel Orientation="Vertical">
                             <Label Content="椭圆半径"/>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="X"/>
-                                <TextBox x:Name="EllipseRadiusX" Width="30" Text="{Binding Path=RadiusX,Mode=TwoWay}" TextChanged="EllipseRadiusX_TextChanged" />
+                                <TextBox x:Name="EllipseRadiusX" Width="30" Height="20" Text="{Binding Path=RadiusX,Mode=TwoWay}" TextChanged="EllipseRadiusX_TextChanged" LostFocus="EllipseRadiusX_LostFocus" />
                                 <Label Content="Y"/>
-                                <TextBox x:Name="EllipseRadiusY" Width="30" Text="{Binding Path=RadiusY,Mode=TwoWay}" TextChanged="EllipseRadiusY_TextChanged"/>
+                                <TextBox x:Name="EllipseRadiusY" Width="30" Height="20" Text="{Binding Path=RadiusY,Mode=TwoWay}" TextChanged="EllipseRadiusY_TextChanged"/>
                             </StackPanel> 
                         </StackPanel>
                     </Border>
-                    <Border>
+                    <Border BorderBrush="Gray" BorderThickness="0,0,1,0" Padding="10">
                         <StackPanel Orientation="Vertical">
                             <StackPanel Orientation="Horizontal">
-                                <CheckBox x:Name="EllipseisLargeArc" IsChecked="{Binding Path=IsLargeArc,Converter={StaticResource intBoolConverter},Mode=TwoWay}" Click="EllipseisLargeArc_Click"/>
+                                <CheckBox x:Name="EllipseisLargeArc" Height="16" IsChecked="{Binding Path=IsLargeArc,Converter={StaticResource intBoolConverter},Mode=TwoWay}" Click="EllipseisLargeArc_Click"/>
                                 <Label Content="大曲线"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <CheckBox x:Name="EllipseisClockwise" IsChecked="{Binding Path=SweepDirection,Converter={StaticResource intBoolConverter},Mode=TwoWay}" Click="EllipseisClockwise_Click" />
+                                <CheckBox x:Name="EllipseisClockwise" Height="16" IsChecked="{Binding Path=SweepDirection,Converter={StaticResource intBoolConverter},Mode=TwoWay}" Click="EllipseisClockwise_Click" />
                                 <Label Content="顺时针"/>
                             </StackPanel>
                         </StackPanel>
                     </Border>
+                    <Border BorderBrush="Gray" BorderThickness="0,0,0,0" Padding="10">
                     <StackPanel Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">
                             <Label Content="旋转度数"/>
-                            <TextBox x:Name="EllipseDegree" Width="30" Text="{Binding Path=RotationAngle,Mode=TwoWay}" TextChanged="EllipseDegree_TextChanged" />
+                                <TextBox x:Name="EllipseDegree" Width="30" Height="20" Text="{Binding Path=RotationAngle,Mode=TwoWay}" TextChanged="EllipseDegree_TextChanged" />
                         </StackPanel>
                     </StackPanel>
+                    </Border>
                 </StackPanel>
             </TabItem>
         </TabControl>
 
-        <Border BorderBrush="Black" Grid.Row="1" Grid.Column="1" BorderThickness="1,0,0,1" >
+        <Border BorderBrush="Black" Grid.Row="1" Grid.Column="1" BorderThickness="1,0,0,1"  Background="#F1F1F1">
             <StackPanel Margin="10,0,0,0">
                 <StackPanel  x:Name="PanProperty" >
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal" Margin="0,0,0,5">
@@ -250,7 +264,7 @@
                                         <StackPanel Height="30" HorizontalAlignment="Left" VerticalAlignment="Center" Orientation="Horizontal">
                                             <Label SnapsToDevicePixels="True"    Content="当前颜色"/>
                                             <Border CornerRadius="2" BorderBrush="Gray" BorderThickness="1" >
-                                                <Label x:Name="FillCurrentColor" Margin="3" Background="{Binding Path=Stroke,Mode=TwoWay}" Height="20" Width="80"/>
+                                                <Label x:Name="FillCurrentColor" Margin="3" Background="{Binding Path=Fill,Mode=TwoWay}" Height="20" Width="80"/>
                                             </Border>
                                         </StackPanel>
                                     </Border>
@@ -443,11 +457,11 @@
         </Border>
 
 
-        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
         <Border Grid.Row="1" x:Name="CanvasBorder" HorizontalAlignment="Center" VerticalAlignment="Center"  
                      Width="{Binding ElementName=RootGrid,Path=ActualWidth,Converter={StaticResource BorderWidthHeightConverter},ConverterParameter=215}"
                     Height="{Binding ElementName=RootGrid,Path=ActualHeight,Converter={StaticResource BorderWidthHeightConverter},ConverterParameter=115}">
-                <Canvas VerticalAlignment="Top" HorizontalAlignment="Center" x:Name="BackGroundCanvas">
+                <Canvas VerticalAlignment="Top" HorizontalAlignment="Center" x:Name="BackGroundCanvas" Margin="0,20,0,0">
                     <Canvas x:Name="RootCanvas" MouseDown="RootCanvas_MouseDown" MouseLeftButtonUp="RootCanvas_MouseLeftButtonUp"  MouseLeftButtonDown="RootCanvas_MouseLeftButtonDown"  MouseMove="RootCanvas_MouseMove"
                         Width="64" Height="64" HorizontalAlignment="Center" VerticalAlignment="Center" MouseRightButtonDown="RootCanvas_MouseRightButtonDown">
                         <Canvas.RenderTransform>
