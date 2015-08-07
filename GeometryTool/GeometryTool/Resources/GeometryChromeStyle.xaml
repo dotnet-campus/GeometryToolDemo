@@ -20,7 +20,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type s:GeometryChrome}">
                     <Grid DataContext="{TemplateBinding DataContext}">
-                        <s:MoveThumb Cursor="SizeAll" Template="{StaticResource MoveThumbTemplate}" DataContext="{TemplateBinding DataContext}" />
+                        <s:MoveThumb Padding="0.2" Cursor="SizeAll" Template="{StaticResource MoveThumbTemplate}" DataContext="{TemplateBinding DataContext}" />
                         <ContentPresenter Content="{TemplateBinding ContentControl.Content}"
                               Margin="{TemplateBinding Padding}"/>
                         <s:ResizeRotateChrome DataContext="{TemplateBinding DataContext}" />

@@ -16,15 +16,13 @@
             <local:ScaleCenterConverter x:Key="scaleCenterConverter"/>
             <local:IntBoolConverter x:Key="intBoolConverter"/>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Resources/Canvas.xaml"/>
-                <ResourceDictionary Source="Resources/ExpanderStyles.xaml"/>
-                <ResourceDictionary Source="Resources/PulseButton.xaml"/>
+                <ResourceDictionary Source="Resources/PulseButtonStyle.xaml"/>
                 <ResourceDictionary Source="Resources/ColorsStyle.xaml"/>
-                <ResourceDictionary Source="Resources/DesignerItem.xaml"/>
+                <ResourceDictionary Source="Resources/ResizeRotateChromeStyle.xaml"/>
                 <ResourceDictionary Source="Resources/RadioButtonStyle.xaml"/>
-                <ResourceDictionary Source="Resources/FontStyle.xaml"/>
-                <ResourceDictionary Source="Resources/RightTabControl.xaml"/>
-                <ResourceDictionary Source="Resources/ButtonImage.xaml"/>
+                <ResourceDictionary Source="Resources/LableStyle.xaml"/>
+                <ResourceDictionary Source="Resources/RightTabControlStyle.xaml"/>
+                <ResourceDictionary Source="Resources/ButtonImageStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             
             <!--<DrawingImage x:Key="DemoImage">

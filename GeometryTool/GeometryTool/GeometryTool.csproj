@@ -74,10 +74,6 @@
     <Compile Include="Model\MoveThumb.cs" />
     <Compile Include="Model\ResizeThumb.cs" />
     <Compile Include="Model\RotateThumb.cs" />
-    <Page Include="Resources\Canvas.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -96,35 +92,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Resources\DesignerItem.xaml">
+    <Page Include="Resources\GeometryChromeStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Resources\ButtonImage.xaml">
+    <Page Include="Resources\ButtonImageStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Resources\RightTabControl.xaml">
+    <Page Include="Resources\RightTabControlStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Resources\ExpanderStyles.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Resources\FontStyle.xaml">
+    <Page Include="Resources\LableStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Resources\GeometryAdorner.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Resources\GreyButton.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Resources\PulseButton.xaml">
+    <Page Include="Resources\PulseButtonStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -132,7 +116,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Resources\ResizeRotateChrome.xaml">
+    <Page Include="Resources\ResizeRotateChromeStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -228,6 +212,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Image\RighttoLeft.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\XuanZhuan.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
