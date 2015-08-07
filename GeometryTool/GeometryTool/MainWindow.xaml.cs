@@ -116,7 +116,7 @@ namespace GeometryTool
                 Microsoft.Win32.SaveFileDialog save = new Microsoft.Win32.SaveFileDialog();
                 save.Filter = "XML Files |*.xml";
                 if ((bool)save.ShowDialog())
-                    fileName = save.fileName;
+                    fileName = save.FileName;
                 else
                     canSave = false;
             }
@@ -160,7 +160,7 @@ namespace GeometryTool
             RootCanvas.Background = null;               //清空背景
             if ((bool)save.ShowDialog())            //选择要保存的文件名
             {
-                string pngFileName = save.fileName;
+                string pngFileName = save.FileName;
 
                 foreach (var item in RootCanvas.Children)   //隐藏点
                 {
@@ -204,7 +204,7 @@ namespace GeometryTool
             save.Filter = "XML Files |*.xml";
             if ((bool)save.ShowDialog())            //选择要保存的文件名
             {
-                fileName = save.fileName;
+                fileName = save.FileName;
 
                 StreamWriter sw = new StreamWriter(fileName);
                 GeomertyStringConverter GCXML = new GeomertyStringConverter(RootCanvas, graphAppearance);
@@ -244,7 +244,7 @@ namespace GeometryTool
             opf.ShowDialog();
             if (!string.IsNullOrEmpty(opf.SafeFileName))
             {
-                string pngFileName = opf.fileName;
+                string pngFileName = opf.FileName;
                 Uri uri = new Uri(pngFileName, UriKind.Absolute);
                 backgroundImage = new BitmapImage(uri);
                 if (backgroundImage == null)
@@ -267,7 +267,7 @@ namespace GeometryTool
             save.Filter = "XML Files |*.xml";
             if ((bool)save.ShowDialog())            //选择要保存的文件名
             {
-                fileName = save.fileName;
+                fileName = save.FileName;
 
                 StreamWriter sw = new StreamWriter(fileName);
                 GeomertyStringConverter gsc = new GeomertyStringConverter(RootCanvas, graphAppearance);
@@ -313,11 +313,11 @@ namespace GeometryTool
                 openFileDlg.Filter = "xml file|*.xml";      //只选择.xml文件
                 if (openFileDlg.ShowDialog() == true)       //打开对话框
                 {
-                    if (!string.IsNullOrEmpty(openFileDlg.fileName))    //如果文件名不为空
+                    if (!string.IsNullOrEmpty(openFileDlg.FileName))    //如果文件名不为空
                     {
                         XMLHelper xmlHelper = new XMLHelper();
                         GeomertyStringConverter GSC = new GeomertyStringConverter(RootCanvas, graphAppearance);
-                        StreamReader streamReader = new StreamReader(openFileDlg.fileName);
+                        StreamReader streamReader = new StreamReader(openFileDlg.FileName);
                         string xmlString = streamReader.ReadToEnd();
                         List<BorderWithAdorner> borderWAList = GSC.PathGeometryFromString(xmlString);
                         foreach (var borderWA in borderWAList)
@@ -353,17 +353,17 @@ namespace GeometryTool
                     openFileDlg.Filter = "xml file|*.xml";      //只选择.xml文件
                     if (openFileDlg.ShowDialog() == true)       //打开对话框
                     {
-                        if (!string.IsNullOrEmpty(openFileDlg.fileName))    //如果文件名不为空
+                        if (!string.IsNullOrEmpty(openFileDlg.FileName))    //如果文件名不为空
                         {
                             XMLHelper xmlHelper = new XMLHelper();
                             GeomertyStringConverter GSC = new GeomertyStringConverter(RootCanvas, graphAppearance);
-                            Match _match = xmlHelper.ReadXml(openFileDlg.fileName);    //读取XML文件
+                            Match _match = xmlHelper.ReadXml(openFileDlg.FileName);    //读取XML文件
                             MatchCollection MatchList = Regex.Matches(_match.Groups[0].ToString(), @"M[\.\,\s\+\-\dLACQZ]+");
                             foreach (Match item in MatchList)
                             {
                                 BorderWithAdorner borderWA = GSC.GeomotryFromString(item.Groups[0].ToString());                  //转化成为图形
                                 RootCanvas.Children.Add(borderWA);              //把图形添加到Canvas中
-                                foreach (var ellipse in borderWA.ellipseList)   //把点添加到Canvas中
+                                foreach (var ellipse in borderWA.EllipseList)   //把点添加到Canvas中
                                 {
                                     BorderWithDrag borderWD = ellipse.Parent as BorderWithDrag;
                                     RootCanvas.Children.Add(borderWD);
@@ -685,7 +685,7 @@ namespace GeometryTool
                 }
                 if (borderWA != null)
                 {
-                    BorderWithDrag borderWD = borderWA.ellipseList[0].Parent as BorderWithDrag;
+                    BorderWithDrag borderWD = borderWA.EllipseList[0].Parent as BorderWithDrag;
                     if (borderWD != null)
                     {
                         BorderLock borderLock = new BorderLock(borderWD);
@@ -911,7 +911,7 @@ namespace GeometryTool
         void AddGeometryIntoCanvas(BorderWithAdorner vBorderWA,int x,int y)
         {
             this.RootCanvas.Children.Add(vBorderWA);
-            foreach (var item in vBorderWA.ellipseList)           //修改图形的点的位置，并把他放进Canvas
+            foreach (var item in vBorderWA.EllipseList)           //修改图形的点的位置，并把他放进Canvas
             {
                 Point p = (item.Data as EllipseGeometry).Center;
                 (item.Data as EllipseGeometry).Center = new Point() { X = p.X + x, Y = p.Y + y };
@@ -983,7 +983,7 @@ namespace GeometryTool
                 BorderWithAdorner borderWA = MainWindow.SelectedBorder;
                 borderWA.GetFourPoint(borderWA);                        //计算这个图形四个角落的位置
                 double averageY = (borderWA.MinY + borderWA.MaxY) / 2.0;
-                foreach (var item in borderWA.ellipseList)              //修改图形的点的位置
+                foreach (var item in borderWA.EllipseList)              //修改图形的点的位置
                 {
                     BorderWithDrag borderWD = item.Parent as BorderWithDrag;
                     if (borderWD.HasOtherPoint)
@@ -1010,7 +1010,7 @@ namespace GeometryTool
                 BorderWithAdorner borderWA = MainWindow.SelectedBorder;
                 borderWA.GetFourPoint(borderWA);                     //计算这个图形四个角落的位置
                 double averageX = (borderWA.MinX + borderWA.MaxX) / 2.0;
-                foreach (var item in borderWA.ellipseList)           //修改图形的点的位置
+                foreach (var item in borderWA.EllipseList)           //修改图形的点的位置
                 {
                     BorderWithDrag borderWD = item.Parent as BorderWithDrag;
                     if (borderWD.HasOtherPoint)
@@ -1038,7 +1038,7 @@ namespace GeometryTool
                 borderWA.GetFourPoint(borderWA);    //计算这个图形四个角落的位置
                 BorderWithAdorner newBorderWA = borderWA.CopyBorder(borderWA);  //获取右镜像的图形的副本
                 this.RootCanvas.Children.Add(newBorderWA);
-                foreach (var item in newBorderWA.ellipseList)           //修改图形的点的位置，并把他放进Canvas
+                foreach (var item in newBorderWA.EllipseList)           //修改图形的点的位置，并把他放进Canvas
                 {
                     Point p = (item.Data as EllipseGeometry).Center;
                     (item.Data as EllipseGeometry).Center = new Point() { X = p.X - (p.X - borderWA.MaxX) * 2, Y = p.Y };
@@ -1062,7 +1062,7 @@ namespace GeometryTool
                 borderWA.GetFourPoint(borderWA);    //计算这个图形四个角落的位置
                 BorderWithAdorner newBorderWA = borderWA.CopyBorder(borderWA);  //获取左镜像的图形的副本
                 this.RootCanvas.Children.Add(newBorderWA);
-                foreach (var item in newBorderWA.ellipseList)           //修改图形的点的位置，并把他放进Canvas
+                foreach (var item in newBorderWA.EllipseList)           //修改图形的点的位置，并把他放进Canvas
                 {
                     Point p = (item.Data as EllipseGeometry).Center;
                     (item.Data as EllipseGeometry).Center = new Point() { X = p.X - (p.X - borderWA.MinX) * 2, Y = p.Y };
@@ -1086,7 +1086,7 @@ namespace GeometryTool
                 borderWA.GetFourPoint(borderWA);    //计算这个图形四个角落的位置
                 BorderWithAdorner newBorderWA = borderWA.CopyBorder(borderWA);  //获取下镜像的图形的副本
                 this.RootCanvas.Children.Add(newBorderWA);
-                foreach (var item in newBorderWA.ellipseList)           //修改图形的点的位置，并把他放进Canvas
+                foreach (var item in newBorderWA.EllipseList)           //修改图形的点的位置，并把他放进Canvas
                 {
                     Point p = (item.Data as EllipseGeometry).Center;
                     (item.Data as EllipseGeometry).Center = new Point() { X = p.X, Y = p.Y - (p.Y - borderWA.MaxY) * 2 };
@@ -1110,7 +1110,7 @@ namespace GeometryTool
                 borderWA.GetFourPoint(borderWA);    //计算这个图形四个角落的位置
                 BorderWithAdorner newBorderWA = borderWA.CopyBorder(borderWA);  //获取上镜像的图形的副本
                 this.RootCanvas.Children.Add(newBorderWA);
-                foreach (var item in newBorderWA.ellipseList)           //修改图形的点的位置，并把他放进Canvas
+                foreach (var item in newBorderWA.EllipseList)           //修改图形的点的位置，并把他放进Canvas
                 {
                     Point p = (item.Data as EllipseGeometry).Center;
                     (item.Data as EllipseGeometry).Center = new Point() { X = p.X, Y = p.Y - (p.Y - borderWA.MinY) * 2 };
