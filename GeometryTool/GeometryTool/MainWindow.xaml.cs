@@ -586,29 +586,42 @@ namespace GeometryTool
         /// <param name="e"></param>
         private void Open_Click(object sender, RoutedEventArgs e)
         {
-            Microsoft.Win32.OpenFileDialog openFileDlg = new Microsoft.Win32.OpenFileDialog();
-            openFileDlg.DefaultExt = ".xml";
-            openFileDlg.Filter = "xml file|*.xml";      //只选择.xml文件
-            if (openFileDlg.ShowDialog() == true)       //打开对话框
+            if (isSava == false)
             {
-                if (!string.IsNullOrEmpty(openFileDlg.FileName))    //如果文件名不为空
+                MessageBoxResult mbr = MessageBox.Show("                                     亲\r\n                         是否要保存当前文件", "", MessageBoxButton.YesNoCancel);
+                if (mbr == MessageBoxResult.Yes)
                 {
-                    XMLHelper xmlHelper = new XMLHelper();
-                    GeomertyStringConverter GSC = new GeomertyStringConverter(RootCanvas, graphAppearance);
-                    Match _match = xmlHelper.ReadXml(openFileDlg.FileName);    //读取XML文件
-                    MatchCollection MatchList = Regex.Matches(_match.Groups[0].ToString(), @"M[\.\,\s\+\-\dLACQZ]+");
-                    foreach (Match item in MatchList)
+                    SaveXML_Click(null, null);
+                    RootCanvas.Children.Clear();
+                    isSava = true;
+                }
+                else if (mbr == MessageBoxResult.No)
+                {
+                    Microsoft.Win32.OpenFileDialog openFileDlg = new Microsoft.Win32.OpenFileDialog();
+                    openFileDlg.DefaultExt = ".xml";
+                    openFileDlg.Filter = "xml file|*.xml";      //只选择.xml文件
+                    if (openFileDlg.ShowDialog() == true)       //打开对话框
                     {
-                        BorderWithAdorner borderWA = GSC.GeomotryFromString(item.Groups[0].ToString());                  //转化成为图形
-                        RootCanvas.Children.Add(borderWA);              //把图形添加到Canvas中
-                        foreach (var ellipse in borderWA.EllipseList)   //把点添加到Canvas中
+                        if (!string.IsNullOrEmpty(openFileDlg.FileName))    //如果文件名不为空
                         {
-                            BorderWithDrag borderWD = ellipse.Parent as BorderWithDrag;
-                            RootCanvas.Children.Add(borderWD);
-                            BorderLock borderLock = new BorderLock(borderWD);
-                            borderLock.Lock(((borderWD.Child as System.Windows.Shapes.Path).Data as EllipseGeometry).Center);
-                        }
+                            XMLHelper xmlHelper = new XMLHelper();
+                            GeomertyStringConverter GSC = new GeomertyStringConverter(RootCanvas, graphAppearance);
+                            Match _match = xmlHelper.ReadXml(openFileDlg.FileName);    //读取XML文件
+                            MatchCollection MatchList = Regex.Matches(_match.Groups[0].ToString(), @"M[\.\,\s\+\-\dLACQZ]+");
+                            foreach (Match item in MatchList)
+                            {
+                                BorderWithAdorner borderWA = GSC.GeomotryFromString(item.Groups[0].ToString());                  //转化成为图形
+                                RootCanvas.Children.Add(borderWA);              //把图形添加到Canvas中
+                                foreach (var ellipse in borderWA.EllipseList)   //把点添加到Canvas中
+                                {
+                                    BorderWithDrag borderWD = ellipse.Parent as BorderWithDrag;
+                                    RootCanvas.Children.Add(borderWD);
+                                    BorderLock borderLock = new BorderLock(borderWD);
+                                    borderLock.Lock(((borderWD.Child as System.Windows.Shapes.Path).Data as EllipseGeometry).Center);
+                                }
 
+                            }
+                        }
                     }
                 }
             }
@@ -1010,7 +1023,6 @@ namespace GeometryTool
                     RootCanvas.Children.Clear();
                     isSava = true;
                 }
-                    
             }
         }
 
