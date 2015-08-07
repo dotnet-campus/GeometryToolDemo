@@ -67,6 +67,10 @@ namespace GeometryTool
 
                 foreach (var item in borderWA.EllipseList)                  //根据公式来计算算旋转后的位置
                 {
+                    if ((item.Parent as BorderWithDrag).HasOtherPoint)
+                    {
+                        continue;
+                    }
                     EllipseGeometry ellipse = item.Data as EllipseGeometry;
                     Point oldPoint = ellipse.Center;
                     double newX = (oldPoint.X - centerX) * Math.Cos(angle) - (oldPoint.Y - centerY) * Math.Sin(angle) + centerX;

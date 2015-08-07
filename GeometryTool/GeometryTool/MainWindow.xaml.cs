@@ -45,23 +45,24 @@ namespace GeometryTool
         public static BorderWithAdorner CopyBorderWA;   //用于存储剪切或者复制的图形
         public static int PasteCount;           //表示当前图形被复制了多少遍
         public static string ActionMode = "";   //表示当前鼠标的模式
-        public static int GridSize = 0;                       //表示画板大小
+        public static int GridSize = 0;         //表示画板大小
+        public static int LowestLevel = -1;      //表示最底层大小
+        public static int HightestLevel = 1;    //表示最顶层大小
         public int isStartPoint;                //绘制直线的时候，表示是否为第一个点
-        System.Windows.Shapes.Path linePath;    //表示绘制直线的时候，直线的Path
-        System.Windows.Shapes.Path ellipsePath; //表示绘制图形的时候，点所在Path
+        GeometryPath.Path linePath;             //表示绘制直线的时候，直线的Path
+        GeometryPath.Path ellipsePath;          //表示绘制图形的时候，点所在Path
         GraphAdd graphAdd;                      //表示绘制动作的类
         GraphAppearance graphAppearance;        //表示图形的外观
         PathFigure pathFigure;                  //表示绘制直线的时候，直线所在的PathFigure
-        System.Windows.Shapes.Path circlePath;  //表示绘制圆的时候，圆所在的Path
+        GeometryPath.Path circlePath;           //表示绘制圆的时候，圆所在的Path
         bool isClose;                           //表示图形是否是闭合的
-        System.Windows.Shapes.Path trianglePath;//表示绘制三角形的时候，三角形所在的Path
-        System.Windows.Shapes.Path rectanglePath;//表示绘制正方形的时候，正方形所在的Path
+        GeometryPath.Path trianglePath;         //表示绘制三角形的时候，三角形所在的Path
+        GeometryPath.Path rectanglePath;        //表示绘制正方形的时候，正方形所在的Path
         bool canMove = false;                   //表示图形是否可以拖动
-        System.Windows.Shapes.Path ellipseGeometryPath; //表示绘制椭圆的时候，椭圆所在的Path
-        System.Windows.Shapes.Path curvePath;   //表示绘制曲线的时候，曲线所在的Path
-        System.Windows.Shapes.Path QBezierPath; //表示绘制二次方贝塞尔曲线时候，曲线所在的Path
-        System.Windows.Shapes.Path BezierPath;  //表示绘制三次方贝塞尔曲线时候，曲线所在的Path
-        List<System.Windows.Shapes.Path> EllipseList;
+        GeometryPath.Path ellipseGeometryPath;  //表示绘制椭圆的时候，椭圆所在的Path
+        GeometryPath.Path QBezierPath;          //表示绘制二次方贝塞尔曲线时候，曲线所在的Path
+        GeometryPath.Path BezierPath;           //表示绘制三次方贝塞尔曲线时候，曲线所在的Path
+        List<GeometryPath.Path> EllipseList;
         BitmapImage BackgroundImage;
         bool isSava;
         public string FileName;
@@ -421,12 +422,6 @@ namespace GeometryTool
                         line2.Size = new Size() { Height = Math.Abs(p.Y - oldPoint1.Y) };
                     }
                     e.Handled = true;
-                }
-                else if (MainWindow.ActionMode == "AddCurve")  //修改曲线的位置
-                {
-                    PathGeometry circel = curvePath.Data as PathGeometry;
-                    ArcSegment line1 = circel.Figures[0].Segments[0] as ArcSegment;
-                    line1.Point = new Point() { X = p.X, Y = p.Y };
                 }
                 else if (MainWindow.ActionMode == "QBezier")   //修改二次方贝塞尔曲线的位置
                 {

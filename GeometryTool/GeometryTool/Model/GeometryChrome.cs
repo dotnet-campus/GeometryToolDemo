@@ -35,6 +35,15 @@ namespace GeometryTool
             DeleteItem.Command = RoutedCommands.DeleteCommand;
             this.ContextMenu.Items.Add(DeleteItem);
 
+            MenuItem TopItem = new MenuItem();
+            TopItem.Header = "至于顶层";
+            TopItem.Click+=TopItem_Click;
+            this.ContextMenu.Items.Add(TopItem);
+            MenuItem BottomItem = new MenuItem();
+
+            BottomItem.Header = "至于底层";
+            BottomItem.Click += BottomItem_Click;
+            this.ContextMenu.Items.Add(BottomItem);
         }
 
         public static void Arrange(GeometryChrome vGC)
@@ -166,8 +175,28 @@ namespace GeometryTool
         }
 
         /// <summary>
-        /// 添加删除/复制/剪切的路由事件
+        /// 把图形至于顶层
         /// </summary>
-   
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void TopItem_Click(object sender, RoutedEventArgs e)
+        {
+            BorderWithAdorner borderWA = this.DataContext as BorderWithAdorner;
+            Canvas.SetZIndex(borderWA, MainWindow.HightestLevel++);
+            for (var i = 0; i < borderWA.EllipseList.Count; ++i)
+            {
+                Canvas.SetZIndex(borderWA.EllipseList[i].Parent as BorderWithDrag, MainWindow.HightestLevel);
+            }
+        }
+
+        public void BottomItem_Click(object sender, RoutedEventArgs e) 
+        {
+            BorderWithAdorner borderWA = this.DataContext as BorderWithAdorner;
+            Canvas.SetZIndex(borderWA, MainWindow.LowestLevel--);
+            for (var i = 0; i < borderWA.EllipseList.Count; ++i)
+            {
+                Canvas.SetZIndex(borderWA.EllipseList[i].Parent as BorderWithDrag, MainWindow.LowestLevel);
+            }
+        }
     }
 }
