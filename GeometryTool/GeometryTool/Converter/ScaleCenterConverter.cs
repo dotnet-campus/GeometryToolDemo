@@ -7,6 +7,9 @@ using System.Windows.Data;
 
 namespace GeometryTool
 {
+    /// <summary>
+    /// 进行画板缩放之后，调整画板的位置
+    /// </summary>
     class ScaleCenterConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

@@ -3,6 +3,9 @@ using System.Windows.Data;
 
 namespace GeometryTool
 {
+    /// <summary>
+    /// 线条粗细的转换
+    /// </summary>
     class SliderConverterToDouble : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

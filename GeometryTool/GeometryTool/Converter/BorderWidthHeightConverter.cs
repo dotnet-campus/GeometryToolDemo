@@ -7,6 +7,10 @@ using System.Windows.Data;
 
 namespace GeometryTool
 {
+
+    /// <summary>
+    /// 用于使画板自动适应屏幕的大小
+    /// </summary>
     public class BorderWidthHeightConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
