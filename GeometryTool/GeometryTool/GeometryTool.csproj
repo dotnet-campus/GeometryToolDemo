@@ -57,7 +57,6 @@
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
     <Compile Include="Action\BorderLock.cs" />
-    <Compile Include="Action\SizeConverter.cs" />
     <Compile Include="Converter\BorderWidthHeightConverter.cs" />
     <Compile Include="Converter\CanvasScaleTransformConverter.cs" />
     <Compile Include="Converter\IntBoolConverter.cs" />

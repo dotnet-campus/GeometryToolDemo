@@ -274,74 +274,6 @@ namespace GeometryTool
         }
 
         /// <summary>
-        /// 在面板中绘制一个多边形
-        /// </summary>
-        /// <param name="vPoint">需要绘制的点</param>
-        /// <param name="vGraphAppearance">图形的外形</param>
-        /// <param name="vRootCanvas">所在的面板</param>
-        /// <param name="vPath">返回的Path</param>
-        /// <param name="count">代表是几边型</param>
-        public void AddGeometry(Point vPoint,GraphAppearance vGraphAppearance, Canvas vRootCanvas,out Path vPath,int count,bool isClose)
-        {
-
-            //设置直线的外观
-            vPath = new Path()
-            {
-                Stroke = vGraphAppearance.Stroke,
-                StrokeThickness = vGraphAppearance.StrokeThickness,
-            };
-
-            if (vGraphAppearance.Fill != Brushes.Transparent)
-            {
-                vPath.Fill = vGraphAppearance.Fill;
-            }
-            //定义直线
-            
-            PathGeometry pathGeometry = new PathGeometry();
-            BorderWithAdorner borderWA = new BorderWithAdorner();
-            borderWA.Child = vPath;
-            vPath.Data =pathGeometry;
-            vRootCanvas.Children.Add(borderWA);
-            pathGeometry.Figures = new PathFigureCollection();
-            PathFigure pathFigure = new PathFigure() { IsClosed = isClose };
-            pathGeometry.Figures.Add(pathFigure);
-            PathSegmentCollection segmentCollection = new PathSegmentCollection();
-            pathFigure.Segments = segmentCollection;
-            
-            
-            //定义第一个点,并绑定起点
-            Path ellipsePath;
-            AddPointWithNoBorder(vPoint, vGraphAppearance, vRootCanvas, out  ellipsePath);
-            List<System.Windows.Shapes.Path> EllipseList=new List<Path>();
-            borderWA.EllipseList.Add(ellipsePath);
-            EllipseList.Add(ellipsePath);
-            BorderWithDrag border = new BorderWithDrag(vPath, 1, EllipseList);
-            border.Child = ellipsePath;
-            vRootCanvas.Children.Add(border);
-            EllipseGeometry ellipseGeometry = ellipsePath.Data as EllipseGeometry;
-            Binding FirstPointBD = new Binding("Center") { Source = ellipseGeometry };
-            FirstPointBD.Mode = BindingMode.TwoWay;
-            BindingOperations.SetBinding(pathFigure, PathFigure.StartPointProperty, FirstPointBD);
-            
-            for (int i = 0; i < count-1; ++i)
-            {
-                AddPointWithNoBorder(vPoint, vGraphAppearance, vRootCanvas, out  ellipsePath);  //添加点
-                EllipseList.Add(ellipsePath);
-                borderWA.EllipseList.Add(ellipsePath);
-                BorderWithDrag border2 = new BorderWithDrag(vPath, i+2, EllipseList);
-                border2.Child = ellipsePath;
-                vRootCanvas.Children.Add(border2);
-                ellipseGeometry = ellipsePath.Data as EllipseGeometry;
-                LineSegment firstLineSe = new LineSegment();
-                Binding SecondPointBD = new Binding("Center") { Source = ellipseGeometry };
-                SecondPointBD.Mode = BindingMode.TwoWay;
-                BindingOperations.SetBinding(firstLineSe, LineSegment.PointProperty, SecondPointBD); //绑定Point
-                pathFigure.Segments.Add(firstLineSe);
-             }
-            
-        }
-
-        /// <summary>
         /// 绘制一个圆
         /// </summary>
         /// <param name="vPoint"></param>
@@ -413,62 +345,6 @@ namespace GeometryTool
             secondLineSe.Size = new Size() { Height = 0.1, Width = 0.1 };
             firstLineSe.Size = new Size() { Height = 0.1, Width = 0.1 };
             return borderWA;
-        }
-
-        /// <summary>
-        /// 绘制曲线
-        /// </summary>
-        /// <param name="vPoint"></param>
-        /// <param name="vGraphAppearance"></param>
-        /// <param name="vRootCanvas"></param>
-        /// <param name="vPath"></param>
-        public void AddCurve(Point vPoint, GraphAppearance vGraphAppearance, Canvas vRootCanvas, out Path vPath)
-        {
-            //设置直线的外观
-            vPath = new Path()
-            {
-                Stroke = vGraphAppearance.Stroke,
-                StrokeThickness = vGraphAppearance.StrokeThickness,
-            };
-
-            if (vGraphAppearance.Fill != Brushes.Transparent)
-            {
-                vPath.Fill = vGraphAppearance.Fill;
-            }
-
-            //定义第一个PathFigure
-            PathGeometry pathGeometry = new PathGeometry();
-            vPath.Data = pathGeometry;
-            BorderWithAdorner borderWA = new BorderWithAdorner();
-            borderWA.Child = vPath;
-            vRootCanvas.Children.Add(borderWA);
-            pathGeometry.Figures = new PathFigureCollection();
-            PathFigure pathFigure = new PathFigure();
-            pathGeometry.Figures.Add(pathFigure);
-            PathSegmentCollection segmentCollection = new PathSegmentCollection();
-            pathFigure.Segments = segmentCollection;
-
-            //绘制第一个点,并绑定起点
-            Path ellipsePath;
-            AddPoint(vPoint, vGraphAppearance, vRootCanvas, out  ellipsePath);
-            EllipseGeometry ellipseGeometry = ellipsePath.Data as EllipseGeometry;
-            borderWA.EllipseList.Add(ellipsePath);
-            EllipseGeometry startGeometry = ellipseGeometry;
-            Binding FirstPointBD = new Binding("Center") { Source = ellipseGeometry };
-            FirstPointBD.Mode = BindingMode.TwoWay;
-            BindingOperations.SetBinding(pathFigure, PathFigure.StartPointProperty, FirstPointBD);
-
-            //绘制第二个点和第一条曲线，并绑定终点
-            AddPoint(vPoint, vGraphAppearance, vRootCanvas, out  ellipsePath);  //添加点
-            ellipseGeometry = ellipsePath.Data as EllipseGeometry;
-            borderWA.EllipseList.Add(ellipsePath);
-            ArcSegment firstLineSe = new ArcSegment() { Size = new Size() { Width=50,Height=25} };
-            Binding SecondPointBD = new Binding("Center") { Source = ellipseGeometry };
-            SecondPointBD.Mode = BindingMode.TwoWay;
-            BindingOperations.SetBinding(firstLineSe, ArcSegment.PointProperty, SecondPointBD); //绑定Point
-            pathFigure.Segments.Add(firstLineSe);
-
-            
         }
         
     }
