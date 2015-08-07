@@ -160,12 +160,6 @@ namespace GeometryTool
         {
             BorderWithAdorner borderWA = this.DataContext as BorderWithAdorner;
             Canvas rootCanvas = MainWindow.myRootCanvas as Canvas;
-            //Canvas rootCanvasParent = rootCanvas.Parent as Canvas;
-            //Border canvasBorder = rootCanvasParent.Parent as Border;
-            //ScrollViewer ScrollViewer = canvasBorder.Parent as ScrollViewer;
-            //Grid rootGrid = ScrollViewer.Parent as Grid;
-            //MainWindow mainWindow = rootGrid.Parent as MainWindow;      //获取MainWindow实例，为了修改CanPaste属性
-
             rootCanvas.Children.Remove(borderWA);       //移除图形
             foreach (var item in borderWA.EllipseList)  //移除图形上面的点
             {
@@ -189,6 +183,11 @@ namespace GeometryTool
             }
         }
 
+        /// <summary>
+        /// 把图形至于底层
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void BottomItem_Click(object sender, RoutedEventArgs e) 
         {
             BorderWithAdorner borderWA = this.DataContext as BorderWithAdorner;

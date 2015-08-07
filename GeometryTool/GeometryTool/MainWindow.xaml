@@ -24,6 +24,7 @@
                 <ResourceDictionary Source="Resources/LableStyle.xaml"/>
                 <ResourceDictionary Source="Resources/RightTabControlStyle.xaml"/>
                 <ResourceDictionary Source="Resources/ButtonImageStyle.xaml"/>
+                <ResourceDictionary Source="Resources/ToolBarImage.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             
         </ResourceDictionary>
@@ -61,6 +62,13 @@
                     <Button  Click="Button_Click" Style="{StaticResource PulseButton}" >
                         <TextBlock FontSize="20" Text="另存为PNG"/>
                     </Button>
+                    <Button  x:Name="SaveDrawingImage" Click="SaveDrawingImage_Click" Style="{StaticResource PulseButton}" >
+                        <TextBlock FontSize="20" Text="另存为DI"/>
+                    </Button>
+                    <Button  x:Name="OpenDrawingImage" Click="OpenDrawingImage_Click"  Style="{StaticResource PulseButton}" >
+                        <TextBlock FontSize="20" Text="打开为DI"/>
+                    </Button>
+                    <Image ></Image>
                 </StackPanel>
             </TabItem>
             <TabItem Header="  图形  " IsSelected="True" >

@@ -320,5 +320,54 @@ namespace GeometryTool
             grapAdd.AddPointWithNoBorder(EllipsePoint, vGraphAppearance, vRootCanvas, out EllipsePath);
         }
 
-     }
+        /// <summary>
+        /// 构造PathGeometry
+        /// </summary>
+        /// <param name="vPath"></param>
+        /// <returns></returns>
+        public string StringFromPathGeometry(Path vPath)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine("          <GeometryDrawing Brush=\"" + vPath.Fill.ToString() + "\">");
+            stringBuilder.AppendLine("              <GeometryDrawing.Geometry>");
+            stringBuilder.AppendLine("                  <PathGeometry Figures=\"" + vPath.Data + (Regex.IsMatch(vPath.Data.ToString(),"[Zz]")==true?" Z":"")+"\"  />");
+            stringBuilder.AppendLine("              </GeometryDrawing.Geometry>");
+            stringBuilder.AppendLine("              <GeometryDrawing.Pen>");
+            stringBuilder.AppendLine("                  <Pen Thickness=\""+vPath.StrokeThickness+"\" Brush=\""+vPath.Stroke.ToString()+"\" />");
+            stringBuilder.AppendLine("              </GeometryDrawing.Pen>");
+            stringBuilder.Append("          </GeometryDrawing>");
+            return stringBuilder.ToString();
+        }
+
+        /// <summary>
+        /// 从XML中读取图形
+        /// </summary>
+        /// <param name="vXMLString"></param>
+        /// <returns></returns>
+        public List<BorderWithAdorner> PathGeometryFromString(string vXMLString)
+        {
+            string pattern=@"<GeometryDrawing Brush=""([#\dA-Fa-f]*)"">\s*<GeometryDrawing.Geometry>\s*<PathGeometry Figures=""([\s\,\.\+\-\dA-Za-z]*)""  />\s*</GeometryDrawing.Geometry>\s*<GeometryDrawing.Pen>\s*<Pen Thickness=""([\d\.\-\+]*)"" Brush=""([#\dA-Fa-f]*)"" />";
+            MatchCollection matchList = Regex.Matches(vXMLString, pattern);
+            List<BorderWithAdorner> borderWAList = new List<BorderWithAdorner>();
+            foreach (Match item in matchList)
+            {
+                string BackgroundColor = item.Groups[1].ToString();
+                string StrokeColor=item.Groups[4].ToString();
+                string MiniLanguage=item.Groups[2].ToString();
+                string StrokeThickness=item.Groups[3].ToString();
+                GraphAppearance graphAppearance = new GraphAppearance();
+                graphAppearance.Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString(BackgroundColor));
+                graphAppearance.Stroke = new SolidColorBrush((Color)ColorConverter.ConvertFromString(StrokeColor));
+                graphAppearance.StrokeThickness = Convert.ToDouble(StrokeThickness);
+                GeomertyStringConverter gsc = new GeomertyStringConverter(MainWindow.myRootCanvas,graphAppearance);
+                BorderWithAdorner newBorderWA = gsc.GeomotryFromString(MiniLanguage);   //把Mini-Language转化成为图形，实现图形的深度复制
+                Path newPath = newBorderWA.Child as Path;
+                newPath.Stroke = graphAppearance.Stroke;
+                newPath.StrokeThickness = graphAppearance.StrokeThickness;
+                newPath.Fill = graphAppearance.Fill;
+                borderWAList.Add(newBorderWA);
+            }
+            return borderWAList;
+        }
+    }
 }
