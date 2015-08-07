@@ -24,9 +24,26 @@
                 <ResourceDictionary Source="Resources/RadioButtonStyle.xaml"/>
                 <ResourceDictionary Source="Resources/FontStyle.xaml"/>
                 <ResourceDictionary Source="Resources/RightTabControl.xaml"/>
+                <ResourceDictionary Source="Resources/ButtonImage.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            
+            <!--<DrawingImage x:Key="DemoImage">
+                <DrawingImage.Drawing>
+                    <GeometryDrawing Brush="Red">
+                        <GeometryDrawing.Geometry>
+                            <StreamGeometry>m0,0 L10,10 20,10 z</StreamGeometry>
+                        </GeometryDrawing.Geometry>
+                    </GeometryDrawing>
+                </DrawingImage.Drawing>
+                <DrawingImage.Drawing>
+                    <GeometryDrawing Brush="Red">
+                        <GeometryDrawing.Geometry>
+                            <StreamGeometry>m20,20 L30,30 40,20 z</StreamGeometry>
+                        </GeometryDrawing.Geometry>
+                    </GeometryDrawing>
+                </DrawingImage.Drawing>
+            </DrawingImage>-->
         </ResourceDictionary>
-        
     </Window.Resources>
     <Grid x:Name="RootGrid" Background="#E3E7EA" >
         <Grid.RowDefinitions>
@@ -39,13 +56,14 @@
             <ColumnDefinition  Width="230"/>
         </Grid.ColumnDefinitions>
 
+<!--ToopTip-->
         <TabControl Grid.Row="0" Grid.ColumnSpan="2" Background="#F1F1F1">
             <TabItem Header="  文件  " >
                 <StackPanel Orientation="Horizontal">
                     <Button  Click="OpenPNG_Click" Style="{StaticResource PulseButton}" >
-                        <TextBlock FontSize="20" Text="导入" ToolTip="导入背景"/>
+                        <TextBlock FontSize="20" Text="导入" ToolTip="导入背景" Margin="20,0,0,0"/>
                     </Button>
-                    <Button  x:Name="CreateNewCanvas" ToolTip="新建文件"  Style="{StaticResource PulseButton}" Command="local:RoutedCommands.NewCommand"  >
+                    <Button  x:Name="CreateNewCanvas" Margin="0" ToolTip="新建文件"  Style="{StaticResource PulseButton}" Command="local:RoutedCommands.NewCommand"  >
                         <TextBlock FontSize="20" Text="新建"/>
                     </Button>
                     <Button  ToolTip="打开文件"   Style="{StaticResource PulseButton}" Command="local:RoutedCommands.OpenCommand" >
@@ -109,6 +127,7 @@
             </TabItem>
         </TabControl>
 
+<!--画笔属性-->
         <Border BorderBrush="Black" Grid.Row="1" Grid.Column="1" BorderThickness="1,0,0,1"  Background="#F1F1F1">
             <StackPanel Margin="7,0,0,0">
                 <StackPanel  x:Name="PanProperty" >
@@ -120,7 +139,7 @@
                         <TabItem Header="线条颜色" Style="{StaticResource RightTabItemStyle1}">
                             <Grid Background="#F1F1F1">
                                 <StackPanel Orientation="Vertical"  Button.Click="StrokeColors_Click" >
-                                    <Border Height="35" Margin="0,-4,0,0"  >
+                                    <Border Height="35"  >
                                         <StackPanel Height="25" HorizontalAlignment="Left" VerticalAlignment="Center" Orientation="Horizontal">
                                             <Label SnapsToDevicePixels="True"    Content="当前颜色"/>
                                             <Border CornerRadius="3" BorderBrush="#CCCCCC" BorderThickness="1" >
@@ -222,10 +241,10 @@
                             <Grid Background="#F1F1F1">
                                 <StackPanel Orientation="Vertical"  Button.Click="FillColors_Click" >
                                     <Border Height="35"  >
-                                        <StackPanel Height="30" HorizontalAlignment="Left" VerticalAlignment="Center" Orientation="Horizontal">
+                                        <StackPanel Height="25" HorizontalAlignment="Left" VerticalAlignment="Center" Orientation="Horizontal">
                                             <Label SnapsToDevicePixels="True"    Content="当前颜色"/>
-                                            <Border CornerRadius="2" BorderBrush="Gray" BorderThickness="1" >
-                                                <Label x:Name="FillCurrentColor" Margin="3" Background="{Binding Path=Fill,Mode=TwoWay}" Height="20" Width="80"/>
+                                            <Border CornerRadius="3" BorderBrush="#CCCCCC" BorderThickness="1" >
+                                                <Label x:Name="FillCurrentColor" Margin="2" Background="{Binding Path=Fill,Mode=TwoWay}" Height="18" Width="80"/>
                                             </Border>
                                         </StackPanel>
                                     </Border>
@@ -346,7 +365,7 @@
                 </StackPanel>
 
 
-
+<!--图形操作-->
                 <StackPanel x:Name="GeometryOptions" Margin="0,10,0,0">
                     <Line X1="6" X2="210" Y1="20" Y2="20" Stroke="#79AC2E" StrokeThickness="1.5"></Line>
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal" Margin="0,0,0,5">
@@ -357,37 +376,37 @@
                         <TabItem Header="镜像" Style="{StaticResource RightTabItemStyle1}">
                             <Grid Background="#F1F1F1">
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                    <Border BorderBrush="Gray" Width="30" BorderThickness="1" Margin="10,0">
-                                        <Image Source="Image/Up.png" MouseDown="TopMirror_Click" Width="20" VerticalAlignment="Center" />
-                                    </Border>
-                                    <!--<Button x:Name="TopMirror" Content="上" Click="TopMirror_Click"/>-->
-                                    <Border BorderBrush="Gray" Width="30" BorderThickness="1,1,1,1" Margin="10,0">
-                                        <Image Source="Image/Down.png" MouseDown="BottomMirror_Click" Width="20" VerticalAlignment="Center" />
-                                    </Border>
-                                    <Border BorderBrush="Gray" Width="30" BorderThickness="1,1,1,1" Margin="10,0">
-                                        <Image Source="Image/Left.png" MouseDown="LetfMirror_Click" Width="20" VerticalAlignment="Center" />
-                                    </Border>
-                                    <Border BorderBrush="Gray" Width="30" BorderThickness="1,1,1,1" Margin="10,0">
-                                        <Image Source="Image/Right.png" MouseDown="RightMirror_Click" Width="20" VerticalAlignment="Center" />
-                                    </Border>
-                                </StackPanel>
+                                    <Button Style="{StaticResource ButtonImageStyle1}" Width="30" BorderThickness="1" Margin="10,0" >
+                                        <Image Source="Image/Up.png"   MouseLeftButtonDown="TopMirror_Click" VerticalAlignment="Center" />
+                                    </Button>
+                                    <Button Style="{StaticResource ButtonImageStyle1}" Width="30" BorderThickness="1" Margin="10,0" >
+                                        <Image Source="Image/Down.png"  MouseLeftButtonDown="BottomMirror_Click" VerticalAlignment="Center" />
+                                    </Button>
+                                    <Button Style="{StaticResource ButtonImageStyle1}" Width="30" BorderThickness="1" Margin="10,0" >
+                                        <Image Source="Image/Left.png"  MouseLeftButtonDown="LetfMirror_Click" VerticalAlignment="Center" />
+                                    </Button>
+                                    <Button Style="{StaticResource ButtonImageStyle1}" Width="30" BorderThickness="1" Margin="10,0" >
+                                        <Image Source="Image/Right.png" MouseLeftButtonDown="RightMirror_Click"  VerticalAlignment="Center" />
+                                    </Button>
+                                    </StackPanel>
                             </Grid>
                         </TabItem>
                         <TabItem Header="翻转" Style="{StaticResource RightTabItemStyle2}">
                             <Grid Background="#F1F1F1">
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Background="{x:Null}">
-                                    <Border BorderBrush="Gray" Width="30" BorderThickness="1" Margin="10,0">
-                                        <Image Source="Image/DowntoUp.png" MouseDown="VerticalOverturn_Click" Width="20" VerticalAlignment="Center" />
-                                    </Border>
-                                    <Border BorderBrush="Gray" Width="30" BorderThickness="1,1,1,1" Margin="10,0">
-                                        <Image Source="Image/RighttoLeft.png" MouseDown="HorizontalOverturn_Click" Width="20" VerticalAlignment="Center" />
-                                    </Border>
+                                    <Button Style="{StaticResource ButtonImageStyle1}" Width="30" BorderThickness="1" Margin="10,0" >
+                                        <Image Source="Image/DowntoUp.png" MouseLeftButtonDown="VerticalOverturn_Click"  VerticalAlignment="Center" />
+                                    </Button>
+                                    <Button Style="{StaticResource ButtonImageStyle1}" Width="30" BorderThickness="1" Margin="10,0" >
+                                        <Image Source="Image/RighttoLeft.png" MouseLeftButtonDown="HorizontalOverturn_Click"  VerticalAlignment="Center" />
+                                    </Button>
                                 </StackPanel>
                             </Grid>
                         </TabItem>
                     </TabControl>
                 </StackPanel>
-
+                
+<!--画板设置-->
                 <StackPanel Margin="0,10,0,0" >
                     <Line X1="6" X2="210" Y1="20" Y2="20" Stroke="#79AC2E" StrokeThickness="1.5"></Line>
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal" Margin="0,0,0,5">
@@ -421,7 +440,7 @@
             </StackPanel>
         </Border>
 
-
+<!--画板-->
         <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
         <Border Grid.Row="1" x:Name="CanvasBorder" HorizontalAlignment="Center" VerticalAlignment="Center"  
                      Width="{Binding ElementName=RootGrid,Path=ActualWidth,Converter={StaticResource BorderWidthHeightConverter},ConverterParameter=215}"

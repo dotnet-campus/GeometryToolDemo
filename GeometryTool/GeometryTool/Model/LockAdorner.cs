@@ -11,13 +11,16 @@ using System.Windows.Media;
 namespace GeometryTool
 {
     /// <summary>
-    /// 融合的Adorner
+    /// 融合点时锁的Adorner
     /// </summary>
     public class LockAdorner: Adorner
     {
         private VisualCollection visuals;
-        public LockChrome chrome;
+        public LockChrome chrome;       //锁的样式
 
+        /// <summary>
+        /// 重写的VisualChildrenCount
+        /// </summary>
         protected override int VisualChildrenCount
         {
             get
@@ -26,6 +29,10 @@ namespace GeometryTool
             }
         }
 
+        /// <summary>
+        /// 重写的构造函数
+        /// </summary>
+        /// <param name="borderWA"></param>
         public LockAdorner(UIElement borderWA)
             : base(borderWA)
         {
@@ -36,12 +43,22 @@ namespace GeometryTool
             this.visuals.Add(this.chrome);
         }
 
+        /// <summary>
+        /// 重写的ArrangeOverride函数
+        /// </summary>
+        /// <param name="arrangeBounds"></param>
+        /// <returns></returns>
         protected override Size ArrangeOverride(Size arrangeBounds)
         {
             this.chrome.Arrange(new Rect(arrangeBounds));
             return arrangeBounds;
         }
 
+        /// <summary>
+        /// 重写的GetVisualChild的函数
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
         protected override Visual GetVisualChild(int index)
         {
             return this.visuals[index];

@@ -10,17 +10,14 @@ using System.Windows;
 
 namespace GeometryTool
 {
-    /*----------------------------------------------------------------
-
-           // 文件功能描述：定义图形的外观
-
-    ----------------------------------------------------------------*/
-    //public class GraphAppearance:DependencyObject
+   /// <summary>
+   /// 图形的外观
+   /// </summary>
     public class GraphAppearance
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private double strokeThickness;  //设置图形的线条的大小
+        private double strokeThickness;                         //设置图形的线条的大小
         public double StrokeThickness 
         { 
             get{return strokeThickness;}
@@ -33,9 +30,8 @@ namespace GeometryTool
                 }
             }
         }
-       // public static readonly DependencyProperty 
 
-        private DoubleCollection strokeDashArray;   //设置虚实
+        private DoubleCollection strokeDashArray;               //设置虚实
         public DoubleCollection StrokeDashArray
         {
             get { return strokeDashArray; }
@@ -77,7 +73,7 @@ namespace GeometryTool
             }
         }
 
-        public FillRule fillRule;
+        public FillRule fillRule;                               //填充规则
         public FillRule FillRule
         {
             get { return fillRule; }

@@ -9,14 +9,16 @@ using System.Windows.Shapes;
 
 namespace GeometryTool
 {
+    /// <summary>
+    /// 可拖动的选择框的边的外观
+    /// </summary>
     public class ResizeThumb : Thumb
     {
-        private RotateTransform rotateTransform;
-        private double angle;
-        private Point transformOrigin;
         private BorderWithAdorner borderWA;
-        private Canvas canvas;
 
+        /// <summary>
+        /// 构造函数，用于注册事件
+        /// </summary>
         public ResizeThumb()
         {
             DragStarted += new DragStartedEventHandler(this.ResizeThumb_DragStarted);
@@ -24,30 +26,14 @@ namespace GeometryTool
             DragCompleted+=ResizeThumb_DragCompleted;
         }
 
+        /// <summary>
+        /// 开始缩放
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ResizeThumb_DragStarted(object sender, DragStartedEventArgs e)
         {
             this.borderWA = this.DataContext as BorderWithAdorner;
-
-            if (this.borderWA != null)
-            {
-                this.canvas = VisualTreeHelper.GetParent(this.borderWA) as Canvas;
-
-                if (this.canvas != null)
-                {
-                    this.transformOrigin = this.borderWA.RenderTransformOrigin;
-
-                    this.rotateTransform = this.borderWA.RenderTransform as RotateTransform;
-                    if (this.rotateTransform != null)
-                    {
-                        this.angle = this.rotateTransform.Angle * Math.PI / 180.0;
-                    }
-                    else
-                    {
-                        this.angle = 0.0d;
-                    }
-
-                }
-            }
         }
 
         /// <summary>

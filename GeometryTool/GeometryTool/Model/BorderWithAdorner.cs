@@ -13,19 +13,21 @@ using System.Windows.Shapes;
 
 namespace GeometryTool
 {
+    /// <summary>
+    /// 包含着图形的border，主要是显示选择框
+    /// </summary>
     public class BorderWithAdorner : Border
     {
-        public GeometryAdorner GAdorner;
-        public double MaxX;
-        public double MinX;
-        public double MaxY;
-        public double MinY;
+        public GeometryAdorner GAdorner;    //图形的选择框
+        public double MaxX;                 //最大的X位置
+        public double MinX;                 //最小的X位置
+        public double MaxY;                 //最大的Y位置
+        public double MinY;                 //最小的Y位置
         public List<Path> EllipseList;
         public BorderWithAdorner()
         {
             this.MouseDown += Element_MouseDown;
             EllipseList = new List<Path>();
-            
         }
 
         /// <summary>
@@ -41,6 +43,9 @@ namespace GeometryTool
             }
         }
 
+        /// <summary>
+        /// 展示Adorner
+        /// </summary>
         public void ShowAdorner()
         {
             AdornerLayer layer = AdornerLayer.GetAdornerLayer(this.Parent as Canvas);

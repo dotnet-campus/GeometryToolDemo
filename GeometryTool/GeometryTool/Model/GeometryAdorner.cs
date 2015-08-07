@@ -10,11 +10,17 @@ using System.Windows.Shapes;
 
 namespace GeometryTool
 {
+    /// <summary>
+    /// 选择框的Adorner
+    /// </summary>
     public class GeometryAdorner:Adorner
     {
          private VisualCollection visuals;
-        public GeometryChrome chrome;
+        public GeometryChrome chrome;       //选择框的真正样式
 
+        /// <summary>
+        /// 重写的VisualChildrenCount函数
+        /// </summary>
         protected override int VisualChildrenCount
         {
             get
@@ -23,6 +29,10 @@ namespace GeometryTool
             }
         }
 
+        /// <summary>
+        /// 构造函数，主要是使chrome是DataContext为BorderWithAdorner
+        /// </summary>
+        /// <param name="borderWA"></param>
         public GeometryAdorner(BorderWithAdorner borderWA)
             : base(borderWA)
         {
@@ -33,6 +43,11 @@ namespace GeometryTool
             this.visuals.Add(this.chrome);
         }
 
+        /// <summary>
+        /// 重写的ArrangeOverride
+        /// </summary>
+        /// <param name="arrangeBounds"></param>
+        /// <returns></returns>
         protected override Size ArrangeOverride(Size arrangeBounds)
         {
             arrangeBounds.Height += 0.5;
@@ -41,6 +56,11 @@ namespace GeometryTool
             return arrangeBounds;
         }
 
+        /// <summary>
+        /// 重写GetVisualChild函数
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
         protected override Visual GetVisualChild(int index)
         {
             return this.visuals[index];

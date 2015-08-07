@@ -13,6 +13,9 @@ using System.Windows.Shapes;
 
 namespace GeometryTool
 {
+    /// <summary>
+    /// 锁真正的外观
+    /// </summary>
     public class LockChrome:Image
     {
         public bool isLock;

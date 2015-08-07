@@ -23,18 +23,15 @@ namespace GeometryTool
             MenuItem CopyItem = new MenuItem();
             CopyItem.Header = "复制";
             CopyItem.Command = RoutedCommands.CopyCommand;
-            //CopyItem.Click+=CopyItem_Click;
             this.ContextMenu.Items.Add(CopyItem);
 
             MenuItem CutItem = new MenuItem();
             CutItem.Header = "剪切";
             CutItem.Command = RoutedCommands.CutCommand;
-            //CutItem.Click+=CutItem_Click;
             this.ContextMenu.Items.Add(CutItem);
 
             MenuItem DeleteItem = new MenuItem();
             DeleteItem.Header = "删除";
-            //DeleteItem.Click+=DeleteItem_Click;
             DeleteItem.Command = RoutedCommands.DeleteCommand;
             this.ContextMenu.Items.Add(DeleteItem);
 
@@ -45,6 +42,7 @@ namespace GeometryTool
             BorderWithAdorner border = vGC.DataContext as BorderWithAdorner;
             vGC.ArrangeOverride(new Size() { Width = border.MaxX, Height = border.MaxY });
         }
+
         /// <summary>
         /// 绘制这个锁
         /// </summary>
@@ -153,11 +151,11 @@ namespace GeometryTool
         {
             BorderWithAdorner borderWA = this.DataContext as BorderWithAdorner;
             Canvas rootCanvas = MainWindow.myRootCanvas as Canvas;
-            Canvas rootCanvasParent = rootCanvas.Parent as Canvas;
-            Border canvasBorder = rootCanvasParent.Parent as Border;
-            ScrollViewer ScrollViewer = canvasBorder.Parent as ScrollViewer;
-            Grid rootGrid = ScrollViewer.Parent as Grid;
-            MainWindow mainWindow = rootGrid.Parent as MainWindow;      //获取MainWindow实例，为了修改CanPaste属性
+            //Canvas rootCanvasParent = rootCanvas.Parent as Canvas;
+            //Border canvasBorder = rootCanvasParent.Parent as Border;
+            //ScrollViewer ScrollViewer = canvasBorder.Parent as ScrollViewer;
+            //Grid rootGrid = ScrollViewer.Parent as Grid;
+            //MainWindow mainWindow = rootGrid.Parent as MainWindow;      //获取MainWindow实例，为了修改CanPaste属性
 
             rootCanvas.Children.Remove(borderWA);       //移除图形
             foreach (var item in borderWA.EllipseList)  //移除图形上面的点

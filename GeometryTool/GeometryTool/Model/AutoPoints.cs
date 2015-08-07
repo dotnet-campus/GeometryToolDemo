@@ -12,6 +12,9 @@ namespace GeometryTool
     /// </summary>
     public class AutoPoints 
     {
+        /// <summary>
+        /// 坐标点的换算，实现自动吸附功能
+        /// </summary>
         public Point GetAutoAdsorbPoint(Point oldPoint)
         {
             Point p = new Point();

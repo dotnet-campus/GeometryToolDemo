@@ -22,14 +22,13 @@ namespace GeometryTool
     {
         public LockAdorner lockAdornor;     //表示控件的装饰器
         public List<Path> EllipseList;      //用于表示所在的图形中所拥有的点集
-        public Path path;
         public Path GeometryPath;           //表示点所在的图形
-        public int Number;
-        public BorderWithDrag BrotherBorder;
+        public int Number;                  //表示这是图形中第几个点
+        public BorderWithDrag BrotherBorder;//表示同一图层中
         bool isDragDropInEffect = false;    //表示是否可以拖动
         public List<BorderWithDrag> PointList = new List<BorderWithDrag>();
-        public Point Pt;
-        bool CanLock=false;
+        public Point Pt;                    //表示当前点的位置
+        bool CanLock=false;                 //表示是否可以拖动该店
 
         /// <summary>
         /// 依赖属性，用于表示该位置是否含有多个点，来控制Adorner的显示
@@ -37,7 +36,6 @@ namespace GeometryTool
         public static readonly DependencyProperty HasOtherPointProperty =
            DependencyProperty.Register("HasOtherPoint", typeof(bool), typeof(BorderWithDrag),
            new FrameworkPropertyMetadata(false, null));
-
         public bool HasOtherPoint
         {
             get
@@ -60,6 +58,12 @@ namespace GeometryTool
             this.MouseLeftButtonUp += Element_MouseLeftButtonUp;
         }
 
+        /// <summary>
+        /// 有参数的构造函数，主要添加了点的删除功能
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="Number"></param>
+        /// <param name="EllipseList"></param>
         public BorderWithDrag(Path path, int Number, List<Path> EllipseList)
         {
             this.MouseLeftButtonDown += Element_MouseLeftButtonDown;
@@ -143,10 +147,7 @@ namespace GeometryTool
             isDragDropInEffect = false;
             _currEle.ReleaseMouseCapture();
             CanLock = false;
-           // e.Handled=true;
-            
         }
-
 
         /// <summary>
         /// 添加Border的删除功能
@@ -203,6 +204,7 @@ namespace GeometryTool
 
            return HitTestResultBehavior.Continue;
        }
+        
         /// <summary>
         /// 融合点
         /// </summary>
@@ -227,6 +229,10 @@ namespace GeometryTool
             this.HasOtherPoint = false;
         }
 
+        /// <summary>
+        /// 删除不必要的点
+        /// </summary>
+        /// <param name="item"></param>
         public void DeletePoint(BorderWithDrag item)
         {
             if (item.Number != 0)

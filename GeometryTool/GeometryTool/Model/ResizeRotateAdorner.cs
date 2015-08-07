@@ -5,6 +5,9 @@ using System.Windows.Media;
 
 namespace GeometryTool
 {
+    /// <summary>
+    /// 拖动边的Adorner
+    /// </summary>
     public class ResizeRotateAdorner : Adorner
     {
         private VisualCollection visuals;

@@ -843,102 +843,6 @@ namespace GeometryTool
         }
 
         /// <summary>
-        /// 实现上镜像功能
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void TopMirror_Click(object sender, RoutedEventArgs e)
-        {
-            if (MainWindow.SelectedBorder != null)
-            {
-                BorderWithAdorner borderWA = MainWindow.SelectedBorder;
-                borderWA.GetFourPoint(borderWA);    //计算这个图形四个角落的位置
-                BorderWithAdorner newBorderWA = borderWA.CopyBorder(borderWA);  //获取上镜像的图形的副本
-                this.RootCanvas.Children.Add(newBorderWA);
-                foreach (var item in newBorderWA.EllipseList)           //修改图形的点的位置，并把他放进Canvas
-                {
-                    Point p = (item.Data as EllipseGeometry).Center;
-                    (item.Data as EllipseGeometry).Center = new Point() { X = p.X, Y = p.Y - (p.Y - borderWA.MinY) * 2 };
-                    this.RootCanvas.Children.Add(item.Parent as BorderWithDrag);
-                }
-                isSava = false;
-            }
-            e.Handled = true;
-        }
-
-        /// <summary>
-        /// 实现下镜像功能
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void BottomMirror_Click(object sender, RoutedEventArgs e)
-        {
-            if (MainWindow.SelectedBorder != null)
-            {
-                BorderWithAdorner borderWA = MainWindow.SelectedBorder;
-                borderWA.GetFourPoint(borderWA);    //计算这个图形四个角落的位置
-                BorderWithAdorner newBorderWA = borderWA.CopyBorder(borderWA);  //获取下镜像的图形的副本
-                this.RootCanvas.Children.Add(newBorderWA);
-                foreach (var item in newBorderWA.EllipseList)           //修改图形的点的位置，并把他放进Canvas
-                {
-                    Point p = (item.Data as EllipseGeometry).Center;
-                    (item.Data as EllipseGeometry).Center = new Point() { X = p.X, Y = p.Y - (p.Y - borderWA.MaxY) * 2 };
-                    this.RootCanvas.Children.Add(item.Parent as BorderWithDrag);
-                }
-                isSava = false;
-            }
-            e.Handled = true;
-        }
-
-        /// <summary>
-        /// 实现左镜像
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void LetfMirror_Click(object sender, RoutedEventArgs e)
-        {
-            if (MainWindow.SelectedBorder != null)
-            {
-                BorderWithAdorner borderWA = MainWindow.SelectedBorder;
-                borderWA.GetFourPoint(borderWA);    //计算这个图形四个角落的位置
-                BorderWithAdorner newBorderWA = borderWA.CopyBorder(borderWA);  //获取左镜像的图形的副本
-                this.RootCanvas.Children.Add(newBorderWA);
-                foreach (var item in newBorderWA.EllipseList)           //修改图形的点的位置，并把他放进Canvas
-                {
-                    Point p = (item.Data as EllipseGeometry).Center;
-                    (item.Data as EllipseGeometry).Center = new Point() { X = p.X - (p.X - borderWA.MinX) * 2, Y = p.Y };
-                    this.RootCanvas.Children.Add(item.Parent as BorderWithDrag);
-                }
-                isSava = false;
-            }
-            e.Handled = true;
-        }
-
-        /// <summary>
-        /// 实现右镜像
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void RightMirror_Click(object sender, RoutedEventArgs e)
-        {
-            if (MainWindow.SelectedBorder != null)
-            {
-                BorderWithAdorner borderWA = MainWindow.SelectedBorder;
-                borderWA.GetFourPoint(borderWA);    //计算这个图形四个角落的位置
-                BorderWithAdorner newBorderWA = borderWA.CopyBorder(borderWA);  //获取右镜像的图形的副本
-                this.RootCanvas.Children.Add(newBorderWA);
-                foreach (var item in newBorderWA.EllipseList)           //修改图形的点的位置，并把他放进Canvas
-                {
-                    Point p = (item.Data as EllipseGeometry).Center;
-                    (item.Data as EllipseGeometry).Center = new Point() { X = p.X - (p.X - borderWA.MaxX) * 2, Y = p.Y };
-                    this.RootCanvas.Children.Add(item.Parent as BorderWithDrag);
-                }
-                isSava = false;
-            }
-            e.Handled = true;
-        }
-
-        /// <summary>
         /// 把图形放进rootCanvas
         /// </summary>
         /// <param name="vBorderWA"></param>
@@ -952,209 +856,6 @@ namespace GeometryTool
                 Point p = (item.Data as EllipseGeometry).Center;
                 (item.Data as EllipseGeometry).Center = new Point() { X = p.X + x, Y = p.Y + y };
                 this.RootCanvas.Children.Add(item.Parent as BorderWithDrag);
-            }
-        }
-
-        /// <summary>
-        /// 实现图形的垂直翻转
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void VerticalOverturn_Click(object sender, RoutedEventArgs e)
-        {
-            if (MainWindow.SelectedBorder != null)
-            {
-                BorderWithAdorner borderWA = MainWindow.SelectedBorder;
-                borderWA.GetFourPoint(borderWA);                        //计算这个图形四个角落的位置
-                double averageY = (borderWA.MinY + borderWA.MaxY) / 2.0;
-                foreach (var item in borderWA.EllipseList)              //修改图形的点的位置
-                {
-                    BorderWithDrag borderWD = item.Parent as BorderWithDrag;
-                    if (borderWD.HasOtherPoint)
-                    {
-                        continue;
-                    }
-                    Point p = (item.Data as EllipseGeometry).Center;
-                    (item.Data as EllipseGeometry).Center = new Point() { X = p.X, Y = p.Y - (p.Y - averageY) * 2 };
-                }
-                isSava = false;
-            }
-            e.Handled = true;
-        }
-
-        /// <summary>
-        /// 实现图形的水平翻转
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void HorizontalOverturn_Click(object sender, RoutedEventArgs e)
-        {
-            if (MainWindow.SelectedBorder != null)
-            {
-                BorderWithAdorner borderWA = MainWindow.SelectedBorder;
-                borderWA.GetFourPoint(borderWA);    //计算这个图形四个角落的位置
-                double averageX = (borderWA.MinX + borderWA.MaxX) / 2.0;
-                foreach (var item in borderWA.EllipseList)           //修改图形的点的位置
-                {
-                    BorderWithDrag borderWD = item.Parent as BorderWithDrag;
-                    if (borderWD.HasOtherPoint)
-                    {
-                        continue;
-                    }
-                    Point p = (item.Data as EllipseGeometry).Center;
-                    (item.Data as EllipseGeometry).Center = new Point() { X = p.X - (p.X - averageX) * 2, Y = p.Y };
-                }
-                isSava = false;
-            }
-            e.Handled = true;
-        }
-
-        /// <summary>
-        /// 修改曲线的RadiuX
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void EllipseRadiusX_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            TextBox tb = sender as TextBox;
-            double RadiuX = 0;
-            try
-            {
-                RadiuX = Convert.ToDouble(tb.Text);
-                if (MainWindow.SelectedBorder != null)
-                {
-                    BorderWithAdorner borderWA = SelectedBorder;
-                    System.Windows.Shapes.Path path = borderWA.Child as System.Windows.Shapes.Path;
-                    PathGeometry pg = path.Data as PathGeometry;
-                    ArcSegment arcSegment = pg.Figures[0].Segments[0] as ArcSegment;
-                    if (arcSegment != null)
-                    {
-                        Size size = arcSegment.Size;
-                        arcSegment.Size = new Size() { Width = RadiuX, Height = size.Height };
-                    }
-                }
-            }
-            catch
-            {
-                tb.Text = "0";
-            }
-            
-        }
-
-        /// <summary>
-        /// 修改曲线的RadiuY
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void EllipseRadiusY_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            TextBox tb = sender as TextBox;
-            double RadiuY = 0;
-            try
-            {
-                RadiuY = Convert.ToDouble(tb.Text);
-                if (MainWindow.SelectedBorder != null)
-                {
-                    BorderWithAdorner borderWA = SelectedBorder;
-                    System.Windows.Shapes.Path path = borderWA.Child as System.Windows.Shapes.Path;
-                    PathGeometry pg = path.Data as PathGeometry;
-                    ArcSegment arcSegment = pg.Figures[0].Segments[0] as ArcSegment;
-                    if (arcSegment != null)
-                    {
-                        Size size = arcSegment.Size;
-                        arcSegment.Size = new Size() { Width = size.Width, Height = RadiuY };
-                    }
-                }
-            }
-            catch
-            {
-                tb.Text = "0";
-            }
-        }
-
-        /// <summary>
-        /// 修改曲线的SweepDirection
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void EllipseisClockwise_Click(object sender, RoutedEventArgs e)
-        {
-            CheckBox cb = sender as CheckBox;
-            try
-            {
-                if (MainWindow.SelectedBorder != null)
-                {
-                    BorderWithAdorner borderWA = SelectedBorder;
-                    System.Windows.Shapes.Path path = borderWA.Child as System.Windows.Shapes.Path;
-                    PathGeometry pg = path.Data as PathGeometry;
-                    ArcSegment arcSegment = pg.Figures[0].Segments[0] as ArcSegment;
-                    if (arcSegment != null)
-                    {
-                        arcSegment.SweepDirection = cb.IsChecked == true ? SweepDirection.Clockwise : SweepDirection.Counterclockwise;
-                    }
-                }
-            }
-            catch
-            {
-                
-            }
-        }
-
-        /// <summary>
-        /// 修改曲线的IsLargeArc
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void EllipseisLargeArc_Click(object sender, RoutedEventArgs e)
-        {
-            CheckBox cb = sender as CheckBox;
-            try
-            {
-                if (MainWindow.SelectedBorder != null)
-                {
-                    BorderWithAdorner borderWA = SelectedBorder;
-                    System.Windows.Shapes.Path path = borderWA.Child as System.Windows.Shapes.Path;
-                    PathGeometry pg = path.Data as PathGeometry;
-                    ArcSegment arcSegment = pg.Figures[0].Segments[0] as ArcSegment;
-                    if (arcSegment != null)
-                    {
-                        arcSegment.IsLargeArc = cb.IsChecked == true ? true : false;
-                    }
-                }
-            }
-            catch
-            {
-
-            }
-        }
-
-        /// <summary>
-        /// 修改曲线的RotationAngle
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void EllipseDegree_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            TextBox tb = sender as TextBox;
-            double RotationAngle = 0;
-            try
-            {
-                RotationAngle = Convert.ToDouble(tb.Text);
-                if (MainWindow.SelectedBorder != null)
-                {
-                    BorderWithAdorner borderWA = SelectedBorder;
-                    System.Windows.Shapes.Path path = borderWA.Child as System.Windows.Shapes.Path;
-                    PathGeometry pg = path.Data as PathGeometry;
-                    ArcSegment arcSegment = pg.Figures[0].Segments[0] as ArcSegment;
-                    if (arcSegment != null)
-                    {
-                        arcSegment.RotationAngle = RotationAngle;
-                    }
-                }
-            }
-            catch
-            {
-                tb.Text = "0";
             }
         }
 
@@ -1292,6 +993,7 @@ namespace GeometryTool
             }
         }
 
+        #region   图形操作
         /// <summary>
         /// 创建一个新的画板
         /// </summary>
@@ -1317,37 +1019,156 @@ namespace GeometryTool
             }
         }
 
-        private void EllipseRadiusX_LostFocus(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// 实现垂直翻转
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void VerticalOverturn_Click(object sender, MouseButtonEventArgs e)
         {
-            TextBox tb = sender as TextBox;
-            double RadiuX = 0;
-            try
+            if (MainWindow.SelectedBorder != null)
             {
-                RadiuX = Convert.ToDouble(tb.Text);
-                if (MainWindow.SelectedBorder != null)
+                BorderWithAdorner borderWA = MainWindow.SelectedBorder;
+                borderWA.GetFourPoint(borderWA);                        //计算这个图形四个角落的位置
+                double averageY = (borderWA.MinY + borderWA.MaxY) / 2.0;
+                foreach (var item in borderWA.EllipseList)              //修改图形的点的位置
                 {
-                    BorderWithAdorner borderWA = SelectedBorder;
-                    System.Windows.Shapes.Path path = borderWA.Child as System.Windows.Shapes.Path;
-                    PathGeometry pg = path.Data as PathGeometry;
-                    ArcSegment arcSegment = pg.Figures[0].Segments[0] as ArcSegment;
-                    if (arcSegment != null)
+                    BorderWithDrag borderWD = item.Parent as BorderWithDrag;
+                    if (borderWD.HasOtherPoint)
                     {
-                        Size size = arcSegment.Size;
-                        arcSegment.Size = new Size() { Width = RadiuX, Height = size.Height };
+                        continue;
                     }
+                    Point p = (item.Data as EllipseGeometry).Center;
+                    (item.Data as EllipseGeometry).Center = new Point() { X = p.X, Y = p.Y - (p.Y - averageY) * 2 };
                 }
+                isSava = false;
             }
-            catch
-            {
-                tb.Text = "0";
-            }
+            e.Handled = true;
         }
 
-     
+        /// <summary>
+        /// 实现水平翻转
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void HorizontalOverturn_Click(object sender, MouseButtonEventArgs e)
+        {
+            if (MainWindow.SelectedBorder != null)
+            {
+                BorderWithAdorner borderWA = MainWindow.SelectedBorder;
+                borderWA.GetFourPoint(borderWA);                     //计算这个图形四个角落的位置
+                double averageX = (borderWA.MinX + borderWA.MaxX) / 2.0;
+                foreach (var item in borderWA.EllipseList)           //修改图形的点的位置
+                {
+                    BorderWithDrag borderWD = item.Parent as BorderWithDrag;
+                    if (borderWD.HasOtherPoint)
+                    {
+                        continue;
+                    }
+                    Point p = (item.Data as EllipseGeometry).Center;
+                    (item.Data as EllipseGeometry).Center = new Point() { X = p.X - (p.X - averageX) * 2, Y = p.Y };
+                }
+                isSava = false;
+            }
+            e.Handled = true;
+        }
 
-        
+        /// <summary>
+        /// 实现右镜像功能
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void RightMirror_Click(object sender, MouseButtonEventArgs e)
+        {
+            if (MainWindow.SelectedBorder != null)
+            {
+                BorderWithAdorner borderWA = MainWindow.SelectedBorder;
+                borderWA.GetFourPoint(borderWA);    //计算这个图形四个角落的位置
+                BorderWithAdorner newBorderWA = borderWA.CopyBorder(borderWA);  //获取右镜像的图形的副本
+                this.RootCanvas.Children.Add(newBorderWA);
+                foreach (var item in newBorderWA.EllipseList)           //修改图形的点的位置，并把他放进Canvas
+                {
+                    Point p = (item.Data as EllipseGeometry).Center;
+                    (item.Data as EllipseGeometry).Center = new Point() { X = p.X - (p.X - borderWA.MaxX) * 2, Y = p.Y };
+                    this.RootCanvas.Children.Add(item.Parent as BorderWithDrag);
+                }
+                isSava = false;
+            }
+            e.Handled = true;
+        }
 
-        
+        /// <summary>
+        /// 实现左镜像
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void LetfMirror_Click(object sender, MouseButtonEventArgs e)
+        {
+            if (MainWindow.SelectedBorder != null)
+            {
+                BorderWithAdorner borderWA = MainWindow.SelectedBorder;
+                borderWA.GetFourPoint(borderWA);    //计算这个图形四个角落的位置
+                BorderWithAdorner newBorderWA = borderWA.CopyBorder(borderWA);  //获取左镜像的图形的副本
+                this.RootCanvas.Children.Add(newBorderWA);
+                foreach (var item in newBorderWA.EllipseList)           //修改图形的点的位置，并把他放进Canvas
+                {
+                    Point p = (item.Data as EllipseGeometry).Center;
+                    (item.Data as EllipseGeometry).Center = new Point() { X = p.X - (p.X - borderWA.MinX) * 2, Y = p.Y };
+                    this.RootCanvas.Children.Add(item.Parent as BorderWithDrag);
+                }
+                isSava = false;
+            }
+            e.Handled = true;
+        }
+
+        /// <summary>
+        /// 实现下镜像功能
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BottomMirror_Click(object sender, MouseButtonEventArgs e)
+        {
+            if (MainWindow.SelectedBorder != null)
+            {
+                BorderWithAdorner borderWA = MainWindow.SelectedBorder;
+                borderWA.GetFourPoint(borderWA);    //计算这个图形四个角落的位置
+                BorderWithAdorner newBorderWA = borderWA.CopyBorder(borderWA);  //获取下镜像的图形的副本
+                this.RootCanvas.Children.Add(newBorderWA);
+                foreach (var item in newBorderWA.EllipseList)           //修改图形的点的位置，并把他放进Canvas
+                {
+                    Point p = (item.Data as EllipseGeometry).Center;
+                    (item.Data as EllipseGeometry).Center = new Point() { X = p.X, Y = p.Y - (p.Y - borderWA.MaxY) * 2 };
+                    this.RootCanvas.Children.Add(item.Parent as BorderWithDrag);
+                }
+                isSava = false;
+            }
+            e.Handled = true;
+        }
+
+        /// <summary>
+        /// 实现上镜像功能
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TopMirror_Click(object sender, MouseButtonEventArgs e)
+        {
+            if (MainWindow.SelectedBorder != null)
+            {
+                BorderWithAdorner borderWA = MainWindow.SelectedBorder;
+                borderWA.GetFourPoint(borderWA);    //计算这个图形四个角落的位置
+                BorderWithAdorner newBorderWA = borderWA.CopyBorder(borderWA);  //获取上镜像的图形的副本
+                this.RootCanvas.Children.Add(newBorderWA);
+                foreach (var item in newBorderWA.EllipseList)           //修改图形的点的位置，并把他放进Canvas
+                {
+                    Point p = (item.Data as EllipseGeometry).Center;
+                    (item.Data as EllipseGeometry).Center = new Point() { X = p.X, Y = p.Y - (p.Y - borderWA.MinY) * 2 };
+                    this.RootCanvas.Children.Add(item.Parent as BorderWithDrag);
+                }
+                isSava = false;
+            }
+            e.Handled = true;
+        }
+        #endregion
     }
 
 

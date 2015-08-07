@@ -89,7 +89,6 @@
     </Compile>
     <Compile Include="Action\GraphAdd.cs" />
     <Compile Include="Model\GraphAppearance.cs" />
-    <Compile Include="Model\MouseAction.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
