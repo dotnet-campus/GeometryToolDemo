@@ -19,6 +19,7 @@
                 <ResourceDictionary Source="Resources/PulseButtonStyle.xaml"/>
                 <ResourceDictionary Source="Resources/ColorsStyle.xaml"/>
                 <ResourceDictionary Source="Resources/ResizeRotateChromeStyle.xaml"/>
+                <ResourceDictionary Source="Resources/GeometryChromeStyle.xaml"/>
                 <ResourceDictionary Source="Resources/RadioButtonStyle.xaml"/>
                 <ResourceDictionary Source="Resources/LableStyle.xaml"/>
                 <ResourceDictionary Source="Resources/RightTabControlStyle.xaml"/>

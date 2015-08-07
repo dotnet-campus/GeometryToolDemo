@@ -4,7 +4,7 @@
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="SizeChrome.xaml"/>
-        <ResourceDictionary Source="ResizeRotateChrome.xaml"/>
+        <ResourceDictionary Source="ResizeRotateChromeStyle.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
     <ControlTemplate x:Key="MoveThumbTemplate"  TargetType="{x:Type s:MoveThumb}">
