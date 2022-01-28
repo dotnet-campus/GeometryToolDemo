@@ -1,6 +1,4 @@
 ﻿using System.Reflection;
-using System.Resources;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows;
 
@@ -31,13 +29,13 @@ using System.Windows;
 //[assembly: NeutralResourcesLanguage("en-US", UltimateResourceFallbackLocation.Satellite)]
 
 
-[assembly:ThemeInfo(
+[assembly: ThemeInfo(
     ResourceDictionaryLocation.None, //主题特定资源字典的位置
-                             //(在页面或应用程序资源字典中 
-                             // 未找到资源的情况下使用)
+    //(在页面或应用程序资源字典中 
+    // 未找到资源的情况下使用)
     ResourceDictionaryLocation.SourceAssembly //普通资源字典的位置
-                                      //(在页面、应用程序或任何主题特定资源字典中 
-                                      // 未找到资源的情况下使用)
+    //(在页面、应用程序或任何主题特定资源字典中 
+    // 未找到资源的情况下使用)
 )]
 
 

@@ -3,26 +3,27 @@
                     xmlns:s="clr-namespace:GeometryTool">
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="SizeChrome.xaml"/>
-        <ResourceDictionary Source="ResizeRotateChromeStyle.xaml"/>
+        <ResourceDictionary Source="SizeChrome.xaml" />
+        <ResourceDictionary Source="ResizeRotateChromeStyle.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <ControlTemplate x:Key="MoveThumbTemplate"  TargetType="{x:Type s:MoveThumb}">
-        <Rectangle Fill="Transparent"/>
+    <ControlTemplate x:Key="MoveThumbTemplate" TargetType="{x:Type s:MoveThumb}">
+        <Rectangle Fill="Transparent" />
     </ControlTemplate>
 
-    <Style  TargetType="{x:Type s:GeometryChrome}">
-        <Setter Property="MinHeight" Value="1"/>
-        <Setter Property="MinWidth" Value="1"/>
-        <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
-        <Setter Property="SnapsToDevicePixels" Value="true"/>
+    <Style TargetType="{x:Type s:GeometryChrome}">
+        <Setter Property="MinHeight" Value="1" />
+        <Setter Property="MinWidth" Value="1" />
+        <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
+        <Setter Property="SnapsToDevicePixels" Value="true" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type s:GeometryChrome}">
                     <Grid DataContext="{TemplateBinding DataContext}">
-                        <s:MoveThumb Padding="0.2" Cursor="SizeAll" Template="{StaticResource MoveThumbTemplate}" DataContext="{TemplateBinding DataContext}" />
+                        <s:MoveThumb Padding="0.2" Cursor="SizeAll" Template="{StaticResource MoveThumbTemplate}"
+                                     DataContext="{TemplateBinding DataContext}" />
                         <ContentPresenter Content="{TemplateBinding ContentControl.Content}"
-                              Margin="{TemplateBinding Padding}"/>
+                                          Margin="{TemplateBinding Padding}" />
                         <s:ResizeRotateChrome DataContext="{TemplateBinding DataContext}" />
                     </Grid>
                 </ControlTemplate>

@@ -1,102 +1,99 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Shapes;
+﻿using System.ComponentModel;
 using System.Windows.Media;
-using System.ComponentModel;
-using System.Windows;
 
-namespace GeometryTool
+namespace GeometryTool;
+
+/// <summary>
+///     图形的外观
+/// </summary>
+public class GraphAppearance
 {
-   /// <summary>
-   /// 图形的外观
-   /// </summary>
-    public class GraphAppearance
+    public FillRule fillRule; //填充规则
+
+    private DoubleCollection strokeDashArray; //设置虚实
+
+    private double strokeThickness; //设置图形的线条的大小
+
+    public GraphAppearance()
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        StrokeThickness = 0.1;
 
-        private double strokeThickness;                         //设置图形的线条的大小
-        public double StrokeThickness 
-        { 
-            get{return strokeThickness;}
-            set 
-            {
-                strokeThickness = value;
-                if (this.PropertyChanged != null)
-                {
-                    this.PropertyChanged.Invoke(this, new PropertyChangedEventArgs("StrokeThickness"));
-                }
-            }
-        }
+        Stroke = Brushes.Black;
+        Fill = Brushes.Transparent;
+        FillRule = FillRule.EvenOdd;
+        StrokeDashArray = new DoubleCollection();
+        StrokeDashArray.Add(1);
+        StrokeDashArray.Add(0);
+    }
 
-        private DoubleCollection strokeDashArray;               //设置虚实
-        public DoubleCollection StrokeDashArray
+    public double StrokeThickness
+    {
+        get => strokeThickness;
+        set
         {
-            get { return strokeDashArray; }
-            set
+            strokeThickness = value;
+            if (PropertyChanged != null)
             {
-                strokeDashArray = value;
-                if (this.PropertyChanged != null)
-                {
-                    this.PropertyChanged.Invoke(this, new PropertyChangedEventArgs("StrokeDashArray"));
-                }
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("StrokeThickness"));
             }
-        }
-
-        private System.Windows.Media.Brush stroke { get; set; } //设置图形的颜色
-        public Brush Stroke
-        {
-            get { return stroke; }
-            set
-            {
-                stroke = value;
-                if (this.PropertyChanged != null)
-                {
-                    this.PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Stroke"));
-                }
-            }
-        }
-
-        private System.Windows.Media.Brush fill { get; set; }   //设置图形填充的颜色
-        public Brush Fill
-        {
-            get { return fill; }
-            set
-            {
-                fill = value;
-                if (this.PropertyChanged != null)
-                {
-                    this.PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Fill"));
-                }
-            }
-        }
-
-        public FillRule fillRule;                               //填充规则
-        public FillRule FillRule
-        {
-            get { return fillRule; }
-            set
-            {
-                fillRule = value;
-                if (this.PropertyChanged != null)
-                {
-                    this.PropertyChanged.Invoke(this, new PropertyChangedEventArgs("FillRule"));
-                }
-            }
-        }
-
-        public GraphAppearance()
-        {
-            StrokeThickness = 0.1;
-
-            Stroke = Brushes.Black;
-            Fill = Brushes.Transparent;
-            FillRule = FillRule.EvenOdd;
-            StrokeDashArray = new DoubleCollection();
-            StrokeDashArray.Add(1);
-            StrokeDashArray.Add(0);
         }
     }
+
+    public DoubleCollection StrokeDashArray
+    {
+        get => strokeDashArray;
+        set
+        {
+            strokeDashArray = value;
+            if (PropertyChanged != null)
+            {
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("StrokeDashArray"));
+            }
+        }
+    }
+
+    private Brush stroke { get; set; } //设置图形的颜色
+
+    public Brush Stroke
+    {
+        get => stroke;
+        set
+        {
+            stroke = value;
+            if (PropertyChanged != null)
+            {
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Stroke"));
+            }
+        }
+    }
+
+    private Brush fill { get; set; } //设置图形填充的颜色
+
+    public Brush Fill
+    {
+        get => fill;
+        set
+        {
+            fill = value;
+            if (PropertyChanged != null)
+            {
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Fill"));
+            }
+        }
+    }
+
+    public FillRule FillRule
+    {
+        get => fillRule;
+        set
+        {
+            fillRule = value;
+            if (PropertyChanged != null)
+            {
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("FillRule"));
+            }
+        }
+    }
+
+    public event PropertyChangedEventHandler PropertyChanged;
 }

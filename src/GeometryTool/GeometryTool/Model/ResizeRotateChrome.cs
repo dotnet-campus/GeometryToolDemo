@@ -1,16 +1,16 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace GeometryTool
+namespace GeometryTool;
+
+/// <summary>
+///     可拖动的选择框的边的外观
+/// </summary>
+public class ResizeRotateChrome : Control
 {
-    /// <summary>
-    /// 可拖动的选择框的边的外观
-    /// </summary>
-    public class ResizeRotateChrome : Control
+    static ResizeRotateChrome()
     {
-        static ResizeRotateChrome()
-        {
-            FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(ResizeRotateChrome), new FrameworkPropertyMetadata(typeof(ResizeRotateChrome)));
-        }
+        DefaultStyleKeyProperty.OverrideMetadata(typeof(ResizeRotateChrome),
+            new FrameworkPropertyMetadata(typeof(ResizeRotateChrome)));
     }
 }

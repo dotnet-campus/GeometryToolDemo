@@ -5,99 +5,99 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace GeometryTool
+namespace GeometryTool;
+
+/// <summary>
+///     图形旋转的Thumb
+/// </summary>
+public class RotateThumb : Thumb
 {
-    /// <summary>
-    /// 图形旋转的Thumb
-    /// </summary>
-    public class RotateThumb : Thumb
+    private BorderWithAdorner borderWA; //图形的Border
+    private Canvas canvas; //图形所在的画布
+    private Point centerPoint; //图形的重点
+    private Vector startVector; //开始的坐标向量
+
+    public RotateThumb()
     {
-        private Vector startVector;             //开始的坐标向量
-        private Point centerPoint;              //图形的重点
-        private BorderWithAdorner borderWA;     //图形的Border
-        private Canvas canvas;                  //图形所在的画布
+        DragDelta += RotateThumb_DragDelta;
+        DragStarted += RotateThumb_DragStarted;
+        DragCompleted += RotateThumb_DragCompleted;
+    }
 
-        public RotateThumb()
+
+    /// <summary>
+    ///     开始旋转
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void RotateThumb_DragStarted(object sender, DragStartedEventArgs e)
+    {
+        borderWA = DataContext as BorderWithAdorner;
+
+        if (borderWA != null)
         {
-            DragDelta += this.RotateThumb_DragDelta;
-            DragStarted += this.RotateThumb_DragStarted;
-            DragCompleted+=RotateThumb_DragCompleted;
-        }
-
-
-        /// <summary>
-        /// 开始旋转
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void RotateThumb_DragStarted(object sender, DragStartedEventArgs e)
-        {
-            this.borderWA = DataContext as BorderWithAdorner;
-
-            if (this.borderWA != null)
+            canvas = VisualTreeHelper.GetParent(borderWA) as Canvas;
+            if (canvas != null)
             {
-                this.canvas = VisualTreeHelper.GetParent(this.borderWA) as Canvas;
-                if (this.canvas != null)
-                {
-                    this.centerPoint = this.borderWA.TranslatePoint(
-                        new Point() { X = (borderWA.MaxX + borderWA.MinX) / 2.0, Y = (borderWA.MaxY + borderWA.MinY) / 2.0 },
-                                  this.canvas);
+                centerPoint = borderWA.TranslatePoint(
+                    new Point { X = (borderWA.MaxX + borderWA.MinX) / 2.0, Y = (borderWA.MaxY + borderWA.MinY) / 2.0 },
+                    canvas);
 
-                    Point startPoint = Mouse.GetPosition(this.canvas);
-                    this.startVector = Point.Subtract(startPoint, this.centerPoint);    //计算开始的向量
-
-                }
+                var startPoint = Mouse.GetPosition(canvas);
+                startVector = Point.Subtract(startPoint, centerPoint); //计算开始的向量
             }
         }
+    }
 
-        /// <summary>
-        /// 旋转的过程
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void RotateThumb_DragDelta(object sender, DragDeltaEventArgs e)
+    /// <summary>
+    ///     旋转的过程
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void RotateThumb_DragDelta(object sender, DragDeltaEventArgs e)
+    {
+        if (borderWA != null && canvas != null)
         {
-            if (this.borderWA != null && this.canvas != null)
-            {
-                Point currentPoint = Mouse.GetPosition(this.canvas);
-                Vector deltaVector = Point.Subtract(currentPoint, this.centerPoint);
-                double angle = Vector.AngleBetween(this.startVector, deltaVector)/360*2*Math.PI;
-                double centerX = (borderWA.MaxX + borderWA.MinX) / 2.0;
-                double centerY = (borderWA.MaxY + borderWA.MinY) / 2.0;     //计算旋转的角度，中点坐标
+            var currentPoint = Mouse.GetPosition(canvas);
+            var deltaVector = Point.Subtract(currentPoint, centerPoint);
+            var angle = Vector.AngleBetween(startVector, deltaVector) / 360 * 2 * Math.PI;
+            var centerX = (borderWA.MaxX + borderWA.MinX) / 2.0;
+            var centerY = (borderWA.MaxY + borderWA.MinY) / 2.0; //计算旋转的角度，中点坐标
 
-                foreach (var item in borderWA.EllipseList)                  //根据公式来计算算旋转后的位置
+            foreach (var item in borderWA.EllipseList) //根据公式来计算算旋转后的位置
+            {
+                if ((item.Parent as BorderWithDrag).HasOtherPoint)
                 {
-                    if ((item.Parent as BorderWithDrag).HasOtherPoint)
-                    {
-                        continue;
-                    }
-                    EllipseGeometry ellipse = item.Data as EllipseGeometry;
-                    Point oldPoint = ellipse.Center;
-                    double newX = (oldPoint.X - centerX) * Math.Cos(angle) - (oldPoint.Y - centerY) * Math.Sin(angle) + centerX;
-                    double newY = (oldPoint.X - centerX) * Math.Sin(angle) + (oldPoint.Y - centerY) * Math.Cos(angle) + centerY;
-                    ellipse.Center = new Point() { X=newX,Y=newY};
+                    continue;
                 }
 
-                Point startPoint = currentPoint;        
-                this.startVector = Point.Subtract(startPoint, this.centerPoint);    //重新赋值开始的向量
+                var ellipse = item.Data as EllipseGeometry;
+                var oldPoint = ellipse.Center;
+                var newX = (oldPoint.X - centerX) * Math.Cos(angle) - (oldPoint.Y - centerY) * Math.Sin(angle) +
+                           centerX;
+                var newY = (oldPoint.X - centerX) * Math.Sin(angle) + (oldPoint.Y - centerY) * Math.Cos(angle) +
+                           centerY;
+                ellipse.Center = new Point { X = newX, Y = newY };
             }
-        }
 
-        /// <summary>
-        /// 结束旋转，并自动吸附到最近的点
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void RotateThumb_DragCompleted(object sender, DragCompletedEventArgs e)
-        {
-            foreach (var item in borderWA.EllipseList)
-            {
-                EllipseGeometry ellipse = item.Data as EllipseGeometry;
-                Point oldPoint = ellipse.Center;
-                Point p = new AutoPoints().GetAutoAdsorbPoint(oldPoint);
-                ellipse.Center = new Point() { X=p.X,Y=p.Y };
-            }
+            var startPoint = currentPoint;
+            startVector = Point.Subtract(startPoint, centerPoint); //重新赋值开始的向量
         }
-        
+    }
+
+    /// <summary>
+    ///     结束旋转，并自动吸附到最近的点
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void RotateThumb_DragCompleted(object sender, DragCompletedEventArgs e)
+    {
+        foreach (var item in borderWA.EllipseList)
+        {
+            var ellipse = item.Data as EllipseGeometry;
+            var oldPoint = ellipse.Center;
+            var p = new AutoPoints().GetAutoAdsorbPoint(oldPoint);
+            ellipse.Center = new Point { X = p.X, Y = p.Y };
+        }
     }
 }

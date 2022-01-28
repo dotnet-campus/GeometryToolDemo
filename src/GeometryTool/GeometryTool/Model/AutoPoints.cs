@@ -1,44 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Windows;
-namespace GeometryTool
+﻿using System.Windows;
+
+namespace GeometryTool;
+
+/// <summary>
+///     坐标点的换算，实现自动吸附功能
+/// </summary>
+public class AutoPoints
 {
     /// <summary>
-    /// 坐标点的换算，实现自动吸附功能
+    ///     坐标点的换算，实现自动吸附功能
     /// </summary>
-    public class AutoPoints 
+    public Point GetAutoAdsorbPoint(Point oldPoint)
     {
-        /// <summary>
-        /// 坐标点的换算，实现自动吸附功能
-        /// </summary>
-        public Point GetAutoAdsorbPoint(Point oldPoint)
+        var p = new Point();
+        if (oldPoint.X * 10 % 10 >= 5)
         {
-            Point p = new Point();
-            if (oldPoint.X * 10 % 10 >= 5)
-            {
-                int b = ((int)(oldPoint.X));           //计算离其最近的一个X坐标
-                p.X = ((int)(oldPoint.X) + 1);
-               
-            }
-            else
-            {
-                p.X = ((int)(oldPoint.X));
-            }
-
-            if (oldPoint.Y * 10 % 10 >= 5)              //计算离其最近的一个Y坐标
-            {
-                p.Y = ((int)(oldPoint.Y) + 1);
-               
-            }
-            else
-            {
-                p.Y = ((int)(oldPoint.Y));
-            }
-            return p;
+            var b = (int)oldPoint.X; //计算离其最近的一个X坐标
+            p.X = (int)oldPoint.X + 1;
         }
+        else
+        {
+            p.X = (int)oldPoint.X;
+        }
+
+        if (oldPoint.Y * 10 % 10 >= 5) //计算离其最近的一个Y坐标
+        {
+            p.Y = (int)oldPoint.Y + 1;
+        }
+        else
+        {
+            p.Y = (int)oldPoint.Y;
+        }
+
+        return p;
     }
 }

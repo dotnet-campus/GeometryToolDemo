@@ -3,43 +3,36 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 
-namespace GeometryTool
+namespace GeometryTool;
+
+/// <summary>
+///     拖动边的Adorner
+/// </summary>
+public class ResizeRotateAdorner : Adorner
 {
-    /// <summary>
-    /// 拖动边的Adorner
-    /// </summary>
-    public class ResizeRotateAdorner : Adorner
+    private readonly ResizeRotateChrome chrome;
+    private readonly VisualCollection visuals;
+
+    public ResizeRotateAdorner(ContentControl borderWA)
+        : base(borderWA)
     {
-        private VisualCollection visuals;
-        private ResizeRotateChrome chrome;
+        SnapsToDevicePixels = true;
+        chrome = new ResizeRotateChrome();
+        chrome.DataContext = borderWA;
+        visuals = new VisualCollection(this);
+        visuals.Add(chrome);
+    }
 
-        protected override int VisualChildrenCount
-        {
-            get
-            {
-                return this.visuals.Count;
-            }
-        }
+    protected override int VisualChildrenCount => visuals.Count;
 
-        public ResizeRotateAdorner(ContentControl borderWA)
-            : base(borderWA)
-        {
-            SnapsToDevicePixels = true;
-            this.chrome = new ResizeRotateChrome();
-            this.chrome.DataContext = borderWA;
-            this.visuals = new VisualCollection(this);
-            this.visuals.Add(this.chrome);
-        }
+    protected override Size ArrangeOverride(Size arrangeBounds)
+    {
+        chrome.Arrange(new Rect(arrangeBounds));
+        return arrangeBounds;
+    }
 
-        protected override Size ArrangeOverride(Size arrangeBounds)
-        {
-            this.chrome.Arrange(new Rect(arrangeBounds));
-            return arrangeBounds;
-        }
-
-        protected override Visual GetVisualChild(int index)
-        {
-            return this.visuals[index];
-        }
+    protected override Visual GetVisualChild(int index)
+    {
+        return visuals[index];
     }
 }

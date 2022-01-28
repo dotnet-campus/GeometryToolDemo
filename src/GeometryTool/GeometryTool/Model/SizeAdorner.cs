@@ -1,44 +1,36 @@
 ﻿using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 
-namespace GeometryTool
+namespace GeometryTool;
+
+public class SizeAdorner : Adorner
 {
-    public class SizeAdorner : Adorner
+    private BorderWithAdorner borderWA;
+    private readonly SizeChrome chrome;
+    private readonly VisualCollection visuals;
+
+    public SizeAdorner(BorderWithAdorner borderWA)
+        : base(borderWA)
     {
-        private SizeChrome chrome;
-        private VisualCollection visuals;
-        private BorderWithAdorner borderWA;
+        SnapsToDevicePixels = true;
+        this.borderWA = borderWA;
+        chrome = new SizeChrome();
+        chrome.DataContext = borderWA;
+        visuals = new VisualCollection(this);
+        visuals.Add(chrome);
+    }
 
-        protected override int VisualChildrenCount
-        {
-            get
-            {
-                return this.visuals.Count;
-            }
-        }
+    protected override int VisualChildrenCount => visuals.Count;
 
-        public SizeAdorner(BorderWithAdorner borderWA)
-            : base(borderWA)
-        {
-            this.SnapsToDevicePixels = true;
-            this.borderWA = borderWA;
-            this.chrome = new SizeChrome();
-            this.chrome.DataContext = borderWA;
-            this.visuals = new VisualCollection(this);
-            this.visuals.Add(this.chrome);
-        }
+    protected override Visual GetVisualChild(int index)
+    {
+        return visuals[index];
+    }
 
-        protected override Visual GetVisualChild(int index)
-        {
-            return this.visuals[index];
-        }
-
-        protected override Size ArrangeOverride(Size arrangeBounds)
-        {
-            this.chrome.Arrange(new Rect(new Point(0.0, 0.0), arrangeBounds));
-            return arrangeBounds;
-        }
+    protected override Size ArrangeOverride(Size arrangeBounds)
+    {
+        chrome.Arrange(new Rect(new Point(0.0, 0.0), arrangeBounds));
+        return arrangeBounds;
     }
 }

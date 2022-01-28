@@ -1,29 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Globalization;
 using System.Windows.Data;
 
-namespace GeometryTool
+namespace GeometryTool;
+
+/// <summary>
+///     画板的缩放的Converter
+/// </summary>
+public class CanvasScaleTransformConverter : IValueConverter
 {
-    /// <summary>
-    /// 画板的缩放的Converter
-    /// </summary>
-    public class CanvasScaleTransformConverter : IValueConverter
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        if ((double)value > 0)
         {
-            if ((double)value > 0)
-            {
-                return System.Convert.ToDouble(String.Format("{0:F}", (double)value)); //等于Slider的Value的十分之一
-            }
-            return 0;
+            return System.Convert.ToDouble(string.Format("{0:F}", (double)value)); //等于Slider的Value的十分之一
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            return null;
-        }
+        return 0;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        return null;
     }
 }
