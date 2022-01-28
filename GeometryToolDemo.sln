@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
+MinimumVisualStudioVersion = 15.0.26124.0
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeometryTool", "src\GeometryTool\GeometryTool\GeometryTool.csproj", "{06B492A3-8225-4497-91A2-3D5FB4DEF45E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{06B492A3-8225-4497-91A2-3D5FB4DEF45E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06B492A3-8225-4497-91A2-3D5FB4DEF45E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06B492A3-8225-4497-91A2-3D5FB4DEF45E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06B492A3-8225-4497-91A2-3D5FB4DEF45E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B4BBE725-CB3C-4EA5-8754-B5A230B27F29}
+	EndGlobalSection
+EndGlobal
