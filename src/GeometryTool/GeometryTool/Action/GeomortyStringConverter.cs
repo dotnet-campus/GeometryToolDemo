@@ -13,7 +13,7 @@ namespace GeometryTool;
 /// <summary>
 ///     字符串转图形，图形转字符串
 /// </summary>
-public class GeomertyStringConverter
+public class GeometryStringConverter
 {
     public GraphAppearance vGraphAppearance;
     public Canvas vRootCanvas;
@@ -23,7 +23,7 @@ public class GeomertyStringConverter
     /// </summary>
     /// <param name="vRootCanvas"></param>
     /// <param name="vGraphAppearance"></param>
-    public GeomertyStringConverter(Canvas vRootCanvas, GraphAppearance vGraphAppearance)
+    public GeometryStringConverter(Canvas vRootCanvas, GraphAppearance vGraphAppearance)
     {
         this.vRootCanvas = vRootCanvas;
         this.vGraphAppearance = vGraphAppearance;
@@ -377,7 +377,7 @@ public class GeomertyStringConverter
             graphAppearance.Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString(BackgroundColor));
             graphAppearance.Stroke = new SolidColorBrush((Color)ColorConverter.ConvertFromString(StrokeColor));
             graphAppearance.StrokeThickness = Convert.ToDouble(StrokeThickness);
-            var gsc = new GeomertyStringConverter(MainWindow.MyRootCanvas, graphAppearance);
+            var gsc = new GeometryStringConverter(MainWindow.MyRootCanvas, graphAppearance);
             var newBorderWA = gsc.GeomotryFromString(MiniLanguage); //把Mini-Language转化成为图形，实现图形的深度复制
             var newPath = newBorderWA.Child as Path;
             newPath.Stroke = graphAppearance.Stroke;

@@ -226,7 +226,7 @@ public partial class MainWindow : Window
         if (canSave)
         {
             var sw = new StreamWriter(FileName);
-            var xmlGeomertyStringConverter = new GeomertyStringConverter(RootCanvas, _graphAppearance);
+            var xmlGeomertyStringConverter = new GeometryStringConverter(RootCanvas, _graphAppearance);
             var sb = new StringBuilder();
             sb.AppendLine("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
             sb.AppendLine("<Canvase>");
@@ -315,7 +315,7 @@ public partial class MainWindow : Window
             FileName = save.FileName;
 
             var sw = new StreamWriter(FileName);
-            var xmlGeometryStringConverter = new GeomertyStringConverter(RootCanvas, _graphAppearance);
+            var xmlGeometryStringConverter = new GeometryStringConverter(RootCanvas, _graphAppearance);
             var sb = new StringBuilder();
             sb.AppendLine("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
             sb.AppendLine("<Canvase>");
@@ -384,7 +384,7 @@ public partial class MainWindow : Window
             FileName = save.FileName;
 
             var sw = new StreamWriter(FileName);
-            var gsc = new GeomertyStringConverter(RootCanvas, _graphAppearance);
+            var gsc = new GeometryStringConverter(RootCanvas, _graphAppearance);
             var stringBuilder = new StringBuilder();
             stringBuilder.AppendLine("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
             stringBuilder.AppendLine("<DrawingImage >");
@@ -432,7 +432,7 @@ public partial class MainWindow : Window
                 if (!string.IsNullOrEmpty(openFileDlg.FileName)) //如果文件名不为空
                 {
                     var xmlHelper = new XMLHelper();
-                    var geomertyStringConverter = new GeomertyStringConverter(RootCanvas, _graphAppearance);
+                    var geomertyStringConverter = new GeometryStringConverter(RootCanvas, _graphAppearance);
                     var streamReader = new StreamReader(openFileDlg.FileName);
                     var xmlString = streamReader.ReadToEnd();
                     var borderWithAdornerList = geomertyStringConverter.PathGeometryFromString(xmlString);
@@ -471,7 +471,7 @@ public partial class MainWindow : Window
                     if (!string.IsNullOrEmpty(openFileDlg.FileName)) //如果文件名不为空
                     {
                         var xmlHelper = new XMLHelper();
-                        var geomertyStringConverter = new GeomertyStringConverter(RootCanvas, _graphAppearance);
+                        var geomertyStringConverter = new GeometryStringConverter(RootCanvas, _graphAppearance);
                         var match = xmlHelper.ReadXml(openFileDlg.FileName); //读取XML文件
                         var matchList = Regex.Matches(match.Groups[0].ToString(), @"M[\.\,\s\+\-\dLACQZ]+");
                         foreach (Match item in matchList)
@@ -721,7 +721,7 @@ public partial class MainWindow : Window
     /// <param name="e"></param>
     private void RootCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-        var geomertyStringConverter = new GeomertyStringConverter(RootCanvas, _graphAppearance);
+        var geomertyStringConverter = new GeometryStringConverter(RootCanvas, _graphAppearance);
 
         if (SelectedBorder != null && SelectedBorder.GAdorner != null) //隐藏之前点击的图形的选择框
         {

@@ -110,7 +110,7 @@ public class BorderWithAdorner : Border
             StrokeDashArray = path.StrokeDashArray,
             Fill = path.Fill
         };
-        var gsc = new GeomertyStringConverter(MainWindow.MyRootCanvas, graphAppearance);
+        var gsc = new GeometryStringConverter(MainWindow.MyRootCanvas, graphAppearance);
         var MiniLanguage = gsc.StringFromGeometry(vBorderWA.Child as Path); //把该图形转化成为Mini-Language
         var newBorderWA = gsc.GeomotryFromString(MiniLanguage); //把Mini-Language转化成为图形，实现图形的深度复制
         var newPath = newBorderWA.Child as Path;
