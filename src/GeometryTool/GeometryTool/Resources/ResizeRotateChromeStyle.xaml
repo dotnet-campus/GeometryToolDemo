@@ -17,7 +17,6 @@
         </Setter>
     </Style>
 
-
     <Style TargetType="{x:Type Shape}" x:Key="ThumbCorner">
         <Setter Property="SnapsToDevicePixels" Value="true" />
         <Setter Property="Width" Value="0.5" />
@@ -36,7 +35,7 @@
                             Height="0.8"
                             Margin="0,-1.2,0,0"
                             Cursor="Hand"
-                            Background="#ae6c6c"
+                            Background="#AE6C6C"
                             VerticalAlignment="Top"
                             HorizontalAlignment="Center" Opacity="0" />
                         <Image Source="../Image/XuanZhuan.png"
@@ -49,49 +48,49 @@
                                IsHitTestVisible="False" />
                         <s:ResizeThumb Height="0.1"
                                        Cursor="SizeNS"
-                                       Background="#6e9552"
+                                       Background="#6E9552"
                                        VerticalAlignment="Top"
                                        HorizontalAlignment="Stretch" />
                         <s:ResizeThumb Width="0.1"
                                        Cursor="SizeWE"
-                                       Background="#6e9552"
+                                       Background="#6E9552"
                                        VerticalAlignment="Stretch"
                                        HorizontalAlignment="Left" />
                         <s:ResizeThumb Width="0.1"
                                        Cursor="SizeWE"
-                                       Background="#6e9552"
+                                       Background="#6E9552"
                                        VerticalAlignment="Stretch"
                                        HorizontalAlignment="Right" />
                         <s:ResizeThumb Height="0.1"
                                        Cursor="SizeNS"
-                                       Background="#6e9552"
+                                       Background="#6E9552"
                                        VerticalAlignment="Bottom"
                                        HorizontalAlignment="Stretch" />
                         <s:ResizeThumb Width="0.3"
                                        Height="0.3"
                                        Margin="-0.1"
-                                       Background="#ae6c6c"
+                                       Background="#AE6C6C"
                                        Cursor="SizeNWSE"
                                        VerticalAlignment="Top"
                                        HorizontalAlignment="Left" />
                         <s:ResizeThumb Width="0.3"
                                        Height="0.3"
                                        Margin="-0.1"
-                                       Background="#ae6c6c"
+                                       Background="#AE6C6C"
                                        Cursor="SizeNESW"
                                        VerticalAlignment="Top"
                                        HorizontalAlignment="Right" />
                         <s:ResizeThumb Width="0.3"
                                        Height="0.3"
                                        Margin="-0.1"
-                                       Background="#ae6c6c"
+                                       Background="#AE6C6C"
                                        Cursor="SizeNESW"
                                        VerticalAlignment="Bottom"
                                        HorizontalAlignment="Left" />
                         <s:ResizeThumb Width="0.3"
                                        Height="0.3"
                                        Margin="-0.1"
-                                       Background="#ae6c6c"
+                                       Background="#AE6C6C"
                                        Cursor="SizeNWSE"
                                        VerticalAlignment="Bottom"
                                        HorizontalAlignment="Right" />

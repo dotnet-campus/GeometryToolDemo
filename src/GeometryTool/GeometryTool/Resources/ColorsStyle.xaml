@@ -37,16 +37,16 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Border x:Name="buttonBorder" Width="13" Height="13" BorderThickness="1" Margin="0"
+                    <Border x:Name="ButtonBorder" Width="13" Height="13" BorderThickness="1" Margin="0"
                             BorderBrush="#D0D0D0" Background="{TemplateBinding Background}">
-                        <Border x:Name="innerBorder" Width="12" Height="12" BorderThickness="0.5"
+                        <Border x:Name="InnerBorder" Width="12" Height="12" BorderThickness="0.5"
                                 BorderBrush="{x:Null}" HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter Property="BorderThickness" Value="2" TargetName="buttonBorder" />
-                            <Setter Property="BorderBrush" Value="#FEAB38" TargetName="buttonBorder" />
-                            <Setter Property="BorderBrush" Value="#FFFFFF" TargetName="innerBorder" />
+                            <Setter Property="BorderThickness" Value="2" TargetName="ButtonBorder" />
+                            <Setter Property="BorderBrush" Value="#FEAB38" TargetName="ButtonBorder" />
+                            <Setter Property="BorderBrush" Value="#FFFFFF" TargetName="InnerBorder" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -62,12 +62,12 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Border x:Name="buttonBorder" Width="13" Height="13" BorderThickness="1,1,1,0" Margin="0"
+                    <Border x:Name="ButtonBorder" Width="13" Height="13" BorderThickness="1,1,1,0" Margin="0"
                             BorderBrush="#D0D0D0" Background="{TemplateBinding Background}" />
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter Property="BorderThickness" Value="2" TargetName="buttonBorder" />
-                            <Setter Property="BorderBrush" Value="#FEAB38" TargetName="buttonBorder" />
+                            <Setter Property="BorderThickness" Value="2" TargetName="ButtonBorder" />
+                            <Setter Property="BorderBrush" Value="#FEAB38" TargetName="ButtonBorder" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -83,19 +83,19 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Border x:Name="buttonBorder" Width="13" Height="13" BorderThickness="1,0,1,0" Margin="0"
+                    <Border x:Name="ButtonBorder" Width="13" Height="13" BorderThickness="1,0,1,0" Margin="0"
                             BorderBrush="#D0D0D0" Background="{TemplateBinding Background}" />
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter Property="BorderThickness" Value="2" TargetName="buttonBorder" />
-                            <Setter Property="BorderBrush" Value="#FEAB38" TargetName="buttonBorder" />
+                            <Setter Property="BorderThickness" Value="2" TargetName="ButtonBorder" />
+                            <Setter Property="BorderBrush" Value="#FEAB38" TargetName="ButtonBorder" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
-    <Style x:Key="toggleButtonStyle" TargetType="{x:Type ToggleButton}">
+    <Style x:Key="ToggleButtonStyle" TargetType="{x:Type ToggleButton}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource ButtonFocusVisual1}" />
         <Setter Property="Background" Value="{StaticResource ButtonNormalBackgroundFill1}" />
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
@@ -104,7 +104,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
-                    <Border x:Name="buttonBorder" Height="Auto" Width="Auto">
+                    <Border x:Name="ButtonBorder" Height="Auto" Width="Auto">
                         <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
                                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                           Margin="{TemplateBinding Padding}"
@@ -119,20 +119,20 @@
                         <Trigger Property="IsChecked" Value="True">
                             <Setter Property="Foreground"
                                     Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
-                            <Setter Property="BorderThickness" Value="1.5,1.5,0,0" TargetName="buttonBorder" />
-                            <Setter Property="BorderBrush" Value="DarkGray" TargetName="buttonBorder" />
-                            <Setter Property="Background" Value="LightGray" TargetName="buttonBorder" />
+                            <Setter Property="BorderThickness" Value="1.5,1.5,0,0" TargetName="ButtonBorder" />
+                            <Setter Property="BorderBrush" Value="DarkGray" TargetName="ButtonBorder" />
+                            <Setter Property="Background" Value="LightGray" TargetName="ButtonBorder" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
-    <LinearGradientBrush x:Key="morecolorgradientbrush" EndPoint="0,1" StartPoint="0,0">
+    <LinearGradientBrush x:Key="MoreColorGradientBrush" EndPoint="0,1" StartPoint="0,0">
         <GradientStop Color="Orange" Offset="0.1" />
         <GradientStop Color="White" Offset=".9" />
     </LinearGradientBrush>
-    <Style x:Key="moreColorsLabel" TargetType="{x:Type Label}">
+    <Style x:Key="MoreColorsLabel" TargetType="{x:Type Label}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Padding" Value="5" />
@@ -155,7 +155,7 @@
                                     Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter Property="Background" Value="{StaticResource morecolorgradientbrush}" />
+                            <Setter Property="Background" Value="{StaticResource MoreColorGradientBrush}" />
                             <Setter Property="BorderThickness" Value="1" />
                             <Setter Property="BorderBrush" Value="Green" />
                         </Trigger>
@@ -181,11 +181,10 @@
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Border Width="196" Height="24" Background="#DDE7EE" BorderThickness="0,0,0,0"
                             BorderBrush="#BFBFBF">
-
                         <DockPanel Width="196">
                             <Label SnapsToDevicePixels="True" FontFamily="Arial" Foreground="DarkBlue" FontSize="11"
                                    FontWeight="Bold" VerticalContentAlignment="Center"
-                                   VerticalAlignment="Center" Style="{StaticResource moreColorsLabel}">
+                                   VerticalAlignment="Center" Style="{StaticResource MoreColorsLabel}">
                                 <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
                                                   HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                                   Margin="{TemplateBinding Padding}"
