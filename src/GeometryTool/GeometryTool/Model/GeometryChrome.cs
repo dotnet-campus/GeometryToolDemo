@@ -113,10 +113,10 @@ public class GeometryChrome : ContentControl
     public void CopyItem_Click(object sender, RoutedEventArgs e)
     {
         var BorderWA = DataContext as BorderWithAdorner;
-        MainWindow.CopyBorderWA = BorderWA; //记录要粘贴的图形
+        MainWindow.CopyBorderWithAdorner = BorderWA; //记录要粘贴的图形
         MainWindow.PasteCount = 0; //把粘贴次数重置为0
 
-        var rootCanvas = MainWindow.myRootCanvas;
+        var rootCanvas = MainWindow.MyRootCanvas;
         var rootCanvasParent = rootCanvas.Parent as Canvas;
         var CanvasBorder = rootCanvasParent.Parent as Border;
         var ScrollViewer = CanvasBorder.Parent as ScrollViewer;
@@ -133,10 +133,10 @@ public class GeometryChrome : ContentControl
     public void CutItem_Click(object sender, RoutedEventArgs e)
     {
         var BorderWA = DataContext as BorderWithAdorner;
-        MainWindow.CopyBorderWA = BorderWA; //记录要粘贴的图形
+        MainWindow.CopyBorderWithAdorner = BorderWA; //记录要粘贴的图形
         MainWindow.PasteCount = 0; //把粘贴次数重置为0
 
-        var rootCanvas = MainWindow.myRootCanvas;
+        var rootCanvas = MainWindow.MyRootCanvas;
         var rootCanvasParent = rootCanvas.Parent as Canvas;
         var CanvasBorder = rootCanvasParent.Parent as Border;
         var ScrollViewer = CanvasBorder.Parent as ScrollViewer;
@@ -159,7 +159,7 @@ public class GeometryChrome : ContentControl
     public void DeleteItem_Click(object sender, RoutedEventArgs e)
     {
         var borderWA = DataContext as BorderWithAdorner;
-        var rootCanvas = MainWindow.myRootCanvas;
+        var rootCanvas = MainWindow.MyRootCanvas;
         rootCanvas.Children.Remove(borderWA); //移除图形
         foreach (var item in borderWA.EllipseList) //移除图形上面的点
         {

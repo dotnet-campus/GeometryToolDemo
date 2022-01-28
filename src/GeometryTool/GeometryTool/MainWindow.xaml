@@ -9,10 +9,10 @@
 
     <Window.Resources>
         <ResourceDictionary>
-            <local:SliderConverterToDouble x:Key="sliderConverterToDouble" />
+            <local:SliderConverterToDouble x:Key="SliderConverterToDouble" />
             <local:BorderWidthHeightConverter x:Key="BorderWidthHeightConverter" />
-            <local:CanvasScaleTransformConverter x:Key="canvasScaleTransformConverter" />
-            <local:ScaleCenterConverter x:Key="scaleCenterConverter" />
+            <local:CanvasScaleTransformConverter x:Key="CanvasScaleTransformConverter" />
+            <local:ScaleCenterConverter x:Key="ScaleCenterConverter" />
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/PulseButtonStyle.xaml" />
                 <ResourceDictionary Source="Resources/ColorsStyle.xaml" />
@@ -38,7 +38,7 @@
             <ColumnDefinition Width="230" />
         </Grid.ColumnDefinitions>
 
-        <!--ToopTip-->
+        <!--ToolTip-->
         <TabControl Grid.Row="0" Grid.ColumnSpan="2" Background="#F1F1F1">
             <TabItem Header="  文件  ">
                 <StackPanel Orientation="Horizontal">
@@ -136,7 +136,7 @@
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal"
                                 Margin="0,0,0,5">
                         <Image Source="Image/Color.png" Width="20" />
-                        <Label x:Name="LBNowSelected" Foreground="#79AC2E" Content="画笔属性" FontSize="14" />
+                        <Label x:Name="NowSelectedLabel" Foreground="#79AC2E" Content="画笔属性" FontSize="14" />
                     </StackPanel>
                     <TabControl Style="{StaticResource TabControlWithNoBorderStyle}">
                         <TabItem Header="线条颜色" Style="{StaticResource RightTabItemStyle1}">
@@ -515,7 +515,7 @@
                         <Grid>
                             <Line Margin="0,-10,0,0" x:Name="LineStyle" Visibility="Hidden" X1="25" X2="175" Y1="0"
                                   Y2="0" Stroke="Black" StrokeDashArray="{Binding StrokeDashArray,Mode=TwoWay}"
-                                  StrokeThickness="{Binding StrokeThickness,Mode=TwoWay,Converter={StaticResource sliderConverterToDouble}}" />
+                                  StrokeThickness="{Binding StrokeThickness,Mode=TwoWay,Converter={StaticResource SliderConverterToDouble}}" />
                             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center"
                                         Orientation="Horizontal">
                                 <Slider x:Name="SliderStyle" HorizontalAlignment="Center" Width="180"
@@ -596,11 +596,11 @@
                     <Line X1="6" X2="210" Y1="20" Y2="20" Stroke="#79AC2E" StrokeThickness="1.5" />
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal"
                                 Margin="0,0,0,5">
-                        <Image Source="Image/myCanvas.png" Width="20" />
+                        <Image Source="Image/MyCanvas.png" Width="20" />
                         <Label Foreground="#79AC2E" Content="画板设置" FontSize="14" />
                     </StackPanel>
                     <Label SnapsToDevicePixels="True" Content="大小" />
-                    <ComboBox SelectionChanged="ComboBox_SelectionChanged" Width="200" x:Name="CBGridSize">
+                    <ComboBox SelectionChanged="ComboBox_SelectionChanged" Width="200" x:Name="GridSizeComboBox">
                         <ComboBoxItem Tag="16">16*16</ComboBoxItem>
                         <ComboBoxItem Tag="24">24*24</ComboBoxItem>
                         <ComboBoxItem Tag="32">32*32</ComboBoxItem>
@@ -629,7 +629,7 @@
         </Border>
 
         <!--画板-->
-        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer Grid.Row="1" Grid.Column="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <Border x:Name="CanvasBorder" HorizontalAlignment="Center" VerticalAlignment="Center"
                     Width="{Binding ElementName=RootGrid,Path=ActualWidth,Converter={StaticResource BorderWidthHeightConverter},ConverterParameter=215}"
                     Height="{Binding ElementName=RootGrid,Path=ActualHeight,Converter={StaticResource BorderWidthHeightConverter},ConverterParameter=115}">
@@ -642,10 +642,10 @@
                             MouseRightButtonDown="RootCanvas_MouseRightButtonDown">
                         <Canvas.RenderTransform>
                             <ScaleTransform x:Name="CanvasScaleTsf"
-                                            CenterX="{Binding ElementName=RootCanvas,Path=Width,Converter={StaticResource scaleCenterConverter}}"
+                                            CenterX="{Binding ElementName=RootCanvas,Path=Width,Converter={StaticResource ScaleCenterConverter}}"
                                             CenterY="0"
-                                            ScaleX="{Binding ElementName=CanvasChange,Path=Value,Converter={StaticResource canvasScaleTransformConverter}}"
-                                            ScaleY="{Binding ElementName=CanvasChange,Path=Value,Converter={StaticResource canvasScaleTransformConverter}}" />
+                                            ScaleX="{Binding ElementName=CanvasChange,Path=Value,Converter={StaticResource CanvasScaleTransformConverter}}"
+                                            ScaleY="{Binding ElementName=CanvasChange,Path=Value,Converter={StaticResource CanvasScaleTransformConverter}}" />
                         </Canvas.RenderTransform>
                         <Canvas.ContextMenu>
                             <ContextMenu x:Name="MenuOptions">

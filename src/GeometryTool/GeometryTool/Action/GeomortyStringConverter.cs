@@ -377,7 +377,7 @@ public class GeomertyStringConverter
             graphAppearance.Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString(BackgroundColor));
             graphAppearance.Stroke = new SolidColorBrush((Color)ColorConverter.ConvertFromString(StrokeColor));
             graphAppearance.StrokeThickness = Convert.ToDouble(StrokeThickness);
-            var gsc = new GeomertyStringConverter(MainWindow.myRootCanvas, graphAppearance);
+            var gsc = new GeomertyStringConverter(MainWindow.MyRootCanvas, graphAppearance);
             var newBorderWA = gsc.GeomotryFromString(MiniLanguage); //把Mini-Language转化成为图形，实现图形的深度复制
             var newPath = newBorderWA.Child as Path;
             newPath.Stroke = graphAppearance.Stroke;

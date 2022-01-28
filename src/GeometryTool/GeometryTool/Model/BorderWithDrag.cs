@@ -80,7 +80,7 @@ namespace GeometryTool
             //判断是否在选择模式下的操作以及是否可以拖动
             if (isDragDropInEffect && MainWindow.ActionMode == "Select")
             {
-                var _oldPoint = e.GetPosition(MainWindow.myRootCanvas); //获取目前鼠标的相对位置
+                var _oldPoint = e.GetPosition(MainWindow.MyRootCanvas); //获取目前鼠标的相对位置
                 var _pt = new AutoPoints().GetAutoAdsorbPoint(_oldPoint); //计算最近的网格的位置
                 Pt = _pt;
                 var _currEle = sender as FrameworkElement;
@@ -258,7 +258,7 @@ namespace GeometryTool
                     _path.Figures.RemoveAt(0);
                 }
 
-                MainWindow.myRootCanvas.Children.Remove(item); //在窗体上移除该点
+                MainWindow.MyRootCanvas.Children.Remove(item); //在窗体上移除该点
 
                 item.EllipseList.RemoveAt(item.Number - 1);
                 for (var j = 0; j < item.EllipseList.Count; ++j) //重新定位点集的位置
