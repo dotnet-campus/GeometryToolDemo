@@ -14,12 +14,18 @@ namespace GeometryTool;
 /// </summary>
 public class BorderLock
 {
-    public BorderWithDrag Border; //用于记录要进行命中测试的图形
-    private int Count; //用于计算命中的BorderWithDrag的数量
+    /// <summary>
+    /// 用于记录要进行命中测试的图形
+    /// </summary>
+    private readonly BorderWithDrag _border;
+    /// <summary>
+    /// 用于计算命中的BorderWithDrag的数量
+    /// </summary>
+    private int _count;
 
     public BorderLock(BorderWithDrag border)
     {
-        Border = border;
+        _border = border;
     }
 
     public BorderLock()
@@ -32,48 +38,48 @@ public class BorderLock
     /// <param name="point"></param>
     public void Lock(Point point)
     {
-        var _pt = point;
+        var currentPoint = point;
 
-        Border.PointList.Clear();
-        VisualTreeHelper.HitTest(Border.Parent as Canvas, null, //进行命中测试
+        _border.PointList.Clear();
+        VisualTreeHelper.HitTest(_border.Parent as Canvas, null, //进行命中测试
             MyHitTestResult,
-            new PointHitTestParameters(_pt));
+            new PointHitTestParameters(currentPoint));
 
 
-        if (Count > 1) //如果该点有多于两个BorderWithDrag，说明有点融合
+        if (_count > 1) //如果该点有多于两个BorderWithDrag，说明有点融合
         {
-            if (Border.BrotherBorder == null)
+            if (_border.BrotherBorder == null)
             {
-                Border.BrotherBorder = Border.PointList[1];
+                _border.BrotherBorder = _border.PointList[1];
             }
 
-            if (Border.BrotherBorder.lockAdornor == null) //只选择一个图层来显示Adorner
+            if (_border.BrotherBorder.LockAdornor == null) //只选择一个图层来显示Adorner
             {
-                Border.BrotherBorder.lockAdornor = new LockAdorner(Border.BrotherBorder);
-                var layer = AdornerLayer.GetAdornerLayer(Border.BrotherBorder.Parent as Canvas);
+                _border.BrotherBorder.LockAdornor = new LockAdorner(_border.BrotherBorder);
+                var layer = AdornerLayer.GetAdornerLayer(_border.BrotherBorder.Parent as Canvas);
                 if (layer != null)
                 {
-                    layer.Add(Border.BrotherBorder.lockAdornor);
+                    layer.Add(_border.BrotherBorder.LockAdornor);
                 }
             }
 
-            Border.BrotherBorder.HasOtherPoint = true; //显示锁
-            Border.BrotherBorder.lockAdornor.chrome.Source =
+            _border.BrotherBorder.HasOtherPoint = true; //显示锁
+            _border.BrotherBorder.LockAdornor.LockChrome.Source =
                 new BitmapImage(new Uri("Image/lock.png", UriKind.Relative));
 
-            if (Border != Border.BrotherBorder)
+            if (_border != _border.BrotherBorder)
             {
-                Border.BrotherBorder.PointList = Border.PointList;
+                _border.BrotherBorder.PointList = _border.PointList;
             }
 
-            foreach (var border in Border.BrotherBorder.PointList)
+            foreach (var border in _border.BrotherBorder.PointList)
             {
-                if (border != Border.BrotherBorder)
+                if (border != _border.BrotherBorder)
                 {
                     BindingOperations.ClearBinding((border.Child as Path).Data as EllipseGeometry,
                         EllipseGeometry.CenterProperty);
                     var binding = new Binding("Center")
-                        { Source = (Border.BrotherBorder.Child as Path).Data as EllipseGeometry };
+                        { Source = (_border.BrotherBorder.Child as Path).Data as EllipseGeometry };
                     binding.Mode = BindingMode.TwoWay;
                     BindingOperations.SetBinding((border.Child as Path).Data as EllipseGeometry,
                         EllipseGeometry.CenterProperty, binding);
@@ -82,7 +88,7 @@ public class BorderLock
         }
         else
         {
-            Border.HasOtherPoint = false;
+            _border.HasOtherPoint = false;
         }
     }
 
@@ -99,11 +105,11 @@ public class BorderLock
             var border = path.Parent as BorderWithDrag;
             if (border != null) //如果命中的图形是BorderWithDrag，就Count++
             {
-                Border.PointList.Add(border);
-                Count++;
-                if (border.lockAdornor != null) //选择一个已经带有Adorner的Border来显示锁
+                _border.PointList.Add(border);
+                _count++;
+                if (border.LockAdornor != null) //选择一个已经带有Adorner的Border来显示锁
                 {
-                    Border.BrotherBorder = border;
+                    _border.BrotherBorder = border;
                 }
             }
         }

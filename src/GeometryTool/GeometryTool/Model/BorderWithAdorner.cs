@@ -12,8 +12,8 @@ namespace GeometryTool;
 /// </summary>
 public class BorderWithAdorner : Border
 {
-    public List<Path> EllipseList;
-    public GeometryAdorner GAdorner; //图形的选择框
+    public List<Path> EllipseList { get; }
+    public GeometryAdorner GeometryAdorner { set; get; } //图形的选择框
     public double MaxX; //最大的X位置
     public double MaxY; //最大的Y位置
     public double MinX; //最小的X位置
@@ -47,11 +47,11 @@ public class BorderWithAdorner : Border
         if (layer != null)
         {
             GetFourPoint(this);
-            if (GAdorner == null)
+            if (GeometryAdorner == null)
             {
                 var path1 = Child as Path;
-                GAdorner = new GeometryAdorner(this);
-                layer.Add(GAdorner);
+                GeometryAdorner = new GeometryAdorner(this);
+                layer.Add(GeometryAdorner);
             }
         }
     }
@@ -110,14 +110,14 @@ public class BorderWithAdorner : Border
             StrokeDashArray = path.StrokeDashArray,
             Fill = path.Fill
         };
-        var gsc = new GeometryStringConverter(MainWindow.MyRootCanvas, graphAppearance);
-        var MiniLanguage = gsc.StringFromGeometry(vBorderWA.Child as Path); //把该图形转化成为Mini-Language
-        var newBorderWA = gsc.GeomotryFromString(MiniLanguage); //把Mini-Language转化成为图形，实现图形的深度复制
-        var newPath = newBorderWA.Child as Path;
+        var geometryStringConverter = new GeometryStringConverter(MainWindow.MyRootCanvas, graphAppearance);
+        var miniLanguage = geometryStringConverter.StringFromGeometry(vBorderWA.Child as Path); //把该图形转化成为Mini-Language
+        var newBorderWithAdorner = geometryStringConverter.GeometryFromString(miniLanguage); //把Mini-Language转化成为图形，实现图形的深度复制
+        var newPath = newBorderWithAdorner.Child as Path;
         newPath.Stroke = path.Stroke;
         newPath.StrokeThickness = path.StrokeThickness;
         newPath.StrokeDashArray = path.StrokeDashArray;
         newPath.Fill = path.Fill;
-        return newBorderWA;
+        return newBorderWithAdorner;
     }
 }

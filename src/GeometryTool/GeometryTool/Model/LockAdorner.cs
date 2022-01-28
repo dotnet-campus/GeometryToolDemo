@@ -9,27 +9,30 @@ namespace GeometryTool;
 /// </summary>
 public class LockAdorner : Adorner
 {
-    public LockChrome chrome; //锁的样式
-    private readonly VisualCollection visuals;
+    /// <summary>
+    /// 锁的样式
+    /// </summary>
+    public LockChrome LockChrome { get; }
+    private readonly VisualCollection _visuals;
 
     /// <summary>
     ///     重写的构造函数
     /// </summary>
-    /// <param name="borderWA"></param>
-    public LockAdorner(UIElement borderWA)
-        : base(borderWA)
+    /// <param name="borderWithAdorner"></param>
+    public LockAdorner(UIElement borderWithAdorner)
+        : base(borderWithAdorner)
     {
         SnapsToDevicePixels = true;
-        chrome = new LockChrome();
-        chrome.DataContext = borderWA;
-        visuals = new VisualCollection(this);
-        visuals.Add(chrome);
+        LockChrome = new LockChrome();
+        LockChrome.DataContext = borderWithAdorner;
+        _visuals = new VisualCollection(this);
+        _visuals.Add(LockChrome);
     }
 
     /// <summary>
     ///     重写的VisualChildrenCount
     /// </summary>
-    protected override int VisualChildrenCount => visuals.Count;
+    protected override int VisualChildrenCount => _visuals.Count;
 
     /// <summary>
     ///     重写的ArrangeOverride函数
@@ -38,7 +41,7 @@ public class LockAdorner : Adorner
     /// <returns></returns>
     protected override Size ArrangeOverride(Size arrangeBounds)
     {
-        chrome.Arrange(new Rect(arrangeBounds));
+        LockChrome.Arrange(new Rect(arrangeBounds));
         return arrangeBounds;
     }
 
@@ -49,6 +52,6 @@ public class LockAdorner : Adorner
     /// <returns></returns>
     protected override Visual GetVisualChild(int index)
     {
-        return visuals[index];
+        return _visuals[index];
     }
 }

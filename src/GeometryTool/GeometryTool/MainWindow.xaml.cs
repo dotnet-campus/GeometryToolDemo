@@ -477,7 +477,7 @@ public partial class MainWindow : Window
                         foreach (Match item in matchList)
                         {
                             var borderWithAdorner =
-                                geomertyStringConverter.GeomotryFromString(item.Groups[0].ToString()); //转化成为图形
+                                geomertyStringConverter.GeometryFromString(item.Groups[0].ToString()); //转化成为图形
                             RootCanvas.Children.Add(borderWithAdorner); //把图形添加到Canvas中
                             foreach (var ellipse in borderWithAdorner.EllipseList) //把点添加到Canvas中
                             {
@@ -538,7 +538,7 @@ public partial class MainWindow : Window
 
         if (SelectedBorder != null) //隐藏之前点击的图形的选择框
         {
-            SelectedBorder.GAdorner.Visibility = Visibility.Hidden;
+            SelectedBorder.GeometryAdorner.Visibility = Visibility.Hidden;
         }
 
         SelectedBorder = null;
@@ -723,9 +723,9 @@ public partial class MainWindow : Window
     {
         var geomertyStringConverter = new GeometryStringConverter(RootCanvas, _graphAppearance);
 
-        if (SelectedBorder != null && SelectedBorder.GAdorner != null) //隐藏之前点击的图形的选择框
+        if (SelectedBorder != null && SelectedBorder.GeometryAdorner != null) //隐藏之前点击的图形的选择框
         {
-            SelectedBorder.GAdorner.Visibility = Visibility.Hidden;
+            SelectedBorder.GeometryAdorner.Visibility = Visibility.Hidden;
         }
 
         if (ActionMode == "Select")
@@ -740,7 +740,7 @@ public partial class MainWindow : Window
             var p = new AutoPoints().GetAutoAdsorbPoint(Mouse.GetPosition(e.Source as FrameworkElement));
             var miniLanguage = "M " + p.X + "," + p.Y + " L " + p.X + "," + p.Y + " L " + p.X + "," + p.Y + " Z";
 
-            SelectedBorder = geomertyStringConverter.GeomotryFromString(miniLanguage);
+            SelectedBorder = geomertyStringConverter.GeometryFromString(miniLanguage);
             _trianglePath = SelectedBorder.Child as GeometryPath.Path;
             AddGeometryIntoCanvas(SelectedBorder, 0, 0);
             PanProperty.DataContext = _trianglePath;
@@ -752,7 +752,7 @@ public partial class MainWindow : Window
             var miniLanguage = "M " + p.X + "," + p.Y + " L " + p.X + "," + p.Y + " L " + p.X + "," + p.Y + " L " +
                                p.X + "," + p.Y + " Z";
 
-            SelectedBorder = geomertyStringConverter.GeomotryFromString(miniLanguage);
+            SelectedBorder = geomertyStringConverter.GeometryFromString(miniLanguage);
             _rectanglePath = SelectedBorder.Child as GeometryPath.Path;
             AddGeometryIntoCanvas(SelectedBorder, 0, 0);
             PanProperty.DataContext = _rectanglePath;
@@ -761,14 +761,14 @@ public partial class MainWindow : Window
         else if (ActionMode == "AddCircle") //绘制圆
         {
             var p = new AutoPoints().GetAutoAdsorbPoint(Mouse.GetPosition(e.Source as FrameworkElement));
-            SelectedBorder = _graphAdd.AddGeometryOfCricle(p, _graphAppearance, RootCanvas, out _circlePath);
+            SelectedBorder = _graphAdd.AddGeometryOfCircle(p, _graphAppearance, RootCanvas, out _circlePath);
             PanProperty.DataContext = _circlePath;
             _canMove = true;
         }
         else if (ActionMode == "AddEllipse") //绘制椭圆
         {
             var p = new AutoPoints().GetAutoAdsorbPoint(Mouse.GetPosition(e.Source as FrameworkElement));
-            SelectedBorder = _graphAdd.AddGeometryOfCricle(p, _graphAppearance, RootCanvas, out _ellipseGeometryPath);
+            SelectedBorder = _graphAdd.AddGeometryOfCircle(p, _graphAppearance, RootCanvas, out _ellipseGeometryPath);
             PanProperty.DataContext = _ellipseGeometryPath;
             _canMove = true;
         }
@@ -777,7 +777,7 @@ public partial class MainWindow : Window
             var p = new AutoPoints().GetAutoAdsorbPoint(Mouse.GetPosition(e.Source as FrameworkElement));
             var miniLanguage = "M " + p.X + "," + p.Y + " Q " + p.X + "," + p.Y
                                + " " + p.X + "," + p.Y;
-            SelectedBorder = geomertyStringConverter.GeomotryFromString(miniLanguage);
+            SelectedBorder = geomertyStringConverter.GeometryFromString(miniLanguage);
             _qBezierPath = SelectedBorder.Child as GeometryPath.Path;
             AddGeometryIntoCanvas(SelectedBorder, 0, 0);
             PanProperty.DataContext = _qBezierPath;
@@ -788,7 +788,7 @@ public partial class MainWindow : Window
             var p = new AutoPoints().GetAutoAdsorbPoint(Mouse.GetPosition(e.Source as FrameworkElement));
             var miniLanguage = "M " + p.X + "," + p.Y + " C " + p.X + "," + p.Y
                                + " " + p.X + "," + p.Y + " " + p.X + "," + p.Y;
-            SelectedBorder = geomertyStringConverter.GeomotryFromString(miniLanguage);
+            SelectedBorder = geomertyStringConverter.GeometryFromString(miniLanguage);
             _bezierPath = SelectedBorder.Child as GeometryPath.Path;
             AddGeometryIntoCanvas(SelectedBorder, 0, 0);
             PanProperty.DataContext = _bezierPath;
@@ -1337,7 +1337,7 @@ public partial class MainWindow : Window
             var borderWithAdorner = path.Parent as BorderWithAdorner;
             if (borderWithAdorner != null)
             {
-                borderWithAdorner.GAdorner.Visibility = Visibility.Visible;
+                borderWithAdorner.GeometryAdorner.Visibility = Visibility.Visible;
                 SelectedBorder = borderWithAdorner;
                 return HitTestResultBehavior.Stop;
             }
@@ -1395,14 +1395,14 @@ public partial class MainWindow : Window
             RoutedCommands.CopyCommand,
             (sender, e) =>
             {
-                if (SelectedBorder != null && SelectedBorder.GAdorner != null)
+                if (SelectedBorder != null && SelectedBorder.GeometryAdorner != null)
                 {
-                    SelectedBorder.GAdorner.chrome.CopyItem_Click(sender, e);
+                    SelectedBorder.GeometryAdorner.GeometryChrome.CopyItem_Click(sender, e);
                 }
             },
             (sender, e) =>
             {
-                if (SelectedBorder != null && SelectedBorder.GAdorner != null)
+                if (SelectedBorder != null && SelectedBorder.GeometryAdorner != null)
                 {
                     e.CanExecute = true;
                 }
@@ -1413,14 +1413,14 @@ public partial class MainWindow : Window
             RoutedCommands.CutCommand,
             (sender, e) =>
             {
-                if (SelectedBorder != null && SelectedBorder.GAdorner != null)
+                if (SelectedBorder != null && SelectedBorder.GeometryAdorner != null)
                 {
-                    SelectedBorder.GAdorner.chrome.CutItem_Click(sender, e);
+                    SelectedBorder.GeometryAdorner.GeometryChrome.CutItem_Click(sender, e);
                 }
             },
             (sender, e) =>
             {
-                if (SelectedBorder != null && SelectedBorder.GAdorner != null)
+                if (SelectedBorder != null && SelectedBorder.GeometryAdorner != null)
                 {
                     e.CanExecute = true;
                 }
@@ -1431,14 +1431,14 @@ public partial class MainWindow : Window
             RoutedCommands.DeleteCommand,
             (sender, e) =>
             {
-                if (SelectedBorder != null && SelectedBorder.GAdorner != null)
+                if (SelectedBorder != null && SelectedBorder.GeometryAdorner != null)
                 {
-                    SelectedBorder.GAdorner.chrome.DeleteItem_Click(sender, e);
+                    SelectedBorder.GeometryAdorner.GeometryChrome.DeleteItem_Click(sender, e);
                 }
             },
             (sender, e) =>
             {
-                if (SelectedBorder != null && SelectedBorder.GAdorner != null)
+                if (SelectedBorder != null && SelectedBorder.GeometryAdorner != null)
                 {
                     e.CanExecute = true;
                 }

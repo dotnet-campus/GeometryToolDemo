@@ -10,41 +10,39 @@ namespace GeometryTool;
 /// </summary>
 public class GeometryChrome : ContentControl
 {
-    public bool isLock;
-
     public GeometryChrome()
     {
         ContextMenu = new ContextMenu();
-        var CopyItem = new MenuItem();
-        CopyItem.Header = "复制";
-        CopyItem.Command = RoutedCommands.CopyCommand;
-        ContextMenu.Items.Add(CopyItem);
+        var copyItem = new MenuItem();
+        copyItem.Header = "复制";
+        copyItem.Command = RoutedCommands.CopyCommand;
+        ContextMenu.Items.Add(copyItem);
 
-        var CutItem = new MenuItem();
-        CutItem.Header = "剪切";
-        CutItem.Command = RoutedCommands.CutCommand;
-        ContextMenu.Items.Add(CutItem);
+        var cutItem = new MenuItem();
+        cutItem.Header = "剪切";
+        cutItem.Command = RoutedCommands.CutCommand;
+        ContextMenu.Items.Add(cutItem);
 
-        var DeleteItem = new MenuItem();
-        DeleteItem.Header = "删除";
-        DeleteItem.Command = RoutedCommands.DeleteCommand;
-        ContextMenu.Items.Add(DeleteItem);
+        var deleteItem = new MenuItem();
+        deleteItem.Header = "删除";
+        deleteItem.Command = RoutedCommands.DeleteCommand;
+        ContextMenu.Items.Add(deleteItem);
 
-        var TopItem = new MenuItem();
-        TopItem.Header = "至于顶层";
-        TopItem.Click += TopItem_Click;
-        ContextMenu.Items.Add(TopItem);
-        var BottomItem = new MenuItem();
+        var topItem = new MenuItem();
+        topItem.Header = "置于顶层";
+        topItem.Click += TopItem_Click;
+        ContextMenu.Items.Add(topItem);
+        var bottomItem = new MenuItem();
 
-        BottomItem.Header = "至于底层";
-        BottomItem.Click += BottomItem_Click;
-        ContextMenu.Items.Add(BottomItem);
+        bottomItem.Header = "置于底层";
+        bottomItem.Click += BottomItem_Click;
+        ContextMenu.Items.Add(bottomItem);
     }
 
-    public static void Arrange(GeometryChrome vGC)
+    public static void Arrange(GeometryChrome geometryChrome)
     {
-        var border = vGC.DataContext as BorderWithAdorner;
-        vGC.ArrangeOverride(new Size { Width = border.MaxX, Height = border.MaxY });
+        var border = geometryChrome.DataContext as BorderWithAdorner;
+        geometryChrome.ArrangeOverride(new Size { Width = border.MaxX, Height = border.MaxY });
     }
 
     /// <summary>
@@ -84,10 +82,10 @@ public class GeometryChrome : ContentControl
             }
         }
 
-        var pg = (border.Child as Path).Data as PathGeometry;
-        if (pg.Figures[0].Segments.Count > 0)
+        var pathGeometry = (border.Child as Path).Data as PathGeometry;
+        if (pathGeometry.Figures[0].Segments.Count > 0)
         {
-            var geometry = pg.GetFlattenedPathGeometry();
+            var geometry = pathGeometry.GetFlattenedPathGeometry();
             var bound = geometry.GetRenderBounds(new Pen(null, (border.Child as Path).StrokeThickness));
             Width = bound.Width + 1;
             Height = bound.Height + 1;
@@ -112,15 +110,15 @@ public class GeometryChrome : ContentControl
     /// <param name="e"></param>
     public void CopyItem_Click(object sender, RoutedEventArgs e)
     {
-        var BorderWA = DataContext as BorderWithAdorner;
-        MainWindow.CopyBorderWithAdorner = BorderWA; //记录要粘贴的图形
+        var borderWithAdorner = DataContext as BorderWithAdorner;
+        MainWindow.CopyBorderWithAdorner = borderWithAdorner; //记录要粘贴的图形
         MainWindow.PasteCount = 0; //把粘贴次数重置为0
 
         var rootCanvas = MainWindow.MyRootCanvas;
         var rootCanvasParent = rootCanvas.Parent as Canvas;
-        var CanvasBorder = rootCanvasParent.Parent as Border;
-        var ScrollViewer = CanvasBorder.Parent as ScrollViewer;
-        var rootGrid = ScrollViewer.Parent as Grid;
+        var canvasBorder = rootCanvasParent.Parent as Border;
+        var scrollViewer = canvasBorder.Parent as ScrollViewer;
+        var rootGrid = scrollViewer.Parent as Grid;
         var mainWindow = rootGrid.Parent as MainWindow; //获取MainWindow实例，为了修改CanPaste属性
         mainWindow.CanPaste = true;
     }
@@ -132,22 +130,22 @@ public class GeometryChrome : ContentControl
     /// <param name="e"></param>
     public void CutItem_Click(object sender, RoutedEventArgs e)
     {
-        var BorderWA = DataContext as BorderWithAdorner;
-        MainWindow.CopyBorderWithAdorner = BorderWA; //记录要粘贴的图形
+        var borderWithAdorner = DataContext as BorderWithAdorner;
+        MainWindow.CopyBorderWithAdorner = borderWithAdorner; //记录要粘贴的图形
         MainWindow.PasteCount = 0; //把粘贴次数重置为0
 
         var rootCanvas = MainWindow.MyRootCanvas;
         var rootCanvasParent = rootCanvas.Parent as Canvas;
-        var CanvasBorder = rootCanvasParent.Parent as Border;
-        var ScrollViewer = CanvasBorder.Parent as ScrollViewer;
-        var rootGrid = ScrollViewer.Parent as Grid;
+        var canvasBorder = rootCanvasParent.Parent as Border;
+        var scrollViewer = canvasBorder.Parent as ScrollViewer;
+        var rootGrid = scrollViewer.Parent as Grid;
         var mainWindow = rootGrid.Parent as MainWindow; //获取MainWindow实例，为了修改CanPaste属性
         mainWindow.CanPaste = true;
-        rootCanvas.Children.Remove(BorderWA);
-        foreach (var item in BorderWA.EllipseList)
+        rootCanvas.Children.Remove(borderWithAdorner);
+        foreach (var item in borderWithAdorner.EllipseList)
         {
-            var borderWD = item.Parent as BorderWithDrag;
-            rootCanvas.Children.Remove(borderWD);
+            var borderWithDrag = item.Parent as BorderWithDrag;
+            rootCanvas.Children.Remove(borderWithDrag);
         }
     }
 
@@ -158,13 +156,13 @@ public class GeometryChrome : ContentControl
     /// <param name="e"></param>
     public void DeleteItem_Click(object sender, RoutedEventArgs e)
     {
-        var borderWA = DataContext as BorderWithAdorner;
+        var borderWithAdorner = DataContext as BorderWithAdorner;
         var rootCanvas = MainWindow.MyRootCanvas;
-        rootCanvas.Children.Remove(borderWA); //移除图形
-        foreach (var item in borderWA.EllipseList) //移除图形上面的点
+        rootCanvas.Children.Remove(borderWithAdorner); //移除图形
+        foreach (var item in borderWithAdorner.EllipseList) //移除图形上面的点
         {
-            var borderWD = item.Parent as BorderWithDrag;
-            rootCanvas.Children.Remove(borderWD);
+            var borderWithDrag = item.Parent as BorderWithDrag;
+            rootCanvas.Children.Remove(borderWithDrag);
         }
     }
 
@@ -175,11 +173,11 @@ public class GeometryChrome : ContentControl
     /// <param name="e"></param>
     public void TopItem_Click(object sender, RoutedEventArgs e)
     {
-        var borderWA = DataContext as BorderWithAdorner;
-        Panel.SetZIndex(borderWA, MainWindow.HightestLevel++);
-        for (var i = 0; i < borderWA.EllipseList.Count; ++i)
+        var borderWithAdorner = DataContext as BorderWithAdorner;
+        Panel.SetZIndex(borderWithAdorner, MainWindow.HightestLevel++);
+        for (var i = 0; i < borderWithAdorner.EllipseList.Count; ++i)
         {
-            Panel.SetZIndex(borderWA.EllipseList[i].Parent as BorderWithDrag, MainWindow.HightestLevel);
+            Panel.SetZIndex(borderWithAdorner.EllipseList[i].Parent as BorderWithDrag, MainWindow.HightestLevel);
         }
     }
 
@@ -190,11 +188,11 @@ public class GeometryChrome : ContentControl
     /// <param name="e"></param>
     public void BottomItem_Click(object sender, RoutedEventArgs e)
     {
-        var borderWA = DataContext as BorderWithAdorner;
-        Panel.SetZIndex(borderWA, MainWindow.LowestLevel--);
-        for (var i = 0; i < borderWA.EllipseList.Count; ++i)
+        var borderWithAdorner = DataContext as BorderWithAdorner;
+        Panel.SetZIndex(borderWithAdorner, MainWindow.LowestLevel--);
+        for (var i = 0; i < borderWithAdorner.EllipseList.Count; ++i)
         {
-            Panel.SetZIndex(borderWA.EllipseList[i].Parent as BorderWithDrag, MainWindow.LowestLevel);
+            Panel.SetZIndex(borderWithAdorner.EllipseList[i].Parent as BorderWithDrag, MainWindow.LowestLevel);
         }
     }
 }

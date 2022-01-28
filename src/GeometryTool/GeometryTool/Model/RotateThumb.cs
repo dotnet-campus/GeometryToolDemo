@@ -12,10 +12,22 @@ namespace GeometryTool;
 /// </summary>
 public class RotateThumb : Thumb
 {
-    private BorderWithAdorner borderWA; //图形的Border
-    private Canvas canvas; //图形所在的画布
-    private Point centerPoint; //图形的重点
-    private Vector startVector; //开始的坐标向量
+    /// <summary>
+    /// 图形的Border
+    /// </summary>
+    private BorderWithAdorner _borderWithAdorner;
+    /// <summary>
+    /// 图形所在的画布
+    /// </summary>
+    private Canvas _canvas;
+    /// <summary>
+    /// 图形的重点
+    /// </summary>
+    private Point _centerPoint;
+    /// <summary>
+    /// 开始的坐标向量
+    /// </summary>
+    private Vector _startVector;
 
     public RotateThumb()
     {
@@ -24,7 +36,6 @@ public class RotateThumb : Thumb
         DragCompleted += RotateThumb_DragCompleted;
     }
 
-
     /// <summary>
     ///     开始旋转
     /// </summary>
@@ -32,19 +43,19 @@ public class RotateThumb : Thumb
     /// <param name="e"></param>
     private void RotateThumb_DragStarted(object sender, DragStartedEventArgs e)
     {
-        borderWA = DataContext as BorderWithAdorner;
+        _borderWithAdorner = DataContext as BorderWithAdorner;
 
-        if (borderWA != null)
+        if (_borderWithAdorner != null)
         {
-            canvas = VisualTreeHelper.GetParent(borderWA) as Canvas;
-            if (canvas != null)
+            _canvas = VisualTreeHelper.GetParent(_borderWithAdorner) as Canvas;
+            if (_canvas != null)
             {
-                centerPoint = borderWA.TranslatePoint(
-                    new Point { X = (borderWA.MaxX + borderWA.MinX) / 2.0, Y = (borderWA.MaxY + borderWA.MinY) / 2.0 },
-                    canvas);
+                _centerPoint = _borderWithAdorner.TranslatePoint(
+                    new Point { X = (_borderWithAdorner.MaxX + _borderWithAdorner.MinX) / 2.0, Y = (_borderWithAdorner.MaxY + _borderWithAdorner.MinY) / 2.0 },
+                    _canvas);
 
-                var startPoint = Mouse.GetPosition(canvas);
-                startVector = Point.Subtract(startPoint, centerPoint); //计算开始的向量
+                var startPoint = Mouse.GetPosition(_canvas);
+                _startVector = Point.Subtract(startPoint, _centerPoint); //计算开始的向量
             }
         }
     }
@@ -56,15 +67,15 @@ public class RotateThumb : Thumb
     /// <param name="e"></param>
     private void RotateThumb_DragDelta(object sender, DragDeltaEventArgs e)
     {
-        if (borderWA != null && canvas != null)
+        if (_borderWithAdorner != null && _canvas != null)
         {
-            var currentPoint = Mouse.GetPosition(canvas);
-            var deltaVector = Point.Subtract(currentPoint, centerPoint);
-            var angle = Vector.AngleBetween(startVector, deltaVector) / 360 * 2 * Math.PI;
-            var centerX = (borderWA.MaxX + borderWA.MinX) / 2.0;
-            var centerY = (borderWA.MaxY + borderWA.MinY) / 2.0; //计算旋转的角度，中点坐标
+            var currentPoint = Mouse.GetPosition(_canvas);
+            var deltaVector = Point.Subtract(currentPoint, _centerPoint);
+            var angle = Vector.AngleBetween(_startVector, deltaVector) / 360 * 2 * Math.PI;
+            var centerX = (_borderWithAdorner.MaxX + _borderWithAdorner.MinX) / 2.0;
+            var centerY = (_borderWithAdorner.MaxY + _borderWithAdorner.MinY) / 2.0; //计算旋转的角度，中点坐标
 
-            foreach (var item in borderWA.EllipseList) //根据公式来计算算旋转后的位置
+            foreach (var item in _borderWithAdorner.EllipseList) //根据公式来计算算旋转后的位置
             {
                 if ((item.Parent as BorderWithDrag).HasOtherPoint)
                 {
@@ -81,7 +92,7 @@ public class RotateThumb : Thumb
             }
 
             var startPoint = currentPoint;
-            startVector = Point.Subtract(startPoint, centerPoint); //重新赋值开始的向量
+            _startVector = Point.Subtract(startPoint, _centerPoint); //重新赋值开始的向量
         }
     }
 
@@ -92,7 +103,7 @@ public class RotateThumb : Thumb
     /// <param name="e"></param>
     private void RotateThumb_DragCompleted(object sender, DragCompletedEventArgs e)
     {
-        foreach (var item in borderWA.EllipseList)
+        foreach (var item in _borderWithAdorner.EllipseList)
         {
             var ellipse = item.Data as EllipseGeometry;
             var oldPoint = ellipse.Center;

@@ -9,14 +9,13 @@ public class XMLHelper
     ///     读取xml文件，返回图形所在Match
     /// </summary>
     /// <param name="vPath"></param>
-    /// <param name="vRootCanvas"></param>
     public Match ReadXml(string vPath)
     {
-        var _streamReader = new StreamReader(vPath);
-        var _regex = new Regex(@"<Figures>\s*([^F]*)</Figures>");
-        var _match = _regex.Match(_streamReader.ReadToEnd());
-        _streamReader.Close();
-        return _match;
+        var streamReader = new StreamReader(vPath);
+        var regex = new Regex(@"<Figures>\s*([^F]*)</Figures>");
+        var match = regex.Match(streamReader.ReadToEnd());
+        streamReader.Close();
+        return match;
     }
 
     /// <summary>

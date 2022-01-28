@@ -10,29 +10,29 @@ namespace GeometryTool;
 /// </summary>
 public class ResizeRotateAdorner : Adorner
 {
-    private readonly ResizeRotateChrome chrome;
-    private readonly VisualCollection visuals;
+    private readonly ResizeRotateChrome _chrome;
+    private readonly VisualCollection _visuals;
 
-    public ResizeRotateAdorner(ContentControl borderWA)
-        : base(borderWA)
+    public ResizeRotateAdorner(ContentControl borderWithAdorner)
+        : base(borderWithAdorner)
     {
         SnapsToDevicePixels = true;
-        chrome = new ResizeRotateChrome();
-        chrome.DataContext = borderWA;
-        visuals = new VisualCollection(this);
-        visuals.Add(chrome);
+        _chrome = new ResizeRotateChrome();
+        _chrome.DataContext = borderWithAdorner;
+        _visuals = new VisualCollection(this);
+        _visuals.Add(_chrome);
     }
 
-    protected override int VisualChildrenCount => visuals.Count;
+    protected override int VisualChildrenCount => _visuals.Count;
 
     protected override Size ArrangeOverride(Size arrangeBounds)
     {
-        chrome.Arrange(new Rect(arrangeBounds));
+        _chrome.Arrange(new Rect(arrangeBounds));
         return arrangeBounds;
     }
 
     protected override Visual GetVisualChild(int index)
     {
-        return visuals[index];
+        return _visuals[index];
     }
 }

@@ -7,34 +7,57 @@ namespace GeometryTool;
 /// </summary>
 public static class RoutedCommands
 {
-    private static RoutedUICommand pasteCommand; //粘贴的路由事件
+    /// <summary>
+    /// 粘贴的路由事件
+    /// </summary>
+    private static RoutedUICommand _pasteCommand;
 
-    private static RoutedUICommand copyCommand; //复制的路由事件
+    /// <summary>
+    /// 复制的路由事件
+    /// </summary>
+    private static RoutedUICommand _copyCommand;
 
-    private static RoutedUICommand cutCommand; //剪切的路由事件
+    /// <summary>
+    /// 剪切的路由事件
+    /// </summary>
+    private static RoutedUICommand _cutCommand;
 
-    private static RoutedUICommand deleteCommand; //删除的路由事件
+    /// <summary>
+    /// 删除的路由事件
+    /// </summary>
+    private static RoutedUICommand _deleteCommand;
 
-    private static RoutedUICommand saveCommand; //保存的路由事件
+    /// <summary>
+    /// 保存的路由事件
+    /// </summary>
+    private static RoutedUICommand _saveCommand;
 
-    private static RoutedUICommand newCommand; //新建的路由事件
+    /// <summary>
+    /// 新建的路由事件
+    /// </summary>
+    private static RoutedUICommand _newCommand;
 
-    private static RoutedUICommand openCommand; //打开的路由事件
+    /// <summary>
+    /// 打开的路由事件
+    /// </summary>
+    private static RoutedUICommand _openCommand;
 
     public static RoutedUICommand PasteCommand
     {
         get
         {
-            if (pasteCommand == null)
+            if (_pasteCommand == null)
             {
-                pasteCommand = new RoutedUICommand(
+                _pasteCommand = new RoutedUICommand
+                (
                     "Paste",
                     "Paste",
                     typeof(MainWindow),
-                    new InputGestureCollection { new KeyGesture(Key.V, ModifierKeys.Control) });
+                    new InputGestureCollection { new KeyGesture(Key.V, ModifierKeys.Control) }
+                );
             }
 
-            return pasteCommand;
+            return _pasteCommand;
         }
     }
 
@@ -42,16 +65,18 @@ public static class RoutedCommands
     {
         get
         {
-            if (copyCommand == null)
+            if (_copyCommand == null)
             {
-                copyCommand = new RoutedUICommand(
+                _copyCommand = new RoutedUICommand
+                (
                     "Copy",
                     "Copy",
                     typeof(MainWindow),
-                    new InputGestureCollection { new KeyGesture(Key.C, ModifierKeys.Control) });
+                    new InputGestureCollection { new KeyGesture(Key.C, ModifierKeys.Control) }
+                );
             }
 
-            return copyCommand;
+            return _copyCommand;
         }
     }
 
@@ -59,16 +84,18 @@ public static class RoutedCommands
     {
         get
         {
-            if (cutCommand == null)
+            if (_cutCommand == null)
             {
-                cutCommand = new RoutedUICommand(
+                _cutCommand = new RoutedUICommand
+                (
                     "Cut",
                     "Cut",
                     typeof(MainWindow),
-                    new InputGestureCollection { new KeyGesture(Key.X, ModifierKeys.Control) });
+                    new InputGestureCollection { new KeyGesture(Key.X, ModifierKeys.Control) }
+                );
             }
 
-            return cutCommand;
+            return _cutCommand;
         }
     }
 
@@ -76,16 +103,18 @@ public static class RoutedCommands
     {
         get
         {
-            if (deleteCommand == null)
+            if (_deleteCommand == null)
             {
-                deleteCommand = new RoutedUICommand(
+                _deleteCommand = new RoutedUICommand
+                (
                     "Delete",
                     "Delete",
                     typeof(MainWindow),
-                    new InputGestureCollection { new KeyGesture(Key.Delete) });
+                    new InputGestureCollection { new KeyGesture(Key.Delete) }
+                );
             }
 
-            return deleteCommand;
+            return _deleteCommand;
         }
     }
 
@@ -93,16 +122,18 @@ public static class RoutedCommands
     {
         get
         {
-            if (saveCommand == null)
+            if (_saveCommand == null)
             {
-                saveCommand = new RoutedUICommand(
+                _saveCommand = new RoutedUICommand
+                (
                     "Save",
                     "Save",
                     typeof(MainWindow),
-                    new InputGestureCollection { new KeyGesture(Key.S, ModifierKeys.Control) });
+                    new InputGestureCollection { new KeyGesture(Key.S, ModifierKeys.Control) }
+                );
             }
 
-            return saveCommand;
+            return _saveCommand;
         }
     }
 
@@ -110,16 +141,18 @@ public static class RoutedCommands
     {
         get
         {
-            if (newCommand == null)
+            if (_newCommand == null)
             {
-                newCommand = new RoutedUICommand(
+                _newCommand = new RoutedUICommand
+                (
                     "New",
                     "New",
                     typeof(MainWindow),
-                    new InputGestureCollection { new KeyGesture(Key.N, ModifierKeys.Control) });
+                    new InputGestureCollection { new KeyGesture(Key.N, ModifierKeys.Control) }
+                );
             }
 
-            return newCommand;
+            return _newCommand;
         }
     }
 
@@ -127,16 +160,18 @@ public static class RoutedCommands
     {
         get
         {
-            if (openCommand == null)
+            if (_openCommand == null)
             {
-                openCommand = new RoutedUICommand(
+                _openCommand = new RoutedUICommand
+                (
                     "open",
                     "open",
                     typeof(MainWindow),
-                    new InputGestureCollection { new KeyGesture(Key.O, ModifierKeys.Control) });
+                    new InputGestureCollection { new KeyGesture(Key.O, ModifierKeys.Control) }
+                );
             }
 
-            return openCommand;
+            return _openCommand;
         }
     }
 }

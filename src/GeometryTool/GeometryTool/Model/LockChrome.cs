@@ -13,13 +13,13 @@ namespace GeometryTool;
 /// </summary>
 public class LockChrome : Image
 {
-    public bool isLock;
+    private readonly bool _isLock;
 
     public LockChrome()
     {
         MouseDown += Element_MouseLeftButtonDown; //给这个Image添加点击事件，用于解开融合
         Source = new BitmapImage(new Uri("Image/lock.png", UriKind.Relative));
-        isLock = true;
+        _isLock = true;
     }
 
     /// <summary>
@@ -35,10 +35,10 @@ public class LockChrome : Image
         HorizontalAlignment = HorizontalAlignment.Right; //放在点的右下角
         VerticalAlignment = VerticalAlignment.Bottom;
 
-        var tt = new TranslateTransform(); //做一个旋转的变换
-        tt.X = 1.2;
-        tt.Y = -0.3;
-        RenderTransform = tt;
+        var translateTransform = new TranslateTransform(); //做一个旋转的变换
+        translateTransform.X = 1.2;
+        translateTransform.Y = -0.3;
+        RenderTransform = translateTransform;
 
         var binding = new Binding("HasOtherPoint") { Converter = new ImageVisibilityConverter() };
         SetBinding(VisibilityProperty, binding); //当没有重合点的时候，隐藏锁
@@ -53,14 +53,14 @@ public class LockChrome : Image
     /// <param name="e"></param>
     public void Element_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-        var Chrome = sender as LockChrome;
-        if (Chrome != null)
+        var chrome = sender as LockChrome;
+        if (chrome != null)
         {
-            if (isLock) //融合变不融合
+            if (_isLock) //融合变不融合
             {
-                var _border = DataContext as BorderWithDrag;
-                var _borderLock = new BorderLock();
-                _borderLock.unLock(_border);
+                var border = DataContext as BorderWithDrag;
+                var borderLock = new BorderLock();
+                borderLock.unLock(border);
             }
 
             e.Handled = true;

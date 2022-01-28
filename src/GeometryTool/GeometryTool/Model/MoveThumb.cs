@@ -9,7 +9,7 @@ namespace GeometryTool;
 /// </summary>
 public class MoveThumb : Thumb
 {
-    private BorderWithAdorner borderWA; //包含该图形的BorderWithAdorner
+    private BorderWithAdorner borderWithAdorner; //包含该图形的BorderWithAdorner
 
     /// <summary>
     ///     构造函数，注册拖动事件
@@ -28,7 +28,7 @@ public class MoveThumb : Thumb
     /// <param name="e"></param>
     private void MoveThumb_DragStarted(object sender, DragStartedEventArgs e)
     {
-        borderWA = DataContext as BorderWithAdorner;
+        borderWithAdorner = DataContext as BorderWithAdorner;
     }
 
     /// <summary>
@@ -38,14 +38,14 @@ public class MoveThumb : Thumb
     /// <param name="e"></param>
     private void MoveThumb_DragDelta(object sender, DragDeltaEventArgs e)
     {
-        if (borderWA != null)
+        if (borderWithAdorner != null)
         {
             var dragDelta = new Point(e.HorizontalChange, e.VerticalChange); //获取移动的距离
-            var border = borderWA;
+            var border = borderWithAdorner;
             for (var i = 0; i < border.EllipseList.Count; ++i)
             {
-                var borderWD = border.EllipseList[i].Parent as BorderWithDrag;
-                if (borderWD.HasOtherPoint) //如果该点有锁，便跳过移动
+                var borderWithDrag = border.EllipseList[i].Parent as BorderWithDrag;
+                if (borderWithDrag.HasOtherPoint) //如果该点有锁，便跳过移动
                 {
                     continue;
                 }
@@ -64,9 +64,9 @@ public class MoveThumb : Thumb
     /// <param name="e"></param>
     private void MoveThumb_DragCompleted(object sender, DragCompletedEventArgs e)
     {
-        for (var i = 0; i < borderWA.EllipseList.Count; ++i)
+        for (var i = 0; i < borderWithAdorner.EllipseList.Count; ++i)
         {
-            var item = borderWA.EllipseList[i].Data as EllipseGeometry;
+            var item = borderWithAdorner.EllipseList[i].Data as EllipseGeometry;
             var p1 = item.Center;
             item.Center = new AutoPoints().GetAutoAdsorbPoint(p1);
         }

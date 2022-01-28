@@ -8,11 +8,20 @@ namespace GeometryTool;
 /// </summary>
 public class GraphAppearance
 {
-    public FillRule fillRule; //填充规则
+    /// <summary>
+    /// 填充规则
+    /// </summary>
+    private FillRule _fillRule;
 
-    private DoubleCollection strokeDashArray; //设置虚实
+    /// <summary>
+    /// 设置虚实
+    /// </summary>
+    private DoubleCollection _strokeDashArray;
 
-    private double strokeThickness; //设置图形的线条的大小
+    /// <summary>
+    /// 设置图形的线条的大小
+    /// </summary>
+    private double _strokeThickness;
 
     public GraphAppearance()
     {
@@ -28,10 +37,10 @@ public class GraphAppearance
 
     public double StrokeThickness
     {
-        get => strokeThickness;
+        get => _strokeThickness;
         set
         {
-            strokeThickness = value;
+            _strokeThickness = value;
             if (PropertyChanged != null)
             {
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs("StrokeThickness"));
@@ -41,10 +50,10 @@ public class GraphAppearance
 
     public DoubleCollection StrokeDashArray
     {
-        get => strokeDashArray;
+        get => _strokeDashArray;
         set
         {
-            strokeDashArray = value;
+            _strokeDashArray = value;
             if (PropertyChanged != null)
             {
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs("StrokeDashArray"));
@@ -52,14 +61,20 @@ public class GraphAppearance
         }
     }
 
-    private Brush stroke { get; set; } //设置图形的颜色
+    /// <summary>
+    /// 设置图形的颜色
+    /// </summary>
+    private Brush _stroke;
 
+    /// <summary>
+    /// 设置图形的颜色
+    /// </summary>
     public Brush Stroke
     {
-        get => stroke;
+        get => _stroke;
         set
         {
-            stroke = value;
+            _stroke = value;
             if (PropertyChanged != null)
             {
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Stroke"));
@@ -67,14 +82,20 @@ public class GraphAppearance
         }
     }
 
-    private Brush fill { get; set; } //设置图形填充的颜色
+    /// <summary>
+    /// 设置图形填充的颜色
+    /// </summary>
+    private Brush _fill;
 
+    /// <summary>
+    /// 设置图形填充的颜色
+    /// </summary>
     public Brush Fill
     {
-        get => fill;
+        get => _fill;
         set
         {
-            fill = value;
+            _fill = value;
             if (PropertyChanged != null)
             {
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Fill"));
@@ -84,10 +105,10 @@ public class GraphAppearance
 
     public FillRule FillRule
     {
-        get => fillRule;
+        get => _fillRule;
         set
         {
-            fillRule = value;
+            _fillRule = value;
             if (PropertyChanged != null)
             {
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs("FillRule"));

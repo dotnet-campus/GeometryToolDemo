@@ -9,27 +9,27 @@ namespace GeometryTool;
 /// </summary>
 public class GeometryAdorner : Adorner
 {
-    public GeometryChrome chrome; //选择框的真正样式
-    private readonly VisualCollection visuals;
+    public GeometryChrome GeometryChrome { set; get; } //选择框的真正样式
+    private readonly VisualCollection _visuals;
 
     /// <summary>
     ///     构造函数，主要是使chrome是DataContext为BorderWithAdorner
     /// </summary>
-    /// <param name="borderWA"></param>
-    public GeometryAdorner(BorderWithAdorner borderWA)
-        : base(borderWA)
+    /// <param name="borderWithAdorner"></param>
+    public GeometryAdorner(BorderWithAdorner borderWithAdorner)
+        : base(borderWithAdorner)
     {
         SnapsToDevicePixels = true;
-        chrome = new GeometryChrome();
-        chrome.DataContext = borderWA;
-        visuals = new VisualCollection(this);
-        visuals.Add(chrome);
+        GeometryChrome = new GeometryChrome();
+        GeometryChrome.DataContext = borderWithAdorner;
+        _visuals = new VisualCollection(this);
+        _visuals.Add(GeometryChrome);
     }
 
     /// <summary>
     ///     重写的VisualChildrenCount函数
     /// </summary>
-    protected override int VisualChildrenCount => visuals.Count;
+    protected override int VisualChildrenCount => _visuals.Count;
 
     /// <summary>
     ///     重写的ArrangeOverride
@@ -40,7 +40,7 @@ public class GeometryAdorner : Adorner
     {
         arrangeBounds.Height += 0.5;
         arrangeBounds.Width += 0.5;
-        chrome.Arrange(new Rect(arrangeBounds));
+        GeometryChrome.Arrange(new Rect(arrangeBounds));
         return arrangeBounds;
     }
 
@@ -51,6 +51,6 @@ public class GeometryAdorner : Adorner
     /// <returns></returns>
     protected override Visual GetVisualChild(int index)
     {
-        return visuals[index];
+        return _visuals[index];
     }
 }
