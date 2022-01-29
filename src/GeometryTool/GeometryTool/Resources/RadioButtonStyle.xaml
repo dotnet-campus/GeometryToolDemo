@@ -18,7 +18,7 @@
                         <Storyboard x:Key="Storyboard1">
                             <ColorAnimationUsingKeyFrames
                                 Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
-                                Storyboard.TargetName="bd">
+                                Storyboard.TargetName="Border">
                                 <EasingColorKeyFrame KeyTime="0" Value="White" />
                                 <EasingColorKeyFrame KeyTime="0:0:0.3" Value="#FFAFAFAF" />
                             </ColorAnimationUsingKeyFrames>
@@ -26,7 +26,7 @@
                         <Storyboard x:Key="Storyboard2">
                             <ColorAnimationUsingKeyFrames
                                 Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
-                                Storyboard.TargetName="bd">
+                                Storyboard.TargetName="Border">
                                 <EasingColorKeyFrame KeyTime="0" Value="#FFAFAFAF" />
                                 <EasingColorKeyFrame KeyTime="0:0:0.5" Value="#D3D3D3" />
                             </ColorAnimationUsingKeyFrames>
