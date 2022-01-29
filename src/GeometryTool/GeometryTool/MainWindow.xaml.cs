@@ -596,10 +596,10 @@ public partial class MainWindow : Window
 
             if (arcSegment != null && pg.Figures[0].Segments.Count == 1) //设置曲线属性
             {
-                var isClockwise = arcSegment.SweepDirection == SweepDirection.Clockwise ? true : false;
-                var isLargeArc = arcSegment.IsLargeArc;
-                var RotationAngle = arcSegment.RotationAngle;
-                var size = arcSegment.Size;
+                //var isClockwise = arcSegment.SweepDirection == SweepDirection.Clockwise ? true : false;
+                //var isLargeArc = arcSegment.IsLargeArc;
+                //var rotationAngle = arcSegment.RotationAngle;
+                //var size = arcSegment.Size;
             }
         }
     }
