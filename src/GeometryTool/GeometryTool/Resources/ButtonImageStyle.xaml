@@ -14,7 +14,7 @@
                     <Border x:Name="Border" BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}" Background="#FFFFFF"
                             SnapsToDevicePixels="true">
-                        <ContentPresenter x:Name="contentPresenter" Focusable="False"
+                        <ContentPresenter x:Name="ContentPresenter" Focusable="False"
                                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                           Margin="{TemplateBinding Padding}" RecognizesAccessKey="True"
                                           SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"

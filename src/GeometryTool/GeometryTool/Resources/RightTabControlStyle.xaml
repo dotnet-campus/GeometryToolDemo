@@ -88,8 +88,8 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TabItem">
-                    <Grid x:Name="grd" Margin="0,0,0,10">
-                        <Border x:Name="headerBorder" Background="#F1F1F1" BorderBrush="{StaticResource BorderBrush}"
+                    <Grid x:Name="Grid" Margin="0,0,0,10">
+                        <Border x:Name="HeaderBorder" Background="#F1F1F1" BorderBrush="{StaticResource BorderBrush}"
                                 BorderThickness="1,1,0,1" Width="100" Height="25" CornerRadius="3,0,0,3" />
                         <ContentPresenter x:Name="TabItemContent" ContentSource="Header" VerticalAlignment="Center"
                                           TextElement.Foreground="{StaticResource FontForeground}"
@@ -97,11 +97,11 @@
                     </Grid>
 
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True" SourceName="grd">
-                            <Setter Property="Background" Value="{StaticResource HoverBrush}" TargetName="headerBorder" />
+                        <Trigger Property="IsMouseOver" Value="True" SourceName="Grid">
+                            <Setter Property="Background" Value="{StaticResource HoverBrush}" TargetName="HeaderBorder" />
                         </Trigger>
                         <Trigger Property="Selector.IsSelected" Value="True">
-                            <Setter Property="Background" Value="#999999" TargetName="headerBorder" />
+                            <Setter Property="Background" Value="#999999" TargetName="HeaderBorder" />
                             <Setter Property="TextElement.Foreground" Value="White" TargetName="TabItemContent" />
                             <Setter Property="Panel.ZIndex" Value="2" />
                         </Trigger>
@@ -116,8 +116,8 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TabItem">
-                    <Grid x:Name="grd" Margin="0,0,0,10">
-                        <Border x:Name="headerBorder" Background="#F1F1F1" BorderBrush="{StaticResource BorderBrush}"
+                    <Grid x:Name="Grid" Margin="0,0,0,10">
+                        <Border x:Name="HeaderBorder" Background="#F1F1F1" BorderBrush="{StaticResource BorderBrush}"
                                 BorderThickness="0,1,1,1" Width="100" Height="25" CornerRadius="0,3,3,0" />
                         <ContentPresenter x:Name="TabItemContent" ContentSource="Header" VerticalAlignment="Center"
                                           TextElement.Foreground="{StaticResource FontForeground}"
@@ -125,11 +125,11 @@
                     </Grid>
 
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True" SourceName="grd">
-                            <Setter Property="Background" Value="{StaticResource HoverBrush}" TargetName="headerBorder" />
+                        <Trigger Property="IsMouseOver" Value="True" SourceName="Grid">
+                            <Setter Property="Background" Value="{StaticResource HoverBrush}" TargetName="HeaderBorder" />
                         </Trigger>
                         <Trigger Property="Selector.IsSelected" Value="True">
-                            <Setter Property="Background" Value="#999999" TargetName="headerBorder" />
+                            <Setter Property="Background" Value="#999999" TargetName="HeaderBorder" />
                             <Setter Property="TextElement.Foreground" Value="White" TargetName="TabItemContent" />
                             <Setter Property="Panel.ZIndex" Value="2" />
                         </Trigger>

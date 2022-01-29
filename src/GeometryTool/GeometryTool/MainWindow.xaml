@@ -562,7 +562,7 @@
                                                VerticalAlignment="Center" />
                                     </Button>
                                     <Button Style="{StaticResource ButtonImageStyle1}" Width="30" Margin="10,0">
-                                        <Image Source="Image/Left.png" MouseLeftButtonDown="LetfMirror_Click"
+                                        <Image Source="Image/Left.png" MouseLeftButtonDown="LeftMirror_Click"
                                                VerticalAlignment="Center" />
                                     </Button>
                                     <Button Style="{StaticResource ButtonImageStyle1}" Width="30" Margin="10,0">

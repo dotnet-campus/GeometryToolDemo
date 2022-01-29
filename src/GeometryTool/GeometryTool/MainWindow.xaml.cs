@@ -179,7 +179,7 @@ public partial class MainWindow : Window
 
         ActionMode = "Select";
         WindowState = WindowState.Maximized; //设置窗口最大化
-        docCanvas_Loaded();
+        DocCanvas_Loaded();
         StrokeCurrentColor.Background = _graphAppearance.Stroke;
         FillCurrentColor.Background = _graphAppearance.Fill;
         MyRootCanvas = RootCanvas;
@@ -226,7 +226,7 @@ public partial class MainWindow : Window
         if (canSave)
         {
             var sw = new StreamWriter(FileName);
-            var xmlGeomertyStringConverter = new GeometryStringConverter(RootCanvas, _graphAppearance);
+            var xmlGeometryStringConverter = new GeometryStringConverter(RootCanvas, _graphAppearance);
             var sb = new StringBuilder();
             sb.AppendLine("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
             sb.AppendLine("<Canvase>");
@@ -237,7 +237,7 @@ public partial class MainWindow : Window
                 var borderWithAdorner = item as BorderWithAdorner; //点是有BorderWithDrag包含着的，图形是Path
                 if (borderWithAdorner != null)
                 {
-                    sb.Append(xmlGeomertyStringConverter.StringFromGeometry(
+                    sb.Append(xmlGeometryStringConverter.StringFromGeometry(
                         borderWithAdorner.Child as GeometryPath.Path)); //构造Mini-Language
                 }
             }
@@ -383,8 +383,8 @@ public partial class MainWindow : Window
         {
             FileName = save.FileName;
 
-            var sw = new StreamWriter(FileName);
-            var gsc = new GeometryStringConverter(RootCanvas, _graphAppearance);
+            var streamWriter = new StreamWriter(FileName);
+            var geometryStringConverter = new GeometryStringConverter(RootCanvas, _graphAppearance);
             var stringBuilder = new StringBuilder();
             stringBuilder.AppendLine("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
             stringBuilder.AppendLine("<DrawingImage >");
@@ -396,15 +396,15 @@ public partial class MainWindow : Window
                 if (borderWithAdorner != null)
                 {
                     stringBuilder.AppendLine(
-                        gsc.StringFromPathGeometry(borderWithAdorner.Child as GeometryPath.Path)); //构造Mini-Language
+                        geometryStringConverter.StringFromPathGeometry(borderWithAdorner.Child as GeometryPath.Path)); //构造Mini-Language
                 }
             }
 
             stringBuilder.AppendLine("      </DrawingGroup>");
             stringBuilder.AppendLine("  </DrawingImage.Drawing>");
             stringBuilder.AppendLine("</DrawingImage>");
-            sw.Write(stringBuilder.ToString());
-            sw.Close();
+            streamWriter.Write(stringBuilder.ToString());
+            streamWriter.Close();
             _isSave = true;
         }
     }
@@ -424,18 +424,18 @@ public partial class MainWindow : Window
         }
         else if (messageBoxResult == MessageBoxResult.No)
         {
-            var openFileDlg = new OpenFileDialog();
-            openFileDlg.DefaultExt = ".xml";
-            openFileDlg.Filter = "xml file|*.xml"; //只选择.xml文件
-            if (openFileDlg.ShowDialog() == true) //打开对话框
+            var openFileDialog = new OpenFileDialog();
+            openFileDialog.DefaultExt = ".xml";
+            openFileDialog.Filter = "xml file|*.xml"; //只选择.xml文件
+            if (openFileDialog.ShowDialog() == true) //打开对话框
             {
-                if (!string.IsNullOrEmpty(openFileDlg.FileName)) //如果文件名不为空
+                if (!string.IsNullOrEmpty(openFileDialog.FileName)) //如果文件名不为空
                 {
                     var xmlHelper = new XMLHelper();
-                    var geomertyStringConverter = new GeometryStringConverter(RootCanvas, _graphAppearance);
-                    var streamReader = new StreamReader(openFileDlg.FileName);
+                    var geometryStringConverter = new GeometryStringConverter(RootCanvas, _graphAppearance);
+                    var streamReader = new StreamReader(openFileDialog.FileName);
                     var xmlString = streamReader.ReadToEnd();
-                    var borderWithAdornerList = geomertyStringConverter.PathGeometryFromString(xmlString);
+                    var borderWithAdornerList = geometryStringConverter.PathGeometryFromString(xmlString);
                     foreach (var borderWithAdorner in borderWithAdornerList)
                     {
                         AddGeometryIntoCanvas(borderWithAdorner, 0, 0);
@@ -471,13 +471,13 @@ public partial class MainWindow : Window
                     if (!string.IsNullOrEmpty(openFileDlg.FileName)) //如果文件名不为空
                     {
                         var xmlHelper = new XMLHelper();
-                        var geomertyStringConverter = new GeometryStringConverter(RootCanvas, _graphAppearance);
+                        var geometryStringConverter = new GeometryStringConverter(RootCanvas, _graphAppearance);
                         var match = xmlHelper.ReadXml(openFileDlg.FileName); //读取XML文件
                         var matchList = Regex.Matches(match.Groups[0].ToString(), @"M[\.\,\s\+\-\dLACQZ]+");
                         foreach (Match item in matchList)
                         {
                             var borderWithAdorner =
-                                geomertyStringConverter.GeometryFromString(item.Groups[0].ToString()); //转化成为图形
+                                geometryStringConverter.GeometryFromString(item.Groups[0].ToString()); //转化成为图形
                             RootCanvas.Children.Add(borderWithAdorner); //把图形添加到Canvas中
                             foreach (var ellipse in borderWithAdorner.EllipseList) //把点添加到Canvas中
                             {
@@ -658,16 +658,16 @@ public partial class MainWindow : Window
             }
             else if (ActionMode == "AddCircle") //修改圆的位置
             {
-                var circel = _circlePath.Data as PathGeometry;
-                var line1 = circel.Figures[0].Segments[1] as ArcSegment;
+                var circle = _circlePath.Data as PathGeometry;
+                var line1 = circle.Figures[0].Segments[1] as ArcSegment;
                 line1.Point = new Point { X = p.X, Y = p.Y };
                 e.Handled = true;
             }
             else if (ActionMode == "AddEllipse") //修改椭圆的位置
             {
-                var circel = _ellipseGeometryPath.Data as PathGeometry;
-                var line1 = circel.Figures[0].Segments[0] as ArcSegment;
-                var line2 = circel.Figures[0].Segments[1] as ArcSegment;
+                var circle = _ellipseGeometryPath.Data as PathGeometry;
+                var line1 = circle.Figures[0].Segments[0] as ArcSegment;
+                var line2 = circle.Figures[0].Segments[1] as ArcSegment;
                 var oldPoint1 = line1.Point;
                 var oldPoint2 = line2.Point;
                 line1.Point = new Point { X = p.X, Y = oldPoint1.Y };
@@ -721,7 +721,7 @@ public partial class MainWindow : Window
     /// <param name="e"></param>
     private void RootCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-        var geomertyStringConverter = new GeometryStringConverter(RootCanvas, _graphAppearance);
+        var geometryStringConverter = new GeometryStringConverter(RootCanvas, _graphAppearance);
 
         if (SelectedBorder != null && SelectedBorder.GeometryAdorner != null) //隐藏之前点击的图形的选择框
         {
@@ -740,7 +740,7 @@ public partial class MainWindow : Window
             var p = new AutoPoints().GetAutoAdsorbPoint(Mouse.GetPosition(e.Source as FrameworkElement));
             var miniLanguage = "M " + p.X + "," + p.Y + " L " + p.X + "," + p.Y + " L " + p.X + "," + p.Y + " Z";
 
-            SelectedBorder = geomertyStringConverter.GeometryFromString(miniLanguage);
+            SelectedBorder = geometryStringConverter.GeometryFromString(miniLanguage);
             _trianglePath = SelectedBorder.Child as GeometryPath.Path;
             AddGeometryIntoCanvas(SelectedBorder, 0, 0);
             PanProperty.DataContext = _trianglePath;
@@ -752,7 +752,7 @@ public partial class MainWindow : Window
             var miniLanguage = "M " + p.X + "," + p.Y + " L " + p.X + "," + p.Y + " L " + p.X + "," + p.Y + " L " +
                                p.X + "," + p.Y + " Z";
 
-            SelectedBorder = geomertyStringConverter.GeometryFromString(miniLanguage);
+            SelectedBorder = geometryStringConverter.GeometryFromString(miniLanguage);
             _rectanglePath = SelectedBorder.Child as GeometryPath.Path;
             AddGeometryIntoCanvas(SelectedBorder, 0, 0);
             PanProperty.DataContext = _rectanglePath;
@@ -777,7 +777,7 @@ public partial class MainWindow : Window
             var p = new AutoPoints().GetAutoAdsorbPoint(Mouse.GetPosition(e.Source as FrameworkElement));
             var miniLanguage = "M " + p.X + "," + p.Y + " Q " + p.X + "," + p.Y
                                + " " + p.X + "," + p.Y;
-            SelectedBorder = geomertyStringConverter.GeometryFromString(miniLanguage);
+            SelectedBorder = geometryStringConverter.GeometryFromString(miniLanguage);
             _qBezierPath = SelectedBorder.Child as GeometryPath.Path;
             AddGeometryIntoCanvas(SelectedBorder, 0, 0);
             PanProperty.DataContext = _qBezierPath;
@@ -788,7 +788,7 @@ public partial class MainWindow : Window
             var p = new AutoPoints().GetAutoAdsorbPoint(Mouse.GetPosition(e.Source as FrameworkElement));
             var miniLanguage = "M " + p.X + "," + p.Y + " C " + p.X + "," + p.Y
                                + " " + p.X + "," + p.Y + " " + p.X + "," + p.Y;
-            SelectedBorder = geomertyStringConverter.GeometryFromString(miniLanguage);
+            SelectedBorder = geometryStringConverter.GeometryFromString(miniLanguage);
             _bezierPath = SelectedBorder.Child as GeometryPath.Path;
             AddGeometryIntoCanvas(SelectedBorder, 0, 0);
             PanProperty.DataContext = _bezierPath;
@@ -930,7 +930,7 @@ public partial class MainWindow : Window
             CanvasBorder.Width = width >= CanvasBorder.ActualWidth ? width : RootGrid.ActualWidth - 215;
             if (RootCanvasBackGround.SelectedIndex == 0)
             {
-                docCanvas_Loaded();
+                DocCanvas_Loaded();
             }
             else if (RootCanvasBackGround.SelectedIndex == 1)
             {
@@ -953,7 +953,6 @@ public partial class MainWindow : Window
             // 忽略
         }
     }
-
 
     /// <summary>
     ///     拖动Slider改变StrokeThickness
@@ -987,7 +986,7 @@ public partial class MainWindow : Window
                         ? height
                         : RootGrid.ActualHeight - 115; //修改Border的大小，使得其能显示放大后的画布
                 CanvasBorder.Width = width >= CanvasBorder.ActualWidth ? width : RootGrid.ActualWidth - 215;
-                docCanvas_Loaded();
+                DocCanvas_Loaded();
             }
 
             _isSave = true;
@@ -1079,7 +1078,6 @@ public partial class MainWindow : Window
         }
     }
 
-
     /// <summary>
     ///     选择画板
     /// </summary>
@@ -1089,7 +1087,7 @@ public partial class MainWindow : Window
     {
         if (RootCanvasBackGround.SelectedIndex == 0)
         {
-            docCanvas_Loaded();
+            DocCanvas_Loaded();
         }
         else if (RootCanvasBackGround.SelectedIndex == 1)
         {
@@ -1228,7 +1226,7 @@ public partial class MainWindow : Window
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void LetfMirror_Click(object sender, MouseButtonEventArgs e)
+    private void LeftMirror_Click(object sender, MouseButtonEventArgs e)
     {
         if (SelectedBorder != null)
         {
@@ -1311,7 +1309,7 @@ public partial class MainWindow : Window
     /// <summary>
     ///     用于绘制网格网格
     /// </summary>
-    private void docCanvas_Loaded()
+    private void DocCanvas_Loaded()
     {
         _gridBrush = new DrawingBrush(new GeometryDrawing(
             new SolidColorBrush(Colors.Transparent),
