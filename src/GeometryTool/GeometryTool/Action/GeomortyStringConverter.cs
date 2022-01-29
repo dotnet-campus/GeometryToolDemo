@@ -58,7 +58,6 @@ public class GeometryStringConverter
         path.Data = pathGeometry;
         pathGeometry.Figures = new PathFigureCollection();
         var mPathFigure = new PathFigure();
-        ;
         var ellipsePoint = new Point();
         var ellipseStartPath = new Path();
         var ellipseList = new List<Path>();

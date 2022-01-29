@@ -25,8 +25,8 @@ public class XMLHelper
     /// <param name="vGeometryString"></param>
     public void WriteXml(string vPath, string vGeometryString)
     {
-        var sw = new StreamWriter(vPath);
-        sw.Write(vGeometryString);
-        sw.Close();
+        var streamWriter = new StreamWriter(vPath);
+        streamWriter.Write(vGeometryString);
+        streamWriter.Close();
     }
 }

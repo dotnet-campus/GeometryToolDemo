@@ -16,7 +16,6 @@ public class GraphAdd
     /// </summary>
     private BorderWithDrag _border;
 
-
     private BorderWithAdorner _borderWithAdorner;
 
     /// <summary>
@@ -142,7 +141,6 @@ public class GraphAdd
 
         vPathFigure.Segments.Add(newLineSegment);
     }
-
 
     /// <summary>
     ///     绘制一个随鼠标移动的线段
