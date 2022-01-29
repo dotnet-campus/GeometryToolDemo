@@ -60,7 +60,7 @@ public class LockChrome : Image
             {
                 var border = DataContext as BorderWithDrag;
                 var borderLock = new BorderLock();
-                borderLock.unLock(border);
+                borderLock.UnLock(border);
             }
 
             e.Handled = true;

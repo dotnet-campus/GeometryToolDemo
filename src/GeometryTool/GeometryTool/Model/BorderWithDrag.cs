@@ -241,7 +241,7 @@ namespace GeometryTool
         public void UnLockItem_Click(object sender, RoutedEventArgs e)
         {
             var borderLock = new BorderLock();
-            borderLock.unLock(this);
+            borderLock.UnLock(this);
             HasOtherPoint = false;
         }
 

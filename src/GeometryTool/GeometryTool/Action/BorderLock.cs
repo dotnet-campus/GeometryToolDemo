@@ -18,6 +18,7 @@ public class BorderLock
     /// 用于记录要进行命中测试的图形
     /// </summary>
     private readonly BorderWithDrag _border;
+
     /// <summary>
     /// 用于计算命中的BorderWithDrag的数量
     /// </summary>
@@ -120,7 +121,7 @@ public class BorderLock
     ///     解开点的融合
     /// </summary>
     /// <param name="border"></param>
-    public void unLock(BorderWithDrag border)
+    public void UnLock(BorderWithDrag border)
     {
         var brotherBorder = border.BrotherBorder;
         var p = ((border.Child as Path).Data as EllipseGeometry).Center;
