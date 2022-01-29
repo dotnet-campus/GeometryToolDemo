@@ -16,14 +16,17 @@ public class RotateThumb : Thumb
     /// 图形的Border
     /// </summary>
     private BorderWithAdorner _borderWithAdorner;
+
     /// <summary>
     /// 图形所在的画布
     /// </summary>
     private Canvas _canvas;
+
     /// <summary>
     /// 图形的重点
     /// </summary>
     private Point _centerPoint;
+
     /// <summary>
     /// 开始的坐标向量
     /// </summary>
@@ -51,7 +54,11 @@ public class RotateThumb : Thumb
             if (_canvas != null)
             {
                 _centerPoint = _borderWithAdorner.TranslatePoint(
-                    new Point { X = (_borderWithAdorner.MaxX + _borderWithAdorner.MinX) / 2.0, Y = (_borderWithAdorner.MaxY + _borderWithAdorner.MinY) / 2.0 },
+                    new Point
+                    {
+                        X = (_borderWithAdorner.MaxX + _borderWithAdorner.MinX) / 2.0,
+                        Y = (_borderWithAdorner.MaxY + _borderWithAdorner.MinY) / 2.0
+                    },
                     _canvas);
 
                 var startPoint = Mouse.GetPosition(_canvas);

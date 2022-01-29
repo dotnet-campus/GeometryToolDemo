@@ -164,8 +164,8 @@ public static class RoutedCommands
             {
                 _openCommand = new RoutedUICommand
                 (
-                    "open",
-                    "open",
+                    "Open",
+                    "Open",
                     typeof(MainWindow),
                     new InputGestureCollection { new KeyGesture(Key.O, ModifierKeys.Control) }
                 );
