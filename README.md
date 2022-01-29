@@ -1,5 +1,7 @@
 # GeometryToolDemo
 
+![](https://github.com/dotnet-campus/GeometryToolDemo/workflows/.NET%20Build/badge.svg)
+
 二维绘画小工具
 
 ![](docs/image/README/README1.png)
