@@ -15,18 +15,18 @@ namespace GeometryTool;
 /// </summary>
 public class GeometryStringConverter
 {
-    private readonly GraphAppearance _vGraphAppearance;
-    private readonly Canvas _vRootCanvas;
+    private readonly GraphAppearance _graphAppearance;
+    private readonly Canvas _rootCanvas;
 
     /// <summary>
     ///     构造函数
     /// </summary>
-    /// <param name="vRootCanvas"></param>
-    /// <param name="vGraphAppearance"></param>
-    public GeometryStringConverter(Canvas vRootCanvas, GraphAppearance vGraphAppearance)
+    /// <param name="rootCanvas"></param>
+    /// <param name="graphAppearance"></param>
+    public GeometryStringConverter(Canvas rootCanvas, GraphAppearance graphAppearance)
     {
-       _vRootCanvas = vRootCanvas;
-       _vGraphAppearance = vGraphAppearance;
+        _rootCanvas = rootCanvas;
+        _graphAppearance = graphAppearance;
     }
 
     /// <summary>
@@ -38,14 +38,14 @@ public class GeometryStringConverter
         var graphAdd = new GraphAdd();
         var path = new Path
         {
-            Stroke = _vGraphAppearance.Stroke,
-            StrokeThickness = _vGraphAppearance.StrokeThickness,
-            StrokeDashArray = _vGraphAppearance.StrokeDashArray
+            Stroke = _graphAppearance.Stroke,
+            StrokeThickness = _graphAppearance.StrokeThickness,
+            StrokeDashArray = _graphAppearance.StrokeDashArray
         };
 
-        if (_vGraphAppearance.Fill != null)
+        if (_graphAppearance.Fill != null)
         {
-            path.Fill = _vGraphAppearance.Fill;
+            path.Fill = _graphAppearance.Fill;
         }
 
         var regex = new Regex(@"([a-zA-Z])\s*([^a-zA-Z]*)");
@@ -74,7 +74,7 @@ public class GeometryStringConverter
                 if (match.Groups[1].ToString() != "M") //起点包含M
                 {
                     mPathFigure.StartPoint = new Point { X = 0, Y = 0 };
-                    graphAdd.AddPointWithNoBorder(ellipsePoint, _vGraphAppearance, _vRootCanvas, out ellipseStartPath);
+                    graphAdd.AddPointWithNoBorder(ellipsePoint, _graphAppearance, _rootCanvas, out ellipseStartPath);
                     borderWithAdorner.EllipseList.Add(ellipseStartPath);
                     pathGeometry.Figures.Add(mPathFigure);
                 }
@@ -118,135 +118,135 @@ public class GeometryStringConverter
             switch (match.Groups[1].ToString())
             {
                 case "L":
-                    {
-                        //创建PathFigure，并绑定StartPoint
+                {
+                    //创建PathFigure，并绑定StartPoint
 
-                        GetEllipsePointWithNoBorder(match, out vPath, out ellipsePoint,
-                            @"([\+\-\d\.]*),([\+\-\d\.]*)"); //构造EllipsePoint
-                        borderWithAdorner.EllipseList.Add(vPath);
-                        //创建LineSegment，并绑定Point
-                        graphAdd.AddLineSegment(mPathFigure, vPath);
-                        ellipseList.Add(vPath);
-                        border = new BorderWithDrag(path, number, ellipseList);
-                        border.Child = vPath;
+                    GetEllipsePointWithNoBorder(match, out vPath, out ellipsePoint,
+                        @"([\+\-\d\.]*),([\+\-\d\.]*)"); //构造EllipsePoint
+                    borderWithAdorner.EllipseList.Add(vPath);
+                    //创建LineSegment，并绑定Point
+                    graphAdd.AddLineSegment(mPathFigure, vPath);
+                    ellipseList.Add(vPath);
+                    border = new BorderWithDrag(path, number, ellipseList);
+                    border.Child = vPath;
 
-                        break;
-                    }
+                    break;
+                }
 
                 case "H":
-                    {
-                        ellipsePoint.X = Convert.ToDouble(match.Groups[2].ToString());
+                {
+                    ellipsePoint.X = Convert.ToDouble(match.Groups[2].ToString());
 
-                        graphAdd.AddPointWithNoBorder(ellipsePoint, _vGraphAppearance, _vRootCanvas, out vPath);
-                        borderWithAdorner.EllipseList.Add(vPath);
-                        graphAdd.AddLineSegment(mPathFigure, vPath);
-                        ellipseList.Add(vPath);
-                        border = new BorderWithDrag(path, number, ellipseList);
-                        border.Child = vPath;
+                    graphAdd.AddPointWithNoBorder(ellipsePoint, _graphAppearance, _rootCanvas, out vPath);
+                    borderWithAdorner.EllipseList.Add(vPath);
+                    graphAdd.AddLineSegment(mPathFigure, vPath);
+                    ellipseList.Add(vPath);
+                    border = new BorderWithDrag(path, number, ellipseList);
+                    border.Child = vPath;
 
-                        break;
-                    }
+                    break;
+                }
 
                 case "V":
-                    {
-                        ellipsePoint.Y = Convert.ToDouble(match.Groups[2].ToString());
+                {
+                    ellipsePoint.Y = Convert.ToDouble(match.Groups[2].ToString());
 
-                        graphAdd.AddPointWithNoBorder(ellipsePoint, _vGraphAppearance, _vRootCanvas, out vPath);
-                        borderWithAdorner.EllipseList.Add(vPath);
-                        graphAdd.AddLineSegment(mPathFigure, vPath);
-                        ellipseList.Add(vPath);
-                        border = new BorderWithDrag(path, number, ellipseList);
-                        border.Child = vPath;
+                    graphAdd.AddPointWithNoBorder(ellipsePoint, _graphAppearance, _rootCanvas, out vPath);
+                    borderWithAdorner.EllipseList.Add(vPath);
+                    graphAdd.AddLineSegment(mPathFigure, vPath);
+                    ellipseList.Add(vPath);
+                    border = new BorderWithDrag(path, number, ellipseList);
+                    border.Child = vPath;
 
-                        break;
-                    }
+                    break;
+                }
 
                 case "A":
+                {
+                    //创建LineSegment，并绑定Point
+                    var size = new Size
                     {
-                        //创建LineSegment，并绑定Point
-                        var size = new Size
-                        {
-                            Width = Convert.ToDouble(Regex
-                                .Match(match.Groups[0].ToString(), @"A ([\+\-\d\.]*),([\+\-\d\.]*)").Groups[1].ToString()),
-                            Height = Convert.ToDouble(Regex
-                                .Match(match.Groups[0].ToString(), @"A ([\+\-\d\.]*),([\+\-\d\.]*)").Groups[2].ToString())
-                        };
+                        Width = Convert.ToDouble(Regex
+                            .Match(match.Groups[0].ToString(), @"A ([\+\-\d\.]*),([\+\-\d\.]*)").Groups[1].ToString()),
+                        Height = Convert.ToDouble(Regex
+                            .Match(match.Groups[0].ToString(), @"A ([\+\-\d\.]*),([\+\-\d\.]*)").Groups[2].ToString())
+                    };
 
-                        SweepDirection vSweepDirection;
-                        var isLargeArc = false;
-                        var matches = Regex.Matches(match.Groups[0].ToString(),
-                            @"A\s*[\+\-\d\.]+,[\+\-\d\.]+\s*([\+\-\.\d]+)\s*([\+\-\.\d]+)\s*([\+\-\.\d]+)");
-                        if (Convert.ToInt32(matches[0].Groups[2].ToString()) == 1) //设置SweepDirection
-                        {
-                            vSweepDirection = SweepDirection.Clockwise;
-                        }
-                        else
-                        {
-                            vSweepDirection = SweepDirection.Counterclockwise;
-                        }
-
-                        if (Convert.ToInt32(matches[0].Groups[3].ToString()) == 1) //设置IsLargeArc
-                        {
-                            isLargeArc = true;
-                        }
-
-                        //创建PathFigure，并绑定StartPoint
-                        GetEllipsePointWithNoBorder(match, out vPath, out ellipsePoint,
-                            @"\d ([\+\-\d\.]*),([\+\-\d\.]*)"); //构造EllipsePoint
-                        graphAdd.AddArcSegment(mPathFigure, vPath, size,
-                            Convert.ToDouble(matches[0].Groups[1].ToString()), vSweepDirection, isLargeArc);
-                        borderWithAdorner.EllipseList.Add(vPath);
-                        border = new BorderWithDrag();
-                        border.Child = vPath;
-                        break;
+                    SweepDirection vSweepDirection;
+                    var isLargeArc = false;
+                    var matches = Regex.Matches(match.Groups[0].ToString(),
+                        @"A\s*[\+\-\d\.]+,[\+\-\d\.]+\s*([\+\-\.\d]+)\s*([\+\-\.\d]+)\s*([\+\-\.\d]+)");
+                    if (Convert.ToInt32(matches[0].Groups[2].ToString()) == 1) //设置SweepDirection
+                    {
+                        vSweepDirection = SweepDirection.Clockwise;
                     }
+                    else
+                    {
+                        vSweepDirection = SweepDirection.Counterclockwise;
+                    }
+
+                    if (Convert.ToInt32(matches[0].Groups[3].ToString()) == 1) //设置IsLargeArc
+                    {
+                        isLargeArc = true;
+                    }
+
+                    //创建PathFigure，并绑定StartPoint
+                    GetEllipsePointWithNoBorder(match, out vPath, out ellipsePoint,
+                        @"\d ([\+\-\d\.]*),([\+\-\d\.]*)"); //构造EllipsePoint
+                    graphAdd.AddArcSegment(mPathFigure, vPath, size,
+                        Convert.ToDouble(matches[0].Groups[1].ToString()), vSweepDirection, isLargeArc);
+                    borderWithAdorner.EllipseList.Add(vPath);
+                    border = new BorderWithDrag();
+                    border.Child = vPath;
+                    break;
+                }
 
                 case "C":
-                    {
-                        //创建PathFigure，并绑定StartPoint
-                        Path ellipsePath1;
-                        GetEllipsePointWithNoBorder(match, out ellipsePath1, out ellipsePoint,
-                            @"([\+\-\d\.]*),([\+\-\d\.]*)"); //构造EllipsePoint
-                        borderWithAdorner.EllipseList.Add(ellipsePath1);
-                        border = new BorderWithDrag();
-                        border.Child = ellipsePath1;
+                {
+                    //创建PathFigure，并绑定StartPoint
+                    Path ellipsePath1;
+                    GetEllipsePointWithNoBorder(match, out ellipsePath1, out ellipsePoint,
+                        @"([\+\-\d\.]*),([\+\-\d\.]*)"); //构造EllipsePoint
+                    borderWithAdorner.EllipseList.Add(ellipsePath1);
+                    border = new BorderWithDrag();
+                    border.Child = ellipsePath1;
 
-                        Path ellipsePath2;
-                        GetEllipsePointWithNoBorder(match, out ellipsePath2, out ellipsePoint,
-                            @"C\s+[\+\-\d\.]+,[\+\-\d\.]+\s*([\+\-\d\.]+),([\+\-\d\.]+)"); //构造EllipsePoint
-                        borderWithAdorner.EllipseList.Add(ellipsePath2);
-                        border = new BorderWithDrag();
-                        border.Child = ellipsePath2;
+                    Path ellipsePath2;
+                    GetEllipsePointWithNoBorder(match, out ellipsePath2, out ellipsePoint,
+                        @"C\s+[\+\-\d\.]+,[\+\-\d\.]+\s*([\+\-\d\.]+),([\+\-\d\.]+)"); //构造EllipsePoint
+                    borderWithAdorner.EllipseList.Add(ellipsePath2);
+                    border = new BorderWithDrag();
+                    border.Child = ellipsePath2;
 
-                        GetEllipsePointWithNoBorder(match, out vPath, out ellipsePoint,
-                            @"([\+\-\d\.]+),([\+\-\d\.]+)\s*$"); //构造EllipsePoint
-                        borderWithAdorner.EllipseList.Add(vPath);
-                        graphAdd.AddBezierSegment(mPathFigure, ellipsePath1, ellipsePath2, vPath);
-                        border = new BorderWithDrag();
-                        border.Child = vPath;
+                    GetEllipsePointWithNoBorder(match, out vPath, out ellipsePoint,
+                        @"([\+\-\d\.]+),([\+\-\d\.]+)\s*$"); //构造EllipsePoint
+                    borderWithAdorner.EllipseList.Add(vPath);
+                    graphAdd.AddBezierSegment(mPathFigure, ellipsePath1, ellipsePath2, vPath);
+                    border = new BorderWithDrag();
+                    border.Child = vPath;
 
-                        break;
-                    }
+                    break;
+                }
 
                 case "Q":
-                    {
-                        //创建PathFigure，并绑定StartPoint
-                        Path ellipsePath1;
-                        GetEllipsePointWithNoBorder(match, out ellipsePath1, out ellipsePoint,
-                            @"([\+\-\d\.]*),([\+\-\d\.]*)"); //构造EllipsePoint
-                        borderWithAdorner.EllipseList.Add(ellipsePath1);
-                        border = new BorderWithDrag();
-                        border.Child = ellipsePath1;
+                {
+                    //创建PathFigure，并绑定StartPoint
+                    Path ellipsePath1;
+                    GetEllipsePointWithNoBorder(match, out ellipsePath1, out ellipsePoint,
+                        @"([\+\-\d\.]*),([\+\-\d\.]*)"); //构造EllipsePoint
+                    borderWithAdorner.EllipseList.Add(ellipsePath1);
+                    border = new BorderWithDrag();
+                    border.Child = ellipsePath1;
 
-                        GetEllipsePointWithNoBorder(match, out vPath, out ellipsePoint,
-                            @"\d\s+([\+\-\d\.]*),([\+\-\d\.]*)"); //构造EllipsePoint
-                        borderWithAdorner.EllipseList.Add(vPath);
-                        graphAdd.AddQuadraticSegment(mPathFigure, ellipsePath1, vPath);
-                        border = new BorderWithDrag();
-                        border.Child = vPath;
+                    GetEllipsePointWithNoBorder(match, out vPath, out ellipsePoint,
+                        @"\d\s+([\+\-\d\.]*),([\+\-\d\.]*)"); //构造EllipsePoint
+                    borderWithAdorner.EllipseList.Add(vPath);
+                    graphAdd.AddQuadraticSegment(mPathFigure, ellipsePath1, vPath);
+                    border = new BorderWithDrag();
+                    border.Child = vPath;
 
-                        break;
-                    }
+                    break;
+                }
             }
         }
 
@@ -315,7 +315,7 @@ public class GeometryStringConverter
         ellipsePoint.X = Convert.ToDouble(Regex.Match(match.Groups[0].ToString(), vPattern).Groups[1].ToString());
         ellipsePoint.Y = Convert.ToDouble(Regex.Match(match.Groups[0].ToString(), vPattern).Groups[2].ToString());
         ellipsePath = new Path();
-        graphAdd.AddPoint(ellipsePoint, _vGraphAppearance, _vRootCanvas, out ellipsePath);
+        graphAdd.AddPoint(ellipsePoint, _graphAppearance, _rootCanvas, out ellipsePath);
     }
 
     /// <summary>
@@ -332,7 +332,7 @@ public class GeometryStringConverter
         ellipsePoint.X = Convert.ToDouble(Regex.Match(match.Groups[0].ToString(), vPattern).Groups[1].ToString());
         ellipsePoint.Y = Convert.ToDouble(Regex.Match(match.Groups[0].ToString(), vPattern).Groups[2].ToString());
         ellipsePath = new Path();
-        grapAdd.AddPointWithNoBorder(ellipsePoint, _vGraphAppearance, _vRootCanvas, out ellipsePath);
+        grapAdd.AddPointWithNoBorder(ellipsePoint, _graphAppearance, _rootCanvas, out ellipsePath);
     }
 
     /// <summary>
@@ -374,11 +374,12 @@ public class GeometryStringConverter
             var miniLanguage = item.Groups[2].ToString();
             var strokeThickness = item.Groups[3].ToString();
             var graphAppearance = new GraphAppearance();
-            graphAppearance.Fill = new SolidColorBrush((Color) ColorConverter.ConvertFromString(backgroundColor));
-            graphAppearance.Stroke = new SolidColorBrush((Color) ColorConverter.ConvertFromString(strokeColor));
+            graphAppearance.Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString(backgroundColor));
+            graphAppearance.Stroke = new SolidColorBrush((Color)ColorConverter.ConvertFromString(strokeColor));
             graphAppearance.StrokeThickness = Convert.ToDouble(strokeThickness);
             var geometryStringConverter = new GeometryStringConverter(MainWindow.MyRootCanvas, graphAppearance);
-            var newBorderWithAdorner = geometryStringConverter.GeometryFromString(miniLanguage); //把Mini-Language转化成为图形，实现图形的深度复制
+            var newBorderWithAdorner =
+                geometryStringConverter.GeometryFromString(miniLanguage); //把Mini-Language转化成为图形，实现图形的深度复制
             var newPath = newBorderWithAdorner.Child as Path;
             newPath.Stroke = graphAppearance.Stroke;
             newPath.StrokeThickness = graphAppearance.StrokeThickness;

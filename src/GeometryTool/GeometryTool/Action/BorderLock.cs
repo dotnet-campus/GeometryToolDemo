@@ -45,7 +45,6 @@ public class BorderLock
             MyHitTestResult,
             new PointHitTestParameters(currentPoint));
 
-
         if (_count > 1) //如果该点有多于两个BorderWithDrag，说明有点融合
         {
             if (_border.BrotherBorder == null)
