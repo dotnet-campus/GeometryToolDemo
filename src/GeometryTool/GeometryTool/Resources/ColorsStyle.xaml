@@ -10,7 +10,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    <LinearGradientBrush x:Key="ButtonNormalBackgroundFill1" EndPoint="0.5,1" StartPoint="0.5,0">
+    <LinearGradientBrush x:Key="Brush.LinearGradientBrush.ButtonNormalBackgroundFill1" EndPoint="0.5,1" StartPoint="0.5,0">
         <GradientStop Color="#FFFFFFFF" Offset="0" />
         <GradientStop Color="#FFF0F0EA" Offset="0.9" />
     </LinearGradientBrush>
@@ -24,13 +24,13 @@
             </Setter.Value>
         </Setter>
     </Style>
-    <LinearGradientBrush x:Key="ButtonNormalBackgroundFill" EndPoint="0.5,1" StartPoint="0.5,0">
+    <LinearGradientBrush x:Key="Brush.LinearGradientBrush.ButtonNormalBackgroundFill" EndPoint="0.5,1" StartPoint="0.5,0">
         <GradientStop Color="#EDEDED" Offset="0" />
         <GradientStop Color="#EDEDED" Offset="0.9" />
     </LinearGradientBrush>
-    <Style x:Key="ColorButtonStyleFirstRow" TargetType="{x:Type Button}">
+    <Style x:Key="Style.Button.ColorFirstRow" TargetType="{x:Type Button}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource ButtonFocusVisual}" />
-        <Setter Property="Background" Value="{StaticResource ButtonNormalBackgroundFill}" />
+        <Setter Property="Background" Value="{StaticResource Brush.LinearGradientBrush.ButtonNormalBackgroundFill}" />
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -53,9 +53,9 @@
             </Setter.Value>
         </Setter>
     </Style>
-    <Style x:Key="ColorButtonStyleSecondRow" TargetType="{x:Type Button}">
+    <Style x:Key="Style.Button.ColorSecondRow" TargetType="{x:Type Button}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource ButtonFocusVisual}" />
-        <Setter Property="Background" Value="{StaticResource ButtonNormalBackgroundFill}" />
+        <Setter Property="Background" Value="{StaticResource Brush.LinearGradientBrush.ButtonNormalBackgroundFill}" />
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -74,9 +74,9 @@
             </Setter.Value>
         </Setter>
     </Style>
-    <Style x:Key="ColorButtonStyle" TargetType="{x:Type Button}">
+    <Style x:Key="Style.Button.ColorButton" TargetType="{x:Type Button}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource ButtonFocusVisual}" />
-        <Setter Property="Background" Value="{StaticResource ButtonNormalBackgroundFill}" />
+        <Setter Property="Background" Value="{StaticResource Brush.LinearGradientBrush.ButtonNormalBackgroundFill}" />
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -95,9 +95,9 @@
             </Setter.Value>
         </Setter>
     </Style>
-    <Style x:Key="ToggleButtonStyle" TargetType="{x:Type ToggleButton}">
+    <Style x:Key="Style.ToggleButton.DefaultToggleButton" TargetType="{x:Type ToggleButton}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource ButtonFocusVisual1}" />
-        <Setter Property="Background" Value="{StaticResource ButtonNormalBackgroundFill1}" />
+        <Setter Property="Background" Value="{StaticResource Brush.LinearGradientBrush.ButtonNormalBackgroundFill1}" />
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
         <Setter Property="HorizontalAlignment" Value="Right" />
         <Setter Property="VerticalAlignment" Value="Bottom" />
@@ -128,11 +128,11 @@
             </Setter.Value>
         </Setter>
     </Style>
-    <LinearGradientBrush x:Key="MoreColorGradientBrush" EndPoint="0,1" StartPoint="0,0">
+    <LinearGradientBrush x:Key="Brush.LinearGradientBrush.MoreColor" EndPoint="0,1" StartPoint="0,0">
         <GradientStop Color="Orange" Offset="0.1" />
         <GradientStop Color="White" Offset=".9" />
     </LinearGradientBrush>
-    <Style x:Key="MoreColorsLabel" TargetType="{x:Type Label}">
+    <Style x:Key="Style.Label.MoreColors" TargetType="{x:Type Label}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Padding" Value="5" />
@@ -155,7 +155,7 @@
                                     Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter Property="Background" Value="{StaticResource MoreColorGradientBrush}" />
+                            <Setter Property="Background" Value="{StaticResource Brush.LinearGradientBrush.MoreColor}" />
                             <Setter Property="BorderThickness" Value="1" />
                             <Setter Property="BorderBrush" Value="Green" />
                         </Trigger>
@@ -164,15 +164,15 @@
             </Setter.Value>
         </Setter>
     </Style>
-    <LinearGradientBrush x:Key="ButtonNormalBackgroundFill2" EndPoint="0.5,1" StartPoint="0.5,0">
+    <LinearGradientBrush x:Key="Brush.LinearGradientBrush.ButtonNormalBackgroundFill2" EndPoint="0.5,1" StartPoint="0.5,0">
         <GradientStop Color="#FFFFFFFF" Offset="0" />
         <GradientStop Color="#FFF0F0EA" Offset="0.9" />
     </LinearGradientBrush>
-    <SolidColorBrush x:Key="ButtonBorder" Color="#FF003C74" />
-    <Style x:Key="BorderLessButtonStyle" TargetType="{x:Type Button}">
+    <SolidColorBrush x:Key="Brush.SolidColorBrush.DefaultButtonBorder" Color="#FF003C74" />
+    <Style x:Key="Style.Button.BorderLess" TargetType="{x:Type Button}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource ButtonFocusVisual}" />
-        <Setter Property="Background" Value="{StaticResource ButtonNormalBackgroundFill}" />
-        <Setter Property="BorderBrush" Value="{StaticResource ButtonBorder}" />
+        <Setter Property="Background" Value="{StaticResource Brush.LinearGradientBrush.ButtonNormalBackgroundFill}" />
+        <Setter Property="BorderBrush" Value="{StaticResource Brush.SolidColorBrush.DefaultButtonBorder}" />
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -184,7 +184,7 @@
                         <DockPanel Width="196">
                             <Label SnapsToDevicePixels="True" FontFamily="Arial" Foreground="DarkBlue" FontSize="11"
                                    FontWeight="Bold" VerticalContentAlignment="Center"
-                                   VerticalAlignment="Center" Style="{StaticResource MoreColorsLabel}">
+                                   VerticalAlignment="Center" Style="{StaticResource Style.Label.MoreColors}">
                                 <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
                                                   HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                                   Margin="{TemplateBinding Padding}"
