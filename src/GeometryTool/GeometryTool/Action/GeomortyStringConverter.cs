@@ -307,7 +307,6 @@ public class GeometryStringConverter
     /// <summary>
     ///     产生一个EllipsePoint
     /// </summary>
-    /// <param name="match"></param>
     private void GetEllipsePoint(Match match, out Path ellipsePath, out Point ellipsePoint, string vPattern)
     {
         var graphAdd = new GraphAdd();
@@ -327,12 +326,12 @@ public class GeometryStringConverter
     /// <param name="vPattern"></param>
     private void GetEllipsePointWithNoBorder(Match match, out Path ellipsePath, out Point ellipsePoint, string vPattern)
     {
-        var grapAdd = new GraphAdd();
+        var graphAdd = new GraphAdd();
         ellipsePoint = new Point();
         ellipsePoint.X = Convert.ToDouble(Regex.Match(match.Groups[0].ToString(), vPattern).Groups[1].ToString());
         ellipsePoint.Y = Convert.ToDouble(Regex.Match(match.Groups[0].ToString(), vPattern).Groups[2].ToString());
         ellipsePath = new Path();
-        grapAdd.AddPointWithNoBorder(ellipsePoint, _graphAppearance, _rootCanvas, out ellipsePath);
+        graphAdd.AddPointWithNoBorder(ellipsePoint, _graphAppearance, _rootCanvas, out ellipsePath);
     }
 
     /// <summary>

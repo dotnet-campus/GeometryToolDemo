@@ -14,10 +14,26 @@ public class BorderWithAdorner : Border
 {
     public List<Path> EllipseList { get; }
     public GeometryAdorner GeometryAdorner { set; get; } //图形的选择框
-    public double MaxX; //最大的X位置
-    public double MaxY; //最大的Y位置
-    public double MinX; //最小的X位置
-    public double MinY; //最小的Y位置
+
+    /// <summary>
+    /// 最大的X位置
+    /// </summary>
+    public double MaxX { set; get; }
+
+    /// <summary>
+    /// 最大的Y位置
+    /// </summary>
+    public double MaxY { set; get; }
+
+    /// <summary>
+    /// 最小的X位置
+    /// </summary>
+    public double MinX { set; get; }
+
+    /// <summary>
+    /// 最小的Y位置
+    /// </summary>
+    public double MinY { set; get; }
 
     public BorderWithAdorner()
     {
@@ -49,7 +65,7 @@ public class BorderWithAdorner : Border
             GetFourPoint(this);
             if (GeometryAdorner == null)
             {
-                var path1 = Child as Path;
+                var path = Child as Path;
                 GeometryAdorner = new GeometryAdorner(this);
                 layer.Add(GeometryAdorner);
             }
@@ -59,38 +75,38 @@ public class BorderWithAdorner : Border
     /// <summary>
     ///     获取图形四个边角的位置
     /// </summary>
-    public void GetFourPoint(BorderWithAdorner vBorderWA)
+    public void GetFourPoint(BorderWithAdorner borderWithAdorner)
     {
-        if (vBorderWA.EllipseList.Count > 0)
+        if (borderWithAdorner.EllipseList.Count > 0)
         {
-            vBorderWA.MinX = (EllipseList[0].Data as EllipseGeometry).Center.X;
-            vBorderWA.MinY = (EllipseList[0].Data as EllipseGeometry).Center.Y;
-            vBorderWA.MaxX = 0;
-            vBorderWA.MaxY = 0;
+            borderWithAdorner.MinX = (EllipseList[0].Data as EllipseGeometry).Center.X;
+            borderWithAdorner.MinY = (EllipseList[0].Data as EllipseGeometry).Center.Y;
+            borderWithAdorner.MaxX = 0;
+            borderWithAdorner.MaxY = 0;
         }
 
-        foreach (var path in vBorderWA.EllipseList)
+        foreach (var path in borderWithAdorner.EllipseList)
         {
             var item = path.Data as EllipseGeometry;
             var point = item.Center;
-            if (vBorderWA.MaxX < point.X)
+            if (borderWithAdorner.MaxX < point.X)
             {
-                vBorderWA.MaxX = point.X;
+                borderWithAdorner.MaxX = point.X;
             }
 
-            if (vBorderWA.MaxY < point.Y)
+            if (borderWithAdorner.MaxY < point.Y)
             {
-                vBorderWA.MaxY = point.Y;
+                borderWithAdorner.MaxY = point.Y;
             }
 
-            if (vBorderWA.MinX > point.X)
+            if (borderWithAdorner.MinX > point.X)
             {
-                vBorderWA.MinX = point.X;
+                borderWithAdorner.MinX = point.X;
             }
 
-            if (vBorderWA.MinY > point.Y)
+            if (borderWithAdorner.MinY > point.Y)
             {
-                vBorderWA.MinY = point.Y;
+                borderWithAdorner.MinY = point.Y;
             }
         }
     }
@@ -98,11 +114,11 @@ public class BorderWithAdorner : Border
     /// <summary>
     ///     用于复制Border，模仿深度复制
     /// </summary>
-    /// <param name="vBorderWA"></param>
+    /// <param name="borderWithAdorner"></param>
     /// <returns></returns>
-    public BorderWithAdorner CopyBorder(BorderWithAdorner vBorderWA)
+    public BorderWithAdorner CopyBorder(BorderWithAdorner borderWithAdorner)
     {
-        var path = vBorderWA.Child as Path;
+        var path = borderWithAdorner.Child as Path;
         var graphAppearance = new GraphAppearance
         {
             Stroke = path.Stroke,
@@ -111,8 +127,9 @@ public class BorderWithAdorner : Border
             Fill = path.Fill
         };
         var geometryStringConverter = new GeometryStringConverter(MainWindow.MyRootCanvas, graphAppearance);
-        var miniLanguage = geometryStringConverter.StringFromGeometry(vBorderWA.Child as Path); //把该图形转化成为Mini-Language
-        var newBorderWithAdorner = geometryStringConverter.GeometryFromString(miniLanguage); //把Mini-Language转化成为图形，实现图形的深度复制
+        var miniLanguage = geometryStringConverter.StringFromGeometry(borderWithAdorner.Child as Path); //把该图形转化成为Mini-Language
+        var newBorderWithAdorner =
+            geometryStringConverter.GeometryFromString(miniLanguage); //把Mini-Language转化成为图形，实现图形的深度复制
         var newPath = newBorderWithAdorner.Child as Path;
         newPath.Stroke = path.Stroke;
         newPath.StrokeThickness = path.StrokeThickness;

@@ -151,8 +151,8 @@ public class GraphAdd
     /// <param name="vPoint"></param>
     public void AddHorvorLine(PathFigure vPathFigure, Point vPoint)
     {
-        var vlastLine = vPathFigure.Segments[vPathFigure.Segments.Count - 1] as LineSegment;
-        vlastLine.Point = vPoint;
+        var lastLine = vPathFigure.Segments[vPathFigure.Segments.Count - 1] as LineSegment;
+        lastLine.Point = vPoint;
     }
 
     /// <summary>
@@ -192,7 +192,6 @@ public class GraphAdd
 
             vPathFigure.Segments.Add(lineSegment);
             vPath.Data = pathGeometry;
-
 
             //将直线的起点和某个点绑定在一起
             var e = vHitPath.Data as EllipseGeometry;
@@ -302,7 +301,6 @@ public class GraphAdd
         pathGeometry.Figures.Add(pathFigure);
         var segmentCollection = new PathSegmentCollection();
         pathFigure.Segments = segmentCollection;
-
 
         //绘制第一个点,并绑定起点
         Path ellipsePath;
