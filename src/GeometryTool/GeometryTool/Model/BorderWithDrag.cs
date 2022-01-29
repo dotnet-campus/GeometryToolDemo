@@ -26,31 +26,39 @@ namespace GeometryTool
         public BorderWithDrag BrotherBorder;
 
         private readonly List<BorderWithDrag> _borderWithDragList = new();
+
         /// <summary>
         /// 表示是否可以拖动该点
         /// </summary>
         private bool _canLock;
+
         /// <summary>
         /// 用于表示所在的图形中所拥有的点集
         /// </summary>
         private readonly List<Path> _ellipseList;
+
         /// <summary>
         /// 表示点所在的图形
         /// </summary>
         private readonly Path _geometryPath;
+
         /// <summary>
         /// 表示是否可以拖动
         /// </summary>
         private bool _isDragDropInEffect;
+
         /// <summary>
         /// 表示控件的装饰器
         /// </summary>
         public LockAdorner LockAdornor { set; get; }
+
         /// <summary>
         /// 表示这是图形中第几个点
         /// </summary>
         private int _number;
+
         public List<BorderWithDrag> PointList = new();
+
         /// <summary>
         /// 表示当前点的位置
         /// </summary>
@@ -78,8 +86,8 @@ namespace GeometryTool
             MouseMove += Element_MouseMove;
             MouseLeftButtonUp += Element_MouseLeftButtonUp;
             _geometryPath = path;
-            this._number = number;
-            this._ellipseList = ellipseList;
+            _number = number;
+            _ellipseList = ellipseList;
 
             ContextMenu = new ContextMenu();
             var deleteItem = new MenuItem();
@@ -291,8 +299,4 @@ namespace GeometryTool
             }
         }
     }
-}
-
-namespace BitsOfStuff
-{
 }

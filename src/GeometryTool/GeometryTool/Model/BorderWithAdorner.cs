@@ -13,7 +13,11 @@ namespace GeometryTool;
 public class BorderWithAdorner : Border
 {
     public List<Path> EllipseList { get; }
-    public GeometryAdorner GeometryAdorner { set; get; } //图形的选择框
+
+    /// <summary>
+    /// 图形的选择框
+    /// </summary>
+    public GeometryAdorner GeometryAdorner { set; get; }
 
     /// <summary>
     /// 最大的X位置
@@ -127,7 +131,8 @@ public class BorderWithAdorner : Border
             Fill = path.Fill
         };
         var geometryStringConverter = new GeometryStringConverter(MainWindow.MyRootCanvas, graphAppearance);
-        var miniLanguage = geometryStringConverter.StringFromGeometry(borderWithAdorner.Child as Path); //把该图形转化成为Mini-Language
+        var miniLanguage =
+            geometryStringConverter.StringFromGeometry(borderWithAdorner.Child as Path); //把该图形转化成为Mini-Language
         var newBorderWithAdorner =
             geometryStringConverter.GeometryFromString(miniLanguage); //把Mini-Language转化成为图形，实现图形的深度复制
         var newPath = newBorderWithAdorner.Child as Path;
