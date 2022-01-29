@@ -11,7 +11,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}"
+                    <Border x:Name="Border" BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}" Background="#FFFFFF"
                             SnapsToDevicePixels="true">
                         <ContentPresenter x:Name="contentPresenter" Focusable="False"
@@ -22,11 +22,11 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter Property="BorderBrush" TargetName="border"
+                            <Setter Property="BorderBrush" TargetName="Border"
                                     Value="{StaticResource Button.MouseOver.Background}" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="true">
-                            <Setter Property="Background" TargetName="border"
+                            <Setter Property="Background" TargetName="Border"
                                     Value="{StaticResource Button.Pressed.Background}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
